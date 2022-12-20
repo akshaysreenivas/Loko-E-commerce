@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;700;800;900&display=swap');
+*{
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  outline: 0 !important;
+  appearance: none !important;
+  /* border: 0 !important; */
+  /* text-decoration: none !important; */
+  list-style: none !important;
+
+}
+:root{
+  --color-light:rgba(132,139,200,0.18) !important;
+  --box-shadow:0 2rem 3rem var(--color-light) !important;
+}
+body{
+  font-size: 14px !important;
+  font-family: 'Poppins', sans-serif;
+  user-select: none;
+  overflow-x: hidden;
+}
+nav{
+  background-color: rgb(242 242 242);
+}
+#admin-logout-btn{
+  color: #c53a3a !important;
+  bottom: 2rem !important;
+  width: 100% !important;
+ }
+ .user-login-btn{
+ color: aliceblue !important;
+
+background: #0d0d0d !important;
+ }
+ .b-radius{
+  border-radius: 25px !important;
+ }
+ .cursor-pointer{
+  cursor: pointer;
+ }
+ .profile_photo{
+  width: 2.8rem;
+  height: 2.8rem;
+  overflow: hidden;
+  border-radius: 50%;
+ }
+ aside .logo img{
+  height: 2rem;
+  width: 2rem;
+ }
+ aside .side-bar{
+  display: flex;
+  flex-direction: column;
+ }
+ #side-Bar a{
+  text-decoration: none !important;
+
+  transition: all 300ms ease !important;
+ }
+ aside .side-bar a:hover{
+ 
+  position: relative;
+  transition: 0.1s;
+    left: 1rem;
+ }
+ aside .a-active{
+  position: relative;
+  color: rgb(232, 231, 231) !important;
+  background: #231919 ;
+  border-radius: 5px;
+  margin-left:0px;
+ }
+ aside .a-active::before{
+content: " " !important;
+position:absolute;
+width:6px !important;
+height: 100% !important;
+  background-color: rgb(106, 141, 211);
+
+ }
+ aside{
+
+  background-color: rgb(242 242 242);
+  position: fixed;
+  top: 4rem;
+  left:0;
+ }
+ .section{
+  height: 100vh;
+  overflow: hidden;
+ }
+ .main{
+ margin-left: 210px !important;
+ }
+ .nav-bar{
+  padding:0 25px !important;;
+  box-shadow: var(--box-shadow);
+  position: fixed;
+  top: 0;
+  
+ }
+ .logo{
+  height: 4rem;
+ }
+ .content-admin{
+   margin-top: 4rem !important; 
+
+}
+  
+ @media screen and (max-width: 850px) {
+  #side-bar{
+    width: 0px !important;
+    position: relative !important;
+    display: none !important;
+  }
+
+  
+}
+ 

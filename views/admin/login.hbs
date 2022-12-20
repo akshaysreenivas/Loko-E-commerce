@@ -1,0 +1,39 @@
+<section class="vh-100 d-flex align-items-center justify-content-center " style="background-color: #dbdbdb;">
+
+    <div class="col-md-6 col-lg-7 d-flex align-items-center rounded" style="max-width:600px;">
+        <div class="card-body col-md-6 col-lg-7 p-4 p-lg-5 text-black rounded" style="background-color: #ffffff;">
+            <form action="/login" method="post">
+            <div class="d-flex justify-content-center"style="width: 100%;">
+                <h2 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Admin</h2>
+
+            </div>
+                <div class="form-outline mb-4">
+                    {{#if loginfail}}
+                    <h4 class="text-danger"><b>{{loginfail}}</b></h4>
+                    {{/if}}
+                </div>
+                <div class="mb-4 m-3 p-2">
+                    <input type="email" id="email" name="Email" placeholder="Admin id" class="form-control form-control-lg" style="width: 100%;border-radius:25px" required/>
+                </div>
+
+                <div class=" mb-4 m-3 p-2">
+                    <input type="password"placeholder="Password " id="password" name="Password" class="form-control form-control-lg" style="width: 100%;border-radius:25px "required/>
+                    <div class="cursor-pointer"><span class="material-icons-sharp pe-auto">
+visibility_off
+</span></div>
+                    <div class="cursor-pointer"><span class="material-icons-sharp pe-auto">
+visibility_on
+</span></div>
+                </div>
+
+                <div class=" mb-4 m-3 p-2">
+                    <button class=" user-login-btn p-1"  type="submit" style="width: 100%;border-radius:25px;font-size: 22px;">Login</button>
+                </div>
+
+
+               
+            </form>
+
+        </div>
+    </div>
+  </section>
