@@ -51,5 +51,41 @@ module.exports={
 
            }
         })
+    },
+
+    blockUser:(data)=>{
+        return new Promise(async(resolve,reject)=>{
+           try{
+            await userslist.findOneAndUpdate({email:data.email},{blocked:true},{new:true})
+            .then((data)=>{
+                console.log("blocked data",data);
+                resolve({status:true,data})
+            }).catch((error)=>{
+                console.log('cant block user',error);
+
+            })
+           }catch(err){
+            console.log("db error cant block",err);
+           }
+        })
+    },
+    unBlockUser:(data)=>{
+        return new Promise(async(resolve,reject)=>{
+           try{
+            await userslist.findOneAndUpdate({email:data.email},{blocked:false},{new:true})
+            .then((data)=>{
+                console.log("blocked data",data);
+                resolve({status:true,data})
+            }).catch((error)=>{
+                console.log('cant block user',error);
+
+            })
+           }catch(err){
+            console.log("db error cant block",err);
+           }
+        })
     }
+
+
+
 }

@@ -15,6 +15,10 @@ const userSc = new mongoose.Schema({
         type: String,
         required: true,
     },
+    blocked:{
+        type:Boolean,
+        default:false
+    }
 });
 
 userSc.pre("save",function (next){

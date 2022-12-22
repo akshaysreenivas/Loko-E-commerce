@@ -10,6 +10,9 @@ const productSc = new mongoose.Schema({
         type: Number,
         require: true
     },
+    size:{
+        type:String,
+    },
     image_path: {
         type: String
     },

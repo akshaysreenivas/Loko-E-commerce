@@ -6,16 +6,16 @@ const productHelper = require("../helpers/productHelper");
 
 /* GET home page. */
 
-// router.get('/', function(req, res, next) {
-//   if(req.session.adminloggedIn){
-//     const userData=[{name:"akshay"}]
-//     const productsData=[{name:"akshayshirt"}] 
-//     res.render('admin/adminpanel',{productsData,userData});
-//   } 
-//   else
-//   res.redirect('/admin/login');
+router.get('/', function(req, res, next) {
+  if(req.session.adminloggedIn){
+    const userData=[{name:"akshay"}]
+    const productsData=[{name:"akshayshirt"}] 
+    res.render('admin/adminpanel',{productsData,userData});
+  } 
+  else
+  res.redirect('/admin/login');
 
-// });
+});
 
 // ---------admin login---------
 
@@ -53,6 +53,7 @@ router.post('/adminlogin', (req, res) => {
   })
 });
 
+// =========Product Management=======
 
 // -------Add Product------
 
@@ -119,6 +120,19 @@ router.get('/listproducts', function (req, res, next) {
 });
 
 
+// -------Delete Product------
+
+router.post('/deleteProduct', (req , res) => {
+  console.log("products to deleted", req.body);
+  productHelper.deleteProduct(req.body).then((response) => {
+    console.log("deleted data from db", response.status)
+   res.redirect('/admin/listproducts');
+  })
+})
+
+
+// ===========User Management========
+
 // =====List Users=====
 
 router.get('/listusers', function (req, res, next) {
@@ -136,15 +150,32 @@ router.get('/listusers', function (req, res, next) {
 
 });
 
-// -------Delete Product------
+// =========block users=====
 
-router.post('/add-product', (req , res) => {
-  console.log("products to be added", req.body);
-  productHelper.editproduct(req.body).then((response) => {
-    console.log("added data", response.data)
-    res.send("success")
+router.post('/blockUser',(req,res)=>{
+  console.log('data',req.body);
+  adminHelper.blockUser(req.body).then((response)=>{
+    if(response.status){
+      console.log("user Blocked",response.data);
+    }
+    res.redirect('/admin/listusers')
   })
+
 })
+
+/// =======Unblock user =======
+
+router.post('/unBlockUser',(req,res)=>{
+  console.log( "user to be unblocked",req.body)
+  adminHelper.unBlockUser(req.body).then((response)=>{
+    if(response.status){
+      console.log("user Unblocked",response.data);
+    }
+    res.redirect('/admin/listusers')
+  })
+
+})
+
 
 
 // --------logout--------

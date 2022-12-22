@@ -41,22 +41,27 @@ module.exports = {
                     resolve({ user: false })
                 }
                 if (userdoc) {
-                    bcrypt.compare(data.password, userdoc.password, (err, result) => {
-                        if (err) throw err
-                        if (result) {
-                            console.log('valid');
-                            resolve({ user: true, status: true ,result})
-                        } else {
-                            console.log('invalid');
-                            resolve({ user: true, status: false })
-                        }
-                    })
+                    console.log( "your doc",userdoc);
+                    if(userdoc.blocked){
+                        console.log( "you are blocked");  
+                        resolve({blocked:true})                     
+                    }
+                    else{
+                        bcrypt.compare(data.password, userdoc.password, (err, result) => {
+                            if (err) throw err
+                            if (result) {
+                                console.log('valid');
+                                resolve({ user: true, status: true ,result, blocked:false})
+                            } else {
+                                console.log('invalid');
+                                resolve({ user: true, status: false })
+                            }
+                        })
+                    }
                 }
             } catch (error) {
                 console.log("error loding>>>>>>", error);
-
             }
-
         })
     }
 
