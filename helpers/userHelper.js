@@ -1,4 +1,4 @@
-const userslist = require('../models/user');
+const userslist = require('../models/usermodel');
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 const bcrypt = require("bcrypt");
@@ -45,7 +45,7 @@ module.exports = {
                         if (err) throw err
                         if (result) {
                             console.log('valid');
-                            resolve({ user: true, status: true })
+                            resolve({ user: true, status: true ,result})
                         } else {
                             console.log('invalid');
                             resolve({ user: true, status: false })

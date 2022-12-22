@@ -1,0 +1,62 @@
+{{>adminNavbar}}
+<section class=" admin-section d-flex gap-5">
+    {{>adminSideBar}}
+    <div class="vw-100 main px-5 pt-5 content-admin justify-content-center">
+        <div class=" container-fluid p-3 my-5 box-shadow">
+            <div class="container  border-primary">
+                <h2>Product Details</h2>
+                <table class="table table-hover table-bordered " id="productsTable">
+                    <thead class="bg-dark text-white">
+                        <tr>
+                            <th class="p-2" scope="col">ID</th>
+                            <th class="p-2" scope="col">Name</th>
+                            <th class="p-2" scope="col">Price</th>
+                            <th class="p-2" scope="col">Category</th>
+                            <th class="p-2" scope="col">Stock</th>
+                            <th class="p-2" scope="col">Product Details</th>
+                            <th class="p-2" scope="col">Edit</th>
+                            <th class="p-2" scope="col">Delete</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each productsData}}
+
+                        <tr class="p-2 ">
+                            <td class="p-2 ">{{this._id}}</td>
+                            <td class="p-2 ">{{this.name}}</td>
+                            <td class="p-2 ">{{this.price}}</td>
+                            <td class="p-2 ">{{this.category}}</td>
+                            <td class="p-2 ">{{this.quantity}}</td>
+                            <td class="p-2 ">{{this.product_description}}</td>
+                            <td class="p-2 "><a class=" d-flex justify-content-center" href="/admin/editProduct/{{this._id}}">
+                                    <span class="material-icons-sharp">edit</span></a>
+                            </td>
+                            <td class="p-2  d-flex justify-content-center"><a href="/admin/deleteProduct/{{this._id}}">
+                                    <span class="material-icons-sharp text-danger">delete</span></a>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+
+</section>
+
+
+
+
+
+{{!--
+<script>
+    {
+        {
+            !--$(document).ready(function () {
+                $('#productsTable').DataTable();
+            }); --}
+    }
+</script> --}}

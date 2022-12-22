@@ -4,9 +4,6 @@
   margin: 0 !important;
   box-sizing: border-box !important;
   outline: 0 !important;
-  appearance: none !important;
-  /* border: 0 !important; */
-  /* text-decoration: none !important; */
   list-style: none !important;
 
 }
@@ -64,27 +61,31 @@ background: #0d0d0d !important;
   transition: 0.1s;
     left: 1rem;
  }
- aside .a-active{
+
+ .active{
   position: relative;
   color: rgb(232, 231, 231) !important;
   background: #231919 ;
   border-radius: 5px;
   margin-left:0px;
+
  }
- aside .a-active::before{
+ 
+.active::before{
 content: " " !important;
 position:absolute;
+left: 0;
 width:6px !important;
 height: 100% !important;
-  background-color: rgb(106, 141, 211);
+background-color: rgb(106, 141, 211);
 
  }
  aside{
 
-  background-color: rgb(242 242 242);
-  position: fixed;
+  background-color: rgb(242 242 242); 
   top: 4rem;
   left:0;
+  bottom: 0 !important;
  }
  .section{
   height: 100vh;
@@ -100,6 +101,11 @@ height: 100% !important;
   top: 0;
   
  }
+ .box-shadow{
+  box-shadow: var(--box-shadow);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+
+ }
  .logo{
   height: 4rem;
  }
@@ -107,7 +113,13 @@ height: 100% !important;
    margin-top: 4rem !important; 
 
 }
-  
+.contents{
+  margin-top: 4rem !important; 
+
+}
+  .form-group{
+  white-space: nowrap;
+  }
  @media screen and (max-width: 850px) {
   #side-bar{
     width: 0px !important;

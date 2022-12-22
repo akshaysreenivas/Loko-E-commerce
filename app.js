@@ -7,7 +7,6 @@ const dbConnect=require('./config/db')
 const indexRouter = require('./routes');
 const usersRouter = require('./routes/users');
 const session=require('express-session')
-const flash  = require('req-flash');
 
 const app = express();
 dbConnect.dbConnect()
@@ -25,15 +24,16 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.use(session({
   secret: 'keyboard cat',
   resave:false,
-  saveUninitialized:false,
-  cookie: {maxAge:600000 },
+  saveUninitialized:true,
+  cookie: {maxAge:60 * 60 * 24 * 1 * 1000 },
 }));
-
-app.use(flash())
-app.use(function(req, res, next){
-  res.locals.message = req.flash();
+ 
+ // prevent cache last page
+ app.use((req,res,next)=>{
+  res.set("Cache-Control","no-store");
   next();
-});
+})
+
 app.use('/admin', indexRouter);
 app.use('/', usersRouter);
 
