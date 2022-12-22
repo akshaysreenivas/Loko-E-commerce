@@ -18,7 +18,7 @@ router.get("/", (req, res) => {
 
 router.get("/signup", (req, res) => {
   if(req.session.loggedIn)
- res.render('users/home');
+ res.redirect('/');
  else
   res.render("users/signup",{message:req.session.signinerr});
   req.session.signinerr="";
@@ -26,11 +26,12 @@ router.get("/signup", (req, res) => {
 
 // post method
 
+
 router.post("/signup", (req, res) => {
   userHelper.userSignup(req.body).then((response) => {
     if (response.status) {
       console.log("success fully added user");
-      res.redirect('login')
+      res.redirect('/login')
     }
     else if(!response.status){
       console.log("already have an account")
@@ -40,6 +41,7 @@ router.post("/signup", (req, res) => {
     }
     else {
       console.log("cannot signup database error ");
+      req.session.signinerr="cannot signup database error"
       res.redirect('/signup')
     }
   });
@@ -51,7 +53,7 @@ router.post("/signup", (req, res) => {
 
 router.get("/login", (req, res) => {
   if(req.session.loggedIn)
- res.render('users/home');
+res.redirect('/');
  else{
   const message = req.session.message
   res.render("users/login", { message });
@@ -60,6 +62,9 @@ router.get("/login", (req, res) => {
  
 
 });
+ // post login
+
+
 
 router.post("/login", (req, res) => {
   userHelper.dologin(req.body).then((response) => {
@@ -70,7 +75,7 @@ router.post("/login", (req, res) => {
           req.session.user=response.result
           req.session.loggedIn=true
           console.log(req.session.message);
-          res.render("users/home");
+          res.redirect("/");
         }
         else {
           req.session.message = "Invalid Password"
@@ -95,6 +100,7 @@ router.post("/login", (req, res) => {
 
 });
 
+// =======logout=====
 
 router.post('logout',(req,res)=>{
  req.session.destroy()

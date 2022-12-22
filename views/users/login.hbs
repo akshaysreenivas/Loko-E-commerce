@@ -1,31 +1,25 @@
 <section class="vh-100 d-flex align-items-center justify-content-center " style="background-color: #dbdbdb;">
     <div class="col-md-6 col-lg-7 d-flex align-items-center rounded" style="max-width:600px;">
         <div class="card-body col-md-6 col-lg-7 p-4 p-lg-5 text-black rounded" style="background-color: #ffffff;">
-            <form action="/login" method="post">
+            <form action="/login" method="post" id="userLoginForm">
                 <div class="d-flex justify-content-center" style="width: 100%;">
                     <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign in to your account </h3>
-
+                
                 </div>
                 <div class="form-outline mb-2">
                     <h5 class="text-danger">{{message}}</h5>
                 </div>
                 <div class="mb-2 m-3 p-2">
-                    <input type="email" id="email" name="email" class="form-control px-3 py-2 "
-                        style="width: 100%;border-radius:25px" required />
                     <label class="p-2" for="email"> Enter Email ID</label>
+                    <input type="email" id="userEmail" name="email" class="form-control px-3 py-2 "
+                        style="width: 100%;border-radius:25px"  />
+                 <small id="emailerr" class="text-danger px-3"></small>
                 </div>
-
                 <div class=" mb-4 m-3 p-2">
-                    <input type="password"  id="password" class="form-control px-3 py-2" name="password"
-                        style="width: 100%;border-radius:25px " required />
                     <label class="p-2" for="password">Password</label>
-
-                    {{!-- <div class="cursor-pointer"><span class="material-icons-sharp pe-auto">
-                            visibility_off
-                        </span></div>
-                    <div class="cursor-pointer"><span class="material-icons-sharp pe-auto">
-                            visibility_on
-                        </span></div> --}}
+                    <input type="password"  id="userPassword" class="form-control px-3 py-2" name="password"
+                        style="width: 100%;border-radius:25px " />
+                 <small id="passwordErr" class="text-danger px-3"></small>
                 </div>
 
                 <div class=" mb-4 my-3 mx-auto p-2 d-flex justify-content-center"  style="width: 100%;">
