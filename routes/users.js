@@ -6,10 +6,10 @@ const bcrypt = require("bcrypt");
 /* user home page. */
 
 router.get("/", (req, res) => {
-  if(req.session.loggedIn)
- res.render('users/home');
- else
-  res.redirect("/login");
+  if (req.session.loggedIn)
+    res.render('users/home');
+  else
+    res.redirect("/login");
 });
 
 // --------user signup ---------
@@ -17,31 +17,31 @@ router.get("/", (req, res) => {
 // get method
 
 router.get("/signup", (req, res) => {
-  if(req.session.loggedIn)
- res.redirect('/');
- else
-  res.render("users/signup",{message:req.session.signinerr});
-  req.session.signinerr="";
+  if (req.session.loggedIn)
+    res.redirect('/');
+  else
+    res.render("users/signup", { message: req.session.signinerr });
+  req.session.signinerr = "";
 });
 
 // post method
 
-
 router.post("/signup", (req, res) => {
+  console.log(req.body)
   userHelper.userSignup(req.body).then((response) => {
     if (response.status) {
       console.log("success fully added user");
       res.redirect('/login')
     }
-    else if(!response.status){
+    else if (!response.status) {
       console.log("already have an account")
-      req.session.signinerr="Looks like already have an account with this email! , login instead"
+      req.session.signinerr = "Looks like already have an account with this email! , login instead"
       res.redirect('/signup')
 
     }
     else {
       console.log("cannot signup database error ");
-      req.session.signinerr="cannot signup database error"
+      req.session.signinerr = "cannot signup database error"
       res.redirect('/signup')
     }
   });
@@ -52,28 +52,25 @@ router.post("/signup", (req, res) => {
 // get login
 
 router.get("/login", (req, res) => {
-  if(req.session.loggedIn)
-res.redirect('/');
- else{
-  const message = req.session.message
-  res.render("users/login", { message });
-  req.session.message = " ";
- }
- 
-
+  if (req.session.loggedIn)
+    res.redirect('/');
+  else {
+    const message = req.session.message
+    res.render("users/login", { message });
+    req.session.message = " ";
+  }
 });
- // post login
 
-
+// post login
 
 router.post("/login", (req, res) => {
   userHelper.dologin(req.body).then((response) => {
-    if(!response.blocked){
+    if (!response.blocked) {
       if (response.user) {
         if (response.status) {
           req.session.message = "login successs"
-          req.session.user=response.result
-          req.session.loggedIn=true
+          req.session.user = response.result
+          req.session.loggedIn = true
           console.log(req.session.message);
           res.redirect("/");
         }
@@ -87,24 +84,25 @@ router.post("/login", (req, res) => {
         req.session.message = "No User Found with this email id"
         console.log('user dont exist in db');
         res.redirect("/login")
-  
+
       }
     }
-  else if(response.blocked){
-    console.log('Your account has been blocked');
-    req.session.message = "Your account has been temporarly blocked"
-    res.redirect("/login")
+    else if (response.blocked) {
+      console.log(' Your account has been blocked');
+      req.session.message = " OOPS !, Your account has been temporarly blocked"
+      res.redirect("/login")
 
-  }
+    }
   });
 
 });
 
+
 // =======logout=====
 
-router.post('logout',(req,res)=>{
- req.session.destroy()
- res.redirect('/login')
+router.get('/logout', (req, res) => {
+  req.session.destroy()
+  res.redirect('/login')
 })
 
 module.exports = router;

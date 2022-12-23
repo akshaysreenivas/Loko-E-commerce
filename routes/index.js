@@ -81,7 +81,6 @@ router.get('/editProduct/:userId', (req, res) => {
     if(response.status){
       console.log("to be updated one data", response.data)
       res.render('admin/editProduct',{tobeupdate:response.data});
-
     }else
     res.send("fail")
 

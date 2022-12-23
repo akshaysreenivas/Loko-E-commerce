@@ -13,7 +13,7 @@ module.exports = {
                 const newUser = new userslist({
                     name: userdata.name,
                     email: userdata.email,
-                    password: userdata.password
+                    password: userdata.confirmPassword
                 })
                 return await newUser.save()
                     .then((data) => {
