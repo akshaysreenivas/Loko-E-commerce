@@ -1,9 +1,45 @@
+// modal opening querys
+
 $(document).on("click", ".opendatamodal", function () {
     const selectionId = $(this).data('email');
     const Id = $(this).data('id');
-    console.log(selectionId)
-    console.log(Id)
     $(".modal-body .selection").val( selectionId );
     $(".modal-body .select").val( Id );
 
 });
+
+// datatable
+
+$(document).ready( function () {
+    document.getElementById('addedImg').style.display='none'
+    $('#userTable').DataTable();
+    $('#productsTable').DataTable();
+
+} );
+
+
+// acivelink 
+
+
+$(function() {
+    $('#sideBar  a').click(function() {
+       $('#sideBar a').removeClass();
+       $($(this).attr('href')).addClass('active-btn');
+    });
+ });
+
+
+//  show img in add product
+
+function viewImg(event){
+    const addImg=document.getElementById('addedImg')
+    addImg.style.display='block'
+    addImg.src=URL.createObjectURL(event.target.files[0])
+}
+
+//  show new img in edit product
+
+
+function newImgView(event){
+document.getElementById('newImg').src=URL.createObjectURL(event.target.files[0])
+}

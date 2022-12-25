@@ -68,20 +68,19 @@
 </div> --}}
 
 
-<section class="mobiles contents py-2 px-5">
+<section class="contents py-2 px-5">
   <div class="container">
     <h1>New Arrivals</h1>
     <div class="p-5 row ">
       <div class="row">
-        {{#each mobiles}}
+        {{#each productsData}}
         <div class="col-md-3 col-sm-6 col-12">
-          <div class="card m-2 p-2 mob-card" style="width=18rem">
-            <img src={{imgUrl}} class="card-img-top" alt="" />
+          <div class="card m-2 p-2 mob-card" >
+            <img src="/images/product-images/{{this._id}}.jpg" class="card-img-top" alt="" style="; height: 20rem;"/>
             <div class="card-body">
-              <h5 class="card-title">{{name}}</h5>
-              <span>₹ {{price}}</span>
-              <p class="card-text">{{desc}}</p>
-              <a href="#" class="btn btn-primary">Buy now</a>
+              <h5 class="card-title p-1">{{name}}</h5>
+             <div class="p-1"> <span>₹ {{price}}</span></div>
+              <a href="#" class="btn btn-dark px-3 py-1">Buy now</a>
             </div>
           </div>
         </div>

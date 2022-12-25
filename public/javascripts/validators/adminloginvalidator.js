@@ -1,75 +1,75 @@
 // admin login form validation   
 
 const adminloginForm = document.getElementById("adminForm");
-if(adminloginForm){
- adminloginForm.addEventListener("submit", validateadminLogin);
+if (adminloginForm) {
+    adminloginForm.addEventListener("submit", validateadminLogin);
 }
 
 
-function validateadminLogin(e){
- e.preventDefault()
-const password=document.getElementById("adpassword").value
-const email = document.getElementById("ademail").value;
-const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-const emailerr = document.getElementById("admemailerr");
-const passworderr =document.getElementById("admpasserr")
-    emailerr.innerHTML=""
-    passworderr.innerHTML=""
+function validateadminLogin(e) {
+    e.preventDefault()
+    const password = document.getElementById("adpassword").value
+    const email = document.getElementById("ademail").value;
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const emailerr = document.getElementById("admemailerr");
+    const passworderr = document.getElementById("admpasserr")
+    emailerr.innerHTML = ""
+    passworderr.innerHTML = ""
 
 
-//---Email validation----
+    //---Email validation----
 
-if(!email){
-    if(emailerr){
-        emailerr.innerHTML="* Email address required"
+    if (!email) {
+        if (emailerr) {
+            emailerr.innerHTML = "* Email address required"
+        }
+        return
     }
-  return
-}
 
 
-if (/\s/.test(email)) {
-    if(emailerr){
-        emailerr.innerHTML=" No spaces"
+    if (/\s/.test(email)) {
+        if (emailerr) {
+            emailerr.innerHTML = " No spaces"
+        }
+        return
     }
-  return
-}
 
-if(!emailRegex.test(email)){
-    if(emailerr){
-        emailerr.innerHTML="Enter a valid Email address"
+    if (!emailRegex.test(email)) {
+        if (emailerr) {
+            emailerr.innerHTML = "Enter a valid Email address"
+        }
+        return
     }
-  return
-}
 
 
-// -----password validation-----
+    // -----password validation-----
 
-if(!password){
-    if(passworderr){
-        passworderr.innerHTML="* Password required"
+    if (!password) {
+        if (passworderr) {
+            passworderr.innerHTML = "* Password required"
+        }
+        return
     }
-  return
-  }
 
-if (/\s/.test(password)) {
-    if(passworderr){
-        passworderr.innerHTML="No spaces"
+    if (/\s/.test(password)) {
+        if (passworderr) {
+            passworderr.innerHTML = "No spaces"
+        }
+        return
     }
-  return
-}
 
-if(password.trim().length<6){
-    if(passworderr){
-        passworderr.innerHTML="Enter a minimum 6 to maximum 18 characters"
+    if (password.trim().length < 6) {
+        if (passworderr) {
+            passworderr.innerHTML = "Enter a minimum 6 to maximum 18 characters"
+        }
+        return
     }
-return
-}
-if(password.length<6){
-    if(passworderr){
-        passworderr.innerHTML="Enter a minimum 6 to maximum 18 characters"
-    }  return
-} 
+    if (password.length < 6) {
+        if (passworderr) {
+            passworderr.innerHTML = "Enter a minimum 6 to maximum 18 characters"
+        } return
+    }
 
 
-adminloginForm.submit()
+    adminloginForm.submit()
 }

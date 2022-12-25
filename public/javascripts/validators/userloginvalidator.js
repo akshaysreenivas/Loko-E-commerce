@@ -1,66 +1,66 @@
 // user login form validation     
 
 const loginForm = document.getElementById("loginForm");
-if(loginForm){
+if (loginForm) {
   loginForm.addEventListener("submit", validateuserLogin);
 }
 
-function validateuserLogin(e){
+function validateuserLogin(e) {
   e.preventDefault()
-const password=document.getElementById("userPassword").value
-const email = document.getElementById("userEmail").value;
-const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-const passwordErr = document.getElementById("passwordErr");
-const emailerr =document.getElementById("emailerr")
-emailerr.innerHTML=""
-passwordErr.innerHTML=""
+  const password = document.getElementById("userPassword").value
+  const email = document.getElementById("userEmail").value;
+  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  const passwordErr = document.getElementById("passwordErr");
+  const emailerr = document.getElementById("emailerr")
+  emailerr.innerHTML = ""
+  passwordErr.innerHTML = ""
 
 
 
-//---Email validation----
+  //---Email validation----
 
-if(!email){
-  if(emailerr){
-      emailerr.innerHTML="* Email address required"
+  if (!email) {
+    if (emailerr) {
+      emailerr.innerHTML = "* Email address required"
+    }
+    return
   }
-return
-}
 
-if (/\s/.test(email)) {
-  emailerr.innerHTML=" No white spaces"
-  return
-}
-
-if(!emailRegex.test(email)){
-  emailerr.innerHTML="Enter a valid Email address"
-  return
-}
-
-
-  
-// -----password validation-----
-
-if(!password){
-  if(passwordErr){
-    passwordErr.innerHTML="* Password required"
+  if (/\s/.test(email)) {
+    emailerr.innerHTML = " No white spaces"
+    return
   }
-return
-}
 
-if (/\s/.test(password)) {
-  passwordErr.innerHTML=" no spaces"
-  return
-}
-
-if(password.trim().length<6){
-  passwordErr.innerHTML="Enter a minimum 6 to maximum 18 characters"
-return
-}
-if(password.length<6){
-  passwordErr.innerHTML="Enter a minimum 6 to maximum 18 characters"
-  return
-} 
+  if (!emailRegex.test(email)) {
+    emailerr.innerHTML = "Enter a valid Email address"
+    return
+  }
 
 
-loginForm.submit()
+
+  // -----password validation-----
+
+  if (!password) {
+    if (passwordErr) {
+      passwordErr.innerHTML = "* Password required"
+    }
+    return
+  }
+
+  if (/\s/.test(password)) {
+    passwordErr.innerHTML = " no spaces"
+    return
+  }
+
+  if (password.trim().length < 6) {
+    passwordErr.innerHTML = "Enter a minimum 6 to maximum 18 characters"
+    return
+  }
+  if (password.length < 6) {
+    passwordErr.innerHTML = "Enter a minimum 6 to maximum 18 characters"
+    return
+  }
+
+
+  loginForm.submit()
 }

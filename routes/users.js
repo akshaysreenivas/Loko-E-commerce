@@ -1,15 +1,18 @@
 const express = require("express");
 const router = express.Router();
 const userHelper = require("../helpers/userHelper");
-const bcrypt = require("bcrypt");
+const productHelper = require("../helpers/productHelper");
 
 /* user home page. */
 
 router.get("/", (req, res) => {
-  if (req.session.loggedIn)
-    res.render('users/home');
-  else
-    res.redirect("/login");
+
+    productHelper.viewproducts().then((response) => {
+      if (response) {
+        const productsData = response.data
+        res.render('users/home', { productsData,userName: req.session.username });
+      }
+    })
 });
 
 // --------user signup ---------
@@ -30,17 +33,14 @@ router.post("/signup", (req, res) => {
   console.log(req.body)
   userHelper.userSignup(req.body).then((response) => {
     if (response.status) {
-      console.log("success fully added user");
       res.redirect('/login')
     }
     else if (!response.status) {
-      console.log("already have an account")
       req.session.signinerr = "Looks like already have an account with this email! , login instead"
       res.redirect('/signup')
 
     }
     else {
-      console.log("cannot signup database error ");
       req.session.signinerr = "cannot signup database error"
       res.redirect('/signup')
     }
@@ -68,27 +68,23 @@ router.post("/login", (req, res) => {
     if (!response.blocked) {
       if (response.user) {
         if (response.status) {
-          req.session.message = "login successs"
           req.session.user = response.result
+          req.session.username=response.userdoc.name
           req.session.loggedIn = true
-          console.log(req.session.message);
           res.redirect("/");
         }
         else {
           req.session.message = "Invalid Password"
-          console.log('invalid in db');
           res.redirect("/login")
         }
       }
       else {
         req.session.message = "No User Found with this email id"
-        console.log('user dont exist in db');
         res.redirect("/login")
 
       }
     }
     else if (response.blocked) {
-      console.log(' Your account has been blocked');
       req.session.message = " OOPS !, Your account has been temporarly blocked"
       res.redirect("/login")
 
@@ -102,7 +98,7 @@ router.post("/login", (req, res) => {
 
 router.get('/logout', (req, res) => {
   req.session.destroy()
-  res.redirect('/login')
+  res.redirect('/')
 })
 
 module.exports = router;

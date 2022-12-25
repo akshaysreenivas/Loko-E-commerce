@@ -10,7 +10,7 @@ module.exports = {
         const newProduct = new products({
           name: data.name,
           price: data.price,
-          size:data.size,
+          size: data.size,
           image_path: data.img_path,
           category: data.category,
           quantity: data.quantity,
@@ -19,15 +19,15 @@ module.exports = {
 
         return await newProduct.save()
           .then((data) => {
-            console.log("new added products", data)
             resolve({ status: true, data })
           }).catch((error) => {
             resolve({ status: false })
-            console.log("cant add product", error)
+            throw error;
+
           })
       }
       catch (error) {
-        console.log("cant connect to batabase");
+        throw error;
       }
     })
   },
@@ -41,20 +41,18 @@ module.exports = {
             name: data.name,
             price: data.price,
             category: data.category,
-            size:data.size,
+            size: data.size,
             quantity: data.quantity,
             product_description: data.description
           }, { new: true })
           .then((updatedData) => {
-            console.log("updatedData", updatedData)
             resolve({ status: true })
           })
           .catch((error) => {
-            console.log("error updating", error)
+            throw error;
           })
       } catch (error) {
-        console.log("error updating in the data base", error)
-
+        throw error;
       }
     })
   },
@@ -64,14 +62,12 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       try {
         await products.find({}).lean().then((data) => {
-          console.log("success fetch products");
           resolve({ status: true, data })
         }).catch((error) => {
-          console.log("error fetch products", error);
-          resolve({ status: false })
+          throw error;
         })
       } catch (error) {
-        console.log("error fetch products", error);
+        throw error;
       }
 
     })
@@ -83,29 +79,27 @@ module.exports = {
         await products.findOne({ _id: id }).lean().then((data) => {
           resolve({ status: true, data })
         }).catch((error) => {
-          console("error finding data", error)
+          throw error;
         })
       } catch (error) {
-        console.log("error finding data from db", error)
+        throw error;
       }
     })
   },
 
   deleteProduct: (data) => {
     return new Promise(async (resolve, reject) => {
-      try{
-      await products.deleteOne({_id:data.id}).then((data)=>{
-        if(data){
-          console.log("success deletion",data);
-          resolve({status:true})
-        }
-      })
-      }catch(error){
-console.log('cant delete from db',error)
+      try {
+        await products.deleteOne({ _id: data.id }).then((data) => {
+          if (data) {
+            resolve({ status: true })
+          }
+        })
+      } catch (error) {
+        throw error;
       }
     })
   }
-
 
 
 

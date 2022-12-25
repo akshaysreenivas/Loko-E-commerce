@@ -3,13 +3,14 @@ const express = require('express');
 const path = require('path');
 const logger = require('morgan');
 const hbs = require('express-handlebars');
-const dbConnect=require('./config/db')
+const dbConnect = require('./config/db')
 const indexRouter = require('./routes');
 const usersRouter = require('./routes/users');
-const session=require('express-session')
-
+const session = require('express-session')
+const fileUpload = require('express-fileupload')
 const app = express();
 dbConnect.dbConnect()
+
 // view engine setup
 app.engine('hbs', hbs.engine({ extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layout/', partialsDir: __dirname + '/views/partials/' }))
 
@@ -21,16 +22,17 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '/public')));
+app.use(fileUpload())
 app.use(session({
   secret: 'keyboard cat',
-  resave:false,
-  saveUninitialized:true,
-  cookie: {maxAge:60 * 60 * 24 * 1 * 1000 },
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 60 * 60 * 24 * 1 * 1000 },
 }));
- 
- // prevent cache last page
- app.use((req,res,next)=>{
-  res.set("Cache-Control","no-store");
+
+// prevent cache last page
+app.use((req, res, next) => {
+  res.set("Cache-Control", "no-store");
   next();
 })
 
@@ -38,12 +40,12 @@ app.use('/admin', indexRouter);
 app.use('/', usersRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

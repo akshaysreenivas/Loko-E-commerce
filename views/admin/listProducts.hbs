@@ -4,9 +4,9 @@
     <div class="vw-100 main px-5 pt-5 content-admin justify-content-center">
         <div class=" container-fluid p-3 my-5 box-shadow">
             <div class="container  border-primary">
-                <h2>Product Details</h2>
-                <div class="table-responsive">
- <table class="table table-hover table-bordered " id="productsTable">
+                <h2 class="my-4 text-center">Product Details</h2>
+                <div class="table-responsive my-3">
+ <table class="py-4 mb-3 table table-hover table-bordered " id="productsTable">
                     <thead class="bg-dark text-white">
                         <tr>
                             <th class="p-2" scope="col">ID</th>
@@ -16,6 +16,7 @@
                             <th class="p-2" scope="col">Category</th>
                             <th class="p-2" scope="col">Stock</th>
                             <th class="p-2" scope="col">Product Details</th>
+                            <th class="p-2" scope="col">Images</th>
                             <th class="p-2" scope="col">Edit</th>
                             <th class="p-2" scope="col">Delete</th>
 
@@ -32,6 +33,7 @@
                             <td class="p-2 ">{{this.category}}</td>
                             <td class="p-2 ">{{this.quantity}}</td>
                             <td class="p-2 ">{{this.product_description}}</td>
+                            <td class="p-2 "><img style="width:50px;height:50px;" src="/images/product-images/{{this._id}}.jpg" alt=""></td>
                             <!---=============== Edit product ==============--->
 
                             <td class="p-2 "><a class=" d-flex justify-content-center"

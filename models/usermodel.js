@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const saltRounds=10;
+const saltRounds = 10;
 const userSc = new mongoose.Schema({
     name: {
         type: String,
@@ -15,39 +15,37 @@ const userSc = new mongoose.Schema({
         type: String,
         required: true,
     },
-    blocked:{
-        type:Boolean,
-        default:false
+    blocked: {
+        type: Boolean,
+        default: false
     }
 });
 
-userSc.pre("save",function (next){
+userSc.pre("save", function (next) {
     const user = this;
-    console.log("data>>>>",user)
-if (this.isModified("password") || this.isNew) {
-   bcrypt.genSalt(saltRounds, (err, salt) => {
-        if (err) {
-            console.log(err, ">>>>>>>>>>>>");
-            return next(err);
-        }
-        else {
-            bcrypt.hash(user.password, salt)
-                .then((hash) => {
-                    user.password = hash;
-                    next();
-                })
-                .catch((err) => {
-                    return next(err);
-                });
+    if (this.isModified("password") || this.isNew) {
+        bcrypt.genSalt(saltRounds, (err, salt) => {
+            if (err) {
+                return next(err);
+            }
+            else {
+                bcrypt.hash(user.password, salt)
+                    .then((hash) => {
+                        user.password = hash;
+                        next();
+                    })
+                    .catch((err) => {
+                        return next(err);
+                    });
 
-        }
+            }
 
-    });
-}
+        });
+    }
 
 
-  
+
 });
 
 
-module.exports=new mongoose.model('userslist',userSc)
+module.exports = new mongoose.model('userslist', userSc)

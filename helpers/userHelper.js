@@ -8,7 +8,6 @@ const bcrypt = require("bcrypt");
 module.exports = {
     userSignup: (userdata) => {
         return new Promise(async (resolve, reject) => {
-            console.log("name", userdata.name);
             try {
                 const newUser = new userslist({
                     name: userdata.name,
@@ -17,50 +16,45 @@ module.exports = {
                 })
                 return await newUser.save()
                     .then((data) => {
-                        console.log('saved data>>', data)
                         resolve({ status: true, data })
                     })
                     .catch((err) => {
-                        console.log("email already exists", err)
                         resolve({ status: false })
                     })
             }
             catch (error) {
-                console.log('cant add data', error);
+                throw error;
             }
         })
     },
 
     dologin: (data) => {
         return new Promise(async (resolve, reject) => {
-            console.log('log>>>>', data)
             try {
-                let userdoc = await userslist.findOne({ email: data.email })
-                if (!userdoc) {
-                    console.log('user dont exist');
-                    resolve({ user: false })
-                }
-                if (userdoc) {
-                    console.log( "your doc",userdoc);
-                    if(userdoc.blocked){
-                        console.log( "you are blocked");  
-                        resolve({blocked:true})                     
+                await userslist.findOne({ email: data.email }).exec((err, userdoc) => {
+                    if (err) throw err
+                    if (!userdoc) {
+                        resolve({ user: false })
                     }
-                    else{
-                        bcrypt.compare(data.password, userdoc.password, (err, result) => {
-                            if (err) throw err
-                            if (result) {
-                                console.log('valid');
-                                resolve({ user: true, status: true ,result, blocked:false})
-                            } else {
-                                console.log('invalid');
-                                resolve({ user: true, status: false })
-                            }
-                        })
+                    if (userdoc) {
+                        if (userdoc.blocked) {
+                            resolve({ blocked: true })
+                        }
+                        else {
+                            bcrypt.compare(data.password, userdoc.password, (err, result) => {
+                                if (err) throw err
+                                if (result) {
+                                    resolve({ user: true, status: true, result, blocked: false, userdoc })
+                                } else {
+                                    resolve({ user: true, status: false })
+                                }
+                            })
+                        }
                     }
-                }
+                })
+
             } catch (error) {
-                console.log("error loding>>>>>>", error);
+                throw error;
             }
         })
     }

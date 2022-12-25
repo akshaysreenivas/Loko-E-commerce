@@ -2,98 +2,110 @@
 <section class=" admin-section d-flex gap-5">
     {{>adminSideBar}}
     <div class="vw-100 main px-5 pt-5 content-admin justify-content-center">
-<form action="/admin/editproduct" method="post" class="d-dlex justify-contents-center box-shadow p-5 mb-5" >
-    <fieldset class="px-5">
+        <form action="/admin/editproduct" method="post" class="d-dlex justify-contents-center box-shadow p-5 mb-5">
+            <fieldset class="px-5">
 
-        <!-- Form Name -->
-    
-        <legend>EDIT PRODUCT</legend>
-        <input type="text" class="d-none" name="productId" value="{{tobeupdate._id}}">
-        <div class="container d-flex align-items-center ">
-            <!-- PRODUCT NAME -->
+                <!-- Form Name -->
 
-            <div class="form-group mb-4 m-3 px-3 p-2">
-                <label class="col-md-4 control-label mb-3" for="product_name">PRODUCT
-                    NAME</label>
+                <legend class="mb-4">EDIT PRODUCT</legend>
+                <input type="text" class="d-none" name="productId" value="{{tobeupdate._id}}">
+                <div class="container d-flex align-items-center ">
+                    <!-- PRODUCT NAME -->
 
-                <input type="text" id="email" name="name" value="{{tobeupdate.name}}"
-                    class="form-control form-control-lg px-3" style="width: 100%;border-radius:25px" required />
-            
-            </div>
+                    <div class="form-group mb-4 m-3 px-3 p-2">
+                        <label class="col-md-4 control-label mb-3" for="product_name">PRODUCT
+                            NAME</label>
 
-            <!-- PRODUCT PRICE -->
+                        <input type="text" id="email" name="name" value="{{tobeupdate.name}}"
+                            class="form-control form-control-lg px-3" style="width: 100%;border-radius:25px" required />
 
-            <div class="form-group mb-4 m-3 px-3 p-2">
-                <label class="col-md-4 control-label mb-3" for="product_name">PRODUCT
-                    PRICE</label>
+                    </div>
 
-                <input type="number" id="email" name="price" value="{{tobeupdate.price}}"
-                    class="form-control form-control-lg px-3" style="width: 100%;border-radius:25px" required />
-            </div>
-        </div>
-        <div class="container d-flex align-items-center">
-            <!-- PRODUCT CATEGORY -->
+                    <!-- PRODUCT PRICE -->
 
-            <div class="form-group mb-4 m-3 px-3 p-2">
-                <label class="col-md-4 control-label mb-3" for="product_name">PRODUCT
-                    CATEGORY</label>
-                <select class="form-select form-control-lg px-3" style="width: 100%;"
-                    aria-label="product category select "  name="category" required>
-                    <option value="{{tobeupdate.category}}" selected>{{tobeupdate.category}}</option>
-                    <option value="Kurta">Kurta</option>
-                    <option value="Jeans">Jeans</option>
-                    <option value="Shirts">Shirts</option>
-                    <option value="Pants">Pants</option>
-                    <option value="other">other</option>
-                </select>
-            </div>
+                    <div class="form-group mb-4 m-3 px-3 p-2">
+                        <label class="col-md-4 control-label mb-3" for="product_name">PRODUCT
+                            PRICE</label>
 
-   <!-- PRODUCT SIZE -->
+                        <input type="number" id="email" name="price" value="{{tobeupdate.price}}"
+                            class="form-control form-control-lg px-3" style="width: 100%;border-radius:25px" required />
+                    </div>
+                </div>
+                <div class="container d-flex align-items-center justify-content-between">
+                    <!-- PRODUCT CATEGORY -->
 
-            <div class="form-group mb-4 m-3 px-3 p-2">
-                <label class="col-md-4 control-label mb-3" for="product_size">PRODUCT
-                   SIZE</label>
-                <select class="form-select form-control-lg px-3" style="width: 100%;"
-                    aria-label="product size select " name="size" required>
-                    <option selected="">Select </option>
-                    <option >Small</option>
-                    <option >Medium </option>
-                    <option >Large</option>
-                    <option >XL </option>
-                    <option >XXL</option>
-                    <option >XXXL</option>
-                    
-                </select>
-            </div>
+                    <div class="form-group mb-4 m-3 px-3 p-2">
+                        <label class="col-md-4 control-label mb-3" for="product_name">PRODUCT
+                            CATEGORY</label>
+                        <select class="form-select form-control-lg px-3" style="width: 10rem;"
+                            aria-label="product category select " name="category" required>
+                            <option value="{{tobeupdate.category}}" selected>{{tobeupdate.category}}</option>
+                            <option value="Kurta">Kurta</option>
+                            <option value="Jeans">Jeans</option>
+                            <option value="Shirts">Shirts</option>
+                            <option value="Pants">Pants</option>
+                            <option value="other">other</option>
+                        </select>
+                    </div>
 
-            <!-- PRODUCT QUANTITY -->
+                    <!-- PRODUCT SIZE -->
 
-            <div class="form-group mb-4 m-3 px-3 p-2">
-                <label class="col-md-4 control-label mb-3" for="available_quantity">AVAILABLE QUANTITY</label>
-                <input id="available_quantity" name="quantity" value="{{tobeupdate.quantity}}"
-                    class="form-control form-control-lg px-3" style="width: 100%;border-radius:25px" required=""
-                    type="number" />
-            </div>
-        </div>
-       
+                    <div class="form-group ">
+                        <label class="col-md-4 control-label mb-3" for="product_size">PRODUCT
+                            SIZE</label>
+                        <select class="form-select form-control-lg px-3" style="width: 10rem;"
+                            aria-label="product size select " name="size" required>
+                            <option value="{{tobeupdate.size}}" selected>{{tobeupdate.size}}</option>
+                            <option>Small</option>
+                            <option>Medium </option>
+                            <option>Large</option>
+                            <option>XL </option>
+                            <option>XXL</option>
+                            <option>XXXL</option>
 
-        <!-- Textarea -->
-        <div class="form-group mb-4 m-3 px-3 p-2">
-            <label class="col-md-4 control-label mb-3" for="product_description">PRODUCT DESCRIPTION</label>
-            <textarea class="form-control form-control-lg p-2"  style="width: 50%;border-radius:5px"
-                id="product_description" name="description">{{tobeupdate.product_description}}</textarea>
+                        </select>
+                    </div>
 
-        </div>
+                    <!-- PRODUCT QUANTITY -->
 
-        <!-- Button -->
+                    <div class="form-group mb-4 m-3 px-3 p-2">
+                        <label class="col-md-4 control-label mb-3" for="available_quantity">AVAILABLE QUANTITY</label>
+                        <input id="available_quantity" name="quantity" value="{{tobeupdate.quantity}}"
+                            class="form-control form-control-lg px-3" style="width: 100%;border-radius:25px" required=""
+                            type="number" />
+                    </div>
+                </div>
 
-        <div class="form-group mb-4 m-3 px-3 p-2">
-            <button class="p-1" type="submit" style="width: 50%;border-radius:25px;">+
-                EDIT PRODUCT</button>
-        </div>
+                <!-- image -->
 
-    </fieldset>
-</form>
+                <div class="form-group mb-4 m-3 px-3 p-2">
+                    <label class="col-md-4 control-label mb-3" for="image">IMAGE</label>
+                    <div class="m-3">
+
+                        <img style="width:50px;height:70px;" src="/./images/product-images/{{tobeupdate._id}}.jpg"
+                            alt="" id="newImg" >
+                    </div>
+                    <label class="col-md-4 control-label my-3" for="image">CHANGE IMAGE</label>
+                    <input class="form-control form-control-lg p-2" type="file" name="image" id="" onchange="newImgView(event)" >
+                </div>
+
+                <!-- Textarea -->
+                <div class="form-group mb-4 m-3 px-3 p-2">
+                    <label class="col-md-4 control-label mb-3" for="product_description">PRODUCT DESCRIPTION</label>
+                    <textarea class="form-control form-control-lg p-2" style="width: 70%;border-radius:5px"
+                        id="product_description" name="description">{{tobeupdate.product_description}}</textarea>
+
+                </div>
+
+                <!-- Button -->
+
+                <div class="form-group mb-4 m-3 px-3 p-2">
+                    <button class="p-1" type="submit" style="width: 50%;border-radius:25px;">+
+                        EDIT PRODUCT</button>
+                </div>
+
+            </fieldset>
+        </form>
     </div>
 
 </section>

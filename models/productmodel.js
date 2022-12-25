@@ -10,8 +10,8 @@ const productSc = new mongoose.Schema({
         type: Number,
         require: true
     },
-    size:{
-        type:String,
+    size: {
+        type: String,
     },
     image_path: {
         type: String
@@ -30,4 +30,4 @@ const productSc = new mongoose.Schema({
     }
 })
 
-module.exports=new mongoose.model("products",productSc)
+module.exports = new mongoose.model("products", productSc)
