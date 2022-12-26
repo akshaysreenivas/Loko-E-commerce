@@ -11,25 +11,18 @@ $(document).on("click", ".opendatamodal", function () {
 // datatable
 
 $(document).ready( function () {
-    document.getElementById('addedImg').style.display='none'
     $('#userTable').DataTable();
     $('#productsTable').DataTable();
-
 } );
 
 
-// acivelink 
-
-
-$(function() {
-    $('#sideBar  a').click(function() {
-       $('#sideBar a').removeClass();
-       $($(this).attr('href')).addClass('active-btn');
-    });
- });
-
 
 //  show img in add product
+
+$(document).ready(function(){
+    document.getElementById('addedImg').style.display='none'
+
+})
 
 function viewImg(event){
     const addImg=document.getElementById('addedImg')
@@ -43,3 +36,8 @@ function viewImg(event){
 function newImgView(event){
 document.getElementById('newImg').src=URL.createObjectURL(event.target.files[0])
 }
+
+
+
+
+

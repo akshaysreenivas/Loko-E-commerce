@@ -31,27 +31,26 @@ module.exports = {
     dologin: (data) => {
         return new Promise(async (resolve, reject) => {
             try {
-                await userslist.findOne({ email: data.email }).exec((err, userdoc) => {
-                    if (err) throw err
-                    if (!userdoc) {
-                        resolve({ user: false })
-                    }
+              const userdoc =  await userslist.findOne({ email: data.email })                         
                     if (userdoc) {
                         if (userdoc.blocked) {
-                            resolve({ blocked: true })
+                            resolve({ user:true, blocked: true})
                         }
                         else {
                             bcrypt.compare(data.password, userdoc.password, (err, result) => {
                                 if (err) throw err
                                 if (result) {
-                                    resolve({ user: true, status: true, result, blocked: false, userdoc })
-                                } else {
-                                    resolve({ user: true, status: false })
-                                }
+                                    resolve({ user: true,blocked: false, result, userdoc })
+                                } 
+                                if (!result) {
+                                    resolve({ user: true,blocked: false, result, userdoc })
+                                } 
                             })
                         }
                     }
-                })
+               else{
+                resolve({ user:false})                
+               }
 
             } catch (error) {
                 throw error;

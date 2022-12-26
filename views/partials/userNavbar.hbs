@@ -1,61 +1,58 @@
-{{!-- <nav class="nav-bar d-flex align-items-center vw-100">
-  <div class="logo"><img class="img-fluid logo " src="/images/loko logo.png" alt=""></div>
-  <div class="profile d-flex align-items-center gap-2 ms-auto">
-    <div class="profile_photo">
-      <img class="img-fluid" src="/images/Mike_Tyson.jpg" alt="">
-    </div>
-    <small>Mike Tyson</small>
-  </div>
-  </div>
-</nav> --}}
-
-
-
-<nav class="navbar nav-bar navbar-expand-lg ">
-  <div class="container-fluid">
-    <div class="logo"><img class="img-fluid logo " src="/images/loko logo.png" alt=""></div>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+<nav class="navbar nav-bg  nav-bar navbar-expand-lg p-0 ">
+  <div class="container-fluid nav-bg">
+    <button class="navbar-toggler p-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
       aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
+      <div class="logo px-3"><img class="img-fluid logo " src="/images/loko logo.png" alt=""></div>  
+    <div class="collapse navbar-collapse nav-bg py-3" id="navbarNavAltMarkup">
+      <div class="navbar-nav d-flex ">
         <a class="nav-link active px-3" aria-current="page" href="#">Home</a>
         <a class="nav-link px-3" href="#">Features</a>
         <a class="nav-link px-3" href="#">Pricing</a>
+
+        {{#if user}}
+        <div class=" d-flex align-items-center">
+            <div class="px-5">
+            <a href="/cart/">
+              <span class="material-icons-sharp text-dark">shopping_cart</span>
+            </a>
+          </div>
+          <div class="btn-group mx-3">
+            <button type="button" class="d-flex justify-content-center btn btn-outline dropdown-toggle p-2 gap-1 nodrop"
+              data-bs-toggle="dropdown" aria-expanded="false">
+
+              <span class="material-icons-sharp">account_circle</span>
+              <span>{{user.name}}</span>
+            </button>
+
+            <ul class="dropdown-menu  me-5">
+
+              <li><a class="dropdown-item d-flex  align-items-center gap-1 p-2" href="/profile"><span
+                    class="material-icons-sharp ">
+                    person_outline
+                  </span> Account Details</a></li>
+
+              <li><a class="dropdown-item d-flex  align-items-center p-2 gap-1" href="/logout" ><span
+                    class="material-icons-sharp">
+                    logout
+                  </span> logout
+                </a></li>
+
+            </ul>
+          </div>
+        
+
+        </div>
+        {{else}}
+        <div class="d-flex align-items-center">
+          <a class="dropdown-item d-flex  align-items-center px-5 gap-1" href="/login" method="get"><span
+              class="material-icons-sharp">account_circle</span> login</a>
+        </div>
+        {{/if}}
       </div>
     </div>
-{{#if userName}}
-<div class="px-5 ">
-      <div class="btn-group mx-5">
-        <button type="button" class="d-flex justify-content-center btn btn-outline dropdown-toggle p-2 gap-1 nodrop"
-          data-bs-toggle="dropdown" aria-expanded="false">
-
-          <span class="material-icons-sharp">account_circle</span>
-          <span>{{userName}}</span>
-        </button>
-
-        <ul class="dropdown-menu  me-5">
-
-          <li><a class="dropdown-item d-flex  align-items-center gap-1 p-2" href="#"><span class="material-icons-sharp ">
-                person_outline
-              </span> Account Details</a></li>
-
-          <li><a class="dropdown-item d-flex  align-items-center p-2 gap-1" href="/logout" method="get"><span class="material-icons-sharp">
-                logout
-              </span> logout
-            </a></li>
-
-        </ul>
-      </div>
-    </div>
-    {{else}}
-    <div class="px-5">
-
-<a class="dropdown-item d-flex  align-items-center px-5 gap-1" href="/login" method="get"><span class="material-icons-sharp">account_circle</span> login</a>
-    </div>
-    {{/if}}
-  
-
+    
   </div>
 </nav>
+

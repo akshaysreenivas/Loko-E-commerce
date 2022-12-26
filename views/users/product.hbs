@@ -1,0 +1,76 @@
+{{>userNavbar}}
+
+<section class="py-5 contents px-5">
+    <div class="container p-4 px-lg-5  border rounded">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6" ><img class="card-img-top mb-5 mb-md-0 img-fluid"
+                    src="/images/product-images/{{product._id}}.jpg" alt="Product image" style="width: 400px; " /></div>
+            <div class="col-md-6">
+                <div class="small mb-1">Product Id : {{product._id}}</div>
+                <h1 class="display-5 fw-bolder">{{product.name}}</h1>
+                <div class="fs-5 mb-5">
+                    {{!-- <span class="text-decoration-line-through">{{product.price}}</span> --}}
+                    <span><b>₹</b> {{product.price}}</span>
+                </div>
+                <div>
+                    <h5>Category : {{product.category}} </h5>
+                </div>
+                <div>
+                    <h5>Size : {{product.size}} </h5>
+                </div>
+
+
+
+
+                <td class="p-2 "></td>
+                <p class="lead">{{product.product_description}}</p>
+                <div class="d-flex">
+
+                    <form action="" method="post">
+                        <button class="btn btn-outline-dark flex-shrink-0 d-flex align-items-center p-2 gap-1 m-2 "
+                            type="button" href="/cart/{{product._id}}">
+                            <span class="material-icons-sharp ">favorite_border</span>Move Wishlist</button>
+                    </form>
+
+                    <form action="" method="post">
+                        <button class="btn btn-outline-dark flex-shrink-0 d-flex align-items-center p-2 gap-1 m-2 "
+                            type="button" href="/cart/{{product._id}}">
+                            <span class="material-icons-sharp">add_shopping_cart</span>
+                            Add to cart
+                        </button>
+                    </form>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="px-5 m-5 d-flex">
+        <a class="btn btn-outline-dark flex-shrink-0 d-flex align-items-center p-2 gap-1 m-2 " type="button"
+            href="/"><span class="material-icons-sharp">keyboard_backspace</span>
+            Continue Shopping
+        </a>
+    </div>
+
+</section>
+
+{{!-- <div class="zoom">
+    <!-- Small Image -->
+    <div class="original">
+        <img>
+    </div>
+    <!-- Large Image -->
+    <div class="viewer">
+        <img src="/images/63a596922ea5865cdd0cc690.jpg" id="target">
+    </div>
+    <!-- Magnifier Effect -->
+    <div class="magnifier"></div>
+</div> --}}
+
+
+
+
+
+</div>
+</section>

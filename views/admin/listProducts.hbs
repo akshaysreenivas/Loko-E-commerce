@@ -2,92 +2,95 @@
 <section class=" admin-section d-flex gap-5">
     {{>adminSideBar}}
     <div class="vw-100 main px-5 pt-5 content-admin justify-content-center">
-        <div class=" container-fluid p-3 my-5 box-shadow">
+        <div class=" container-fluid p-3 mt-2 mb-5 box-shadow">
             <div class="container  border-primary">
                 <h2 class="my-4 text-center">Product Details</h2>
-                <div class="table-responsive my-3">
- <table class="py-4 mb-3 table table-hover table-bordered " id="productsTable">
-                    <thead class="bg-dark text-white">
-                        <tr>
-                            <th class="p-2" scope="col">ID</th>
-                            <th class="p-2" scope="col">Name</th>
-                            <th class="p-2" scope="col">Price</th>
-                            <th class="p-2" scope="col">Size</th>
-                            <th class="p-2" scope="col">Category</th>
-                            <th class="p-2" scope="col">Stock</th>
-                            <th class="p-2" scope="col">Product Details</th>
-                            <th class="p-2" scope="col">Images</th>
-                            <th class="p-2" scope="col">Edit</th>
-                            <th class="p-2" scope="col">Delete</th>
+                <div class="table-responsive ">
+                    <table class="py-4 mb-3 table table-hover table-bordered " id="productsTable">
+                        <thead class="bg-dark text-white">
+                            <tr>
+                                <th class="p-2" scope="col">ID</th>
+                                <th class="p-2" scope="col">Name</th>
+                                <th class="p-2" scope="col">Price</th>
+                                <th class="p-2" scope="col">Size</th>
+                                <th class="p-2" scope="col">Category</th>
+                                <th class="p-2" scope="col">Stock</th>
+                                <th class="p-2" scope="col">Product Details</th>
+                                <th class="p-2" scope="col">Images</th>
+                                <th class="p-2" scope="col">Edit</th>
+                                <th class="p-2" scope="col">Delete</th>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each productsData}}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each productsData}}
 
-                        <tr class="p-2 ">
-                            <td class="p-2 ">{{this._id}}</td>
-                            <td class="p-2 ">{{this.name}}</td>
-                            <td class="p-2 ">{{this.price}}</td>
-                            <td class="p-2 ">{{this.size}}</td>
-                            <td class="p-2 ">{{this.category}}</td>
-                            <td class="p-2 ">{{this.quantity}}</td>
-                            <td class="p-2 ">{{this.product_description}}</td>
-                            <td class="p-2 "><img style="width:50px;height:50px;" src="/images/product-images/{{this._id}}.jpg" alt=""></td>
-                            <!---=============== Edit product ==============--->
+                            <tr class="p-2 ">
+                                <td class="p-2 ">{{this._id}}</td>
+                                <td class="p-2 ">{{this.name}}</td>
+                                <td class="p-2 ">{{this.price}}</td>
+                                <td class="p-2 ">{{this.size}}</td>
+                                <td class="p-2 ">{{this.category}}</td>
+                                <td class="p-2 ">{{this.quantity}}</td>
+                                <td class="p-2 ">{{this.product_description}}</td>
+                                <td class="p-2 "><img style="max-width:50px; max-height:70px"
+                                        src="/images/product-images/{{this._id}}.jpg" alt=""></td>
 
-                            <td class="p-2 "><a class=" d-flex justify-content-center"
-                                    href="/admin/editProduct/{{this._id}}">
-                                    <span class="material-icons-sharp">edit</span></a>
-                            </td>
+                                <!---=============== Edit product ==============--->
 
-                            <!---=============== Delete product ==============--->
+                                <td class="p-2 "><a class=" d-flex justify-content-center"
+                                        href="/admin/editProduct/{{this._id}}">
+                                        <span class="material-icons-sharp">edit</span></a>
+                                </td>
 
-                            <td class="p-2 d-flex justify-content-center">
-                                <a role="button" data-bs-toggle="modal" class="opendatamodal" data-id="{{this._id}}"
-                                    data-bs-target="#deleteProduct">
-                                    <span class="material-icons-sharp text-danger">delete</span></a>
-                                </a>
-                            </td>
-                            <!---=== Delete product modal ===--->
+                                <!---=============== Delete product ==============--->
 
-                            <div class="modal fade " id="deleteProduct" data-bs-backdrop="static"
-                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                aria-hidden="true">
-                                <div class=" d-flex justify-content-center align-items-center modal-dialog-centered">
-                                    <div class="modal-dialog bg-success">
-                                        <div class="modal-content p-4">
-                                            <div class="modal-header p-2">
-                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Product
-                                                </h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <form action="/admin/deleteProduct" method="post">
-                                                <div class="modal-body p-3">
-                                                    <input type="text" class="d-none select" name="id" value="">
-                                                    <p>Are you sure? Delete product with ID</p>
-                                                    <input type="text" class="border-0 select " name="id" value=""
-                                                        disabled>
+                                <td class="p-2 ">
+                                    <a class="d-flex justify-content-center text-danger" role="button" data-bs-toggle="modal" class="opendatamodal" data-id="{{this._id}}"
+                                        data-bs-target="#deleteProduct">
+                                        <span class="material-icons-sharp text-danger">delete</span></a>
+                                    </a>
+                                </td>
+                                <!---=== Delete product modal ===--->
 
+                                <div class="modal fade " id="deleteProduct" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                    aria-hidden="true">
+                                    <div
+                                        class=" d-flex justify-content-center align-items-center modal-dialog-centered">
+                                        <div class="modal-dialog bg-success">
+                                            <div class="modal-content p-4">
+                                                <div class="modal-header p-2">
+                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Product
+                                                    </h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
                                                 </div>
-                                                <div class="modal-footer p-2">
-                                                    <button type="button" class="btn btn-secondary  p-2"
-                                                        data-bs-dismiss="modal">Cancel</button>
-                                                    <button type="submit"
-                                                        class="btn btn-danger mx-4 px-4 p-2">Delete</button>
-                                            </form>
+                                                <form action="/admin/deleteProduct" method="post">
+                                                    <div class="modal-body p-3">
+                                                        <input type="text" class="d-none select" name="id" value="">
+                                                        <p>Are you sure? Delete product with ID</p>
+                                                        <input type="text" class="border-0 select " name="id" value=""
+                                                            disabled>
+
+                                                    </div>
+                                                    <div class="modal-footer p-2">
+                                                        <button type="button" class="btn btn-secondary  p-2"
+                                                            data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="submit"
+                                                            class="btn btn-danger mx-4 px-4 p-2">Delete</button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
                 </div>
 
-               
+
             </div>
 
 

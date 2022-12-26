@@ -81,7 +81,9 @@ router.get("/editProduct/:userId", (req, res) => {
     productHelper.getproduct(req.params.userId).then((response) => {
       if (response.status) {
         res.render("admin/editProduct", { tobeupdate: response.data });
-      } else res.send("fail");
+      }
+       else
+        res.send("fail");
     });
   } else res.redirect("/admin/login");
 });

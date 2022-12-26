@@ -68,24 +68,30 @@
 </div> --}}
 
 
-<section class="contents py-2 px-5">
+<section class="contents py-5 px-5">
   <div class="container">
     <h1>New Arrivals</h1>
-    <div class="p-5 row ">
+    <div class="p-4 row ">
       <div class="row">
         {{#each productsData}}
-        <div class="col-md-3 col-sm-6 col-12">
+        <div class="col-md-3 col-sm-6 col-12 single-item">
           <div class="card m-2 p-2 mob-card" >
+            <a href="/product/{{this._id}}" class="text-dark text-decoration-none">
             <img src="/images/product-images/{{this._id}}.jpg" class="card-img-top" alt="" style="; height: 20rem;"/>
             <div class="card-body">
-              <h5 class="card-title p-1">{{name}}</h5>
-             <div class="p-1"> <span>₹ {{price}}</span></div>
-              <a href="#" class="btn btn-dark px-3 py-1">Buy now</a>
+              <h5 class="card-title p-1 m-0">{{name}}</h5>
+             <div class="p-1 mb-1"> <b><span>₹ {{price}}</span></b></div>
+             <form action="#" >
+
+              <button  type="submit" class="btn btn-dark px-3 py-1 d-flex gap-1 align-items-center"><span class="material-icons-sharp">add_shopping_cart</span> Add to Cart</button>
+             </form>
             </div>
+            </a>
           </div>
         </div>
         {{/each}}
       </div>
     </div>
   </div>
+
 </section>

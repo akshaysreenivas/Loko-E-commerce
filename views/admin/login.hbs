@@ -1,31 +1,36 @@
-<section class="vh-100 d-flex align-items-center justify-content-center " style="background-color: #dbdbdb;">
+<section class="vh-100 d-flex align-items-center justify-content-center" style="background-color: #dbdbdb;">
 
     <div class="col-md-6 col-lg-7 d-flex align-items-center rounded col-10" style="max-width:600px;">
         <div class="card-body col-md-6 col-lg-7 p-4 p-lg-5 text-black rounded" style="background-color: #ffffff;">
             <form action="/admin/adminlogin" method="post" id="adminForm">
+
                 <div class="d-flex justify-content-center" style="width: 100%;">
                     <h2 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Admin</h2>
                 </div>
+
                 <div class="form-outline mb-2 p-2">
                     <h5 class="text-danger">{{message}}</h5>
                 </div>
+
                 <div class="mb-4 m-3 px-3 p-2">
-                    <input type="email" id="ademail" onblur="javascript:value=value.replace(/\s/g,'');" name="email" placeholder="Admin id"
-                        class="form-control form-control-lg px-3 " style="width: 100%;border-radius:25px"  />
-                        <small class="text-danger px-2" id="admemailerr"></small>
+                    <input type="email" id="ademail" onblur="javascript:value=value.replace(/\s/g,'');" name="email"
+                        placeholder="Admin id" class="form-control form-control-lg px-3"
+                        style="width: 100%;border-radius:25px" />
+                    <small class="text-danger px-2" id="admemailerr"></small>
                 </div>
 
-                <div class=" mb-4 m-3 px-3 p-2">
+                <div class="mb-4 m-3 px-3 p-2">
                     <input type="password" placeholder="Password " id="adpassword" name="password"
-                        class="form-control form-control-lg px-3 " style="width: 100%;border-radius:25px " />
-                        <small class="text-danger px-2" id="admpasserr"></small>
+                        class="form-control form-control-lg px-3" style="width: 100%;border-radius:25px " />
+                    <small class="text-danger px-2" id="admpasserr"></small>
                 </div>
-                <div class=" mb-4 m-3 px-3  p-2">
-                    <button class=" user-login-btn p-1" type="submit"
+
+                <div class="mb-4 m-3 px-3 p-2">
+                    <button class="user-login-btn p-1" type="submit"
                         style="width: 100%;border-radius:25px;font-size: 22px;">Login</button>
                 </div>
+
             </form>
-<span id="form"></span>
         </div>
     </div>
 </section>
