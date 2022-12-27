@@ -81,8 +81,7 @@
             <div class="card-body">
               <h5 class="card-title p-1 m-0">{{name}}</h5>
              <div class="p-1 mb-1"> <b><span>₹ {{price}}</span></b></div>
-             <form action="#" >
-
+             <form action="/addToCart/{{this._id}}" method="post">
               <button  type="submit" class="btn btn-dark px-3 py-1 d-flex gap-1 align-items-center"><span class="material-icons-sharp">add_shopping_cart</span> Add to Cart</button>
              </form>
             </div>

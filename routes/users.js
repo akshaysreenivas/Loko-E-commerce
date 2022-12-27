@@ -91,23 +91,36 @@ router.get("/profile", (req, res) => {
 // cart --------
 
 router.get("/cart", (req, res) => {
-  // if (req.session.loggedIn)
-   res.render("users/cart",{ user : req.session.user });
-  // else redirect("/login");
+  if (req.session.loggedIn){
+userHelper.getCartItems(req.session.user._id)
+    res.render("users/cart",{ user : req.session.user });
+  }
+  else
+  res.redirect("/login");
+});
+router.post("/addToCart/:productID", (req, res) => {
+
+  if (req.session.loggedIn){
+    const quantity=1;
+    userHelper.addToCart(req.session.user._id,req.params.productID,quantity)
+    res.redirect("/cart");
+
+  }
+  else
+  res.redirect("/login");
 });
 
 // product view ------ 
 
 router.get("/product/:productID", async(req, res) => {
    const product = await productHelper.getproduct(req.params.productID)
-   console.log(product)
    res.render("users/product",{ user : req.session.user , product:product.data});
  
 });
 
 // wishlist -------
 
-router.get("/cart", (req, res) => {
+router.get("/wishlist", (req, res) => {
   if (req.session.loggedIn) res.render("users/wishlist",{ user : req.session.user });
   else redirect("/login");
 });
