@@ -3,14 +3,26 @@ const router = express.Router();
 const userHelper = require("../helpers/userHelper");
 const productHelper = require("../helpers/productHelper");
 
+const verifyLogin = (req, res, next) => {
+  if (req.session.loggedIn) {
+    next();
+  } else {
+    res.redirect("/login");
+  }
+};
+
 /* user home page. */
 
-router.get("/", async(req, res) => { 
-   await productHelper.viewproducts().then((response) => {
-      const productsData = response.data;
-      res.render("users/home", { productsData, user: req.session.user });
-    });
- 
+router.get("/", async (req, res) => {
+  let total = null;
+  if (req.session.user) {
+    total = await userHelper.getCartCount(req.session.user._id);
+  }
+  await productHelper.viewproducts().then((response) => {
+    const productsData = response.data;
+   
+    res.render("users/home", { productsData, total, user: req.session.user });
+  });
 });
 
 // --------user signup ---------
@@ -45,8 +57,10 @@ router.post("/signup", (req, res) => {
 // get login
 
 router.get("/login", (req, res) => {
-  if (req.session.loggedIn) res.redirect("/");
+  if (req.session.loggedIn)
+   res.redirect("/");
   else {
+    console.log(">>>");
     const message = req.session.message;
     res.render("users/login", { message });
     req.session.message = " ";
@@ -81,48 +95,82 @@ router.post("/login", (req, res) => {
 
 // profile UI--------
 
-router.get("/profile", (req, res) => {
-  // if (req.session.loggedIn) 
-  res.render("users/profile",{ user : req.session.user });
-  // else redirect("/login");
+router.get("/profile", verifyLogin, (req, res) => {
+  res.render("users/profile", { user: req.session.user });
 });
 
+// product view ------
+
+router.get("/product/:productID", async (req, res) => {
+  const product = await productHelper.getproduct(req.params.productID);
+  res.render("users/product", {
+    user: req.session.user,
+    product: product.data,
+  });
+});
 
 // cart --------
 
-router.get("/cart", (req, res) => {
-  if (req.session.loggedIn){
-userHelper.getCartItems(req.session.user._id)
-    res.render("users/cart",{ user : req.session.user });
-  }
-  else
-  res.redirect("/login");
-});
-router.post("/addToCart/:productID", (req, res) => {
-
-  if (req.session.loggedIn){
-    const quantity=1;
-    userHelper.addToCart(req.session.user._id,req.params.productID,quantity)
-    res.redirect("/cart");
-
-  }
-  else
-  res.redirect("/login");
+router.get("/cart", verifyLogin, async (req, res) => {
+  await userHelper.getCartItems(req.session.user._id).then((response) => {
+    let total = 0;
+    let cartProducts = null;
+    if (response.status) {
+      total = response.cartItems[0].totalQty;
+      cartProducts = response.cartItems ;
+      console.log("cartProducts",cartProducts);
+    }
+    res.render("users/cart", { cartProducts, total, user: req.session.user });
+  });
 });
 
-// product view ------ 
-
-router.get("/product/:productID", async(req, res) => {
-   const product = await productHelper.getproduct(req.params.productID)
-   res.render("users/product",{ user : req.session.user , product:product.data});
+// post 
  
+router.post("/addToCart/:productID",verifyLogin, async (req, res,next) => {
+  const quantity = 1;
+  console.log("id",req.params.productID);
+  await userHelper
+    .addToCart(req.session.user._id, req.params.productID, quantity)
+    .then((response) => {
+      let itemCount = response.data;
+      res.json({ itemCount }); 
+    })
+    .catch((err) => err);
+});
+
+
+
+
+// delete product from cart 
+
+router.post("/delete-cart-item/:productID",verifyLogin, (req, res) => {
+  let count = -1;
+  userHelper
+    .deleteCartProduct(req.session.user._id, req.params.productID, count) 
+    .then((response) => {
+      res.json({ response });
+    });
+});
+
+// change quantity of a single item in cart  
+
+router.post("/changeqty",verifyLogin, (req, res) => {
+  let count = 1;
+  console.log(" req.data", req.body.id);
+  console.log(" req.data", req.body.count);
+  console.log("req.session.user._id", req.session.user._id);
+  console.log("req.params.productID", req.params.productID);
+  userHelper
+    .changeCartProductCount(req.session.user._id, req.body)
+    .then((response) => {
+      res.json({ response });
+    });
 });
 
 // wishlist -------
 
-router.get("/wishlist", (req, res) => {
-  if (req.session.loggedIn) res.render("users/wishlist",{ user : req.session.user });
-  else redirect("/login");
+router.get("/wishlist", verifyLogin, (req, res) => {
+  res.render("users/wishlist", { user: req.session.user });
 });
 
 // =======logout=====

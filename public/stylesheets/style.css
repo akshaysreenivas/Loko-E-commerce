@@ -11,6 +11,14 @@
   --box-shadow: 0 2rem 3rem var(--color-light) ;
 }
 
+input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+  
+        
+
 body {
   font-size: 14px ;
   font-family: "Poppins", sans-serif;
@@ -131,85 +139,16 @@ aside {
 /* image zoom  */
 
 
-.zoom, .original {
-  position: relative;
-}
-
-.zoom {
-  display: inline-block;
-}
-
-.original {
-  cursor: crosshair;
-}
 
 
 
-.zoom .viewer {
-  position: absolute;
-  top: 0;
-  left: 100%;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-.zoom .viewer img {
-  position: absolute;
-}
-
-.original:hover ~ div {
-  display: block;
-}
-
-.original::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1;
-} 
-
-.magnifier {
-  position: absolute;
-  background: #000;
-  opacity: 0.7;
-  top: 0;
-  left: 0;
-}
-
-.magnifier .viewer {
-  border: 1px solid #d4d4d4;
-  /* margin-left: 1rem; */
-  /* display: none; */
-}
 
 
-.img-zoom-container {
-  position: relative;
-}
 
-.img-zoom-lens {
-  position: absolute;
-  /* display:none; */
-  border: 1px solid #d4d4d4;
-  background-color: #9397b86c;
-  /*set the size of the lens:*/
-  width: 100px;
-  height: 100px;
-}
-
-.img-zoom-result {
-  width: 300px;
-  height: 300px;
-}
 
 /* product listing   */
 
 .single-item:hover {
- zoom: 1;
  cursor: pointer;
 }
 

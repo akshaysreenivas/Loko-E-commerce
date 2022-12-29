@@ -13,7 +13,7 @@ module.exports = {
           size: data.size,
           image_path: data.img_path,
           category: data.category,
-          quantity: data.quantity,
+          stock: data.quantity,
           product_description: data.description
         })
 
@@ -35,14 +35,13 @@ module.exports = {
   editproduct: (data) => {
     return new Promise(async (resolve, reject) => {
       try {
-        console.log(data)
         await products.findOneAndUpdate({ _id: data.productId }
           , {
             name: data.name,
             price: data.price,
             category: data.category,
             size: data.size,
-            quantity: data.quantity,
+            stock: data.quantity,
             product_description: data.description
           }, { new: true })
           .then((updatedData) => {

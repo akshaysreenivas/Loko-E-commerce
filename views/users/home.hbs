@@ -46,11 +46,11 @@
   <div class="carousel-inner">
 
     <div class="carousel-item active">
-      <img src=""
-        class="d-block w-100" alt="..." />
+      <img src="" class="d-block w-100" alt="..." />
     </div>
     <div class="carousel-item ">
-      <img src="https://www.myg.in/images/promo/35/myg_digital_banners_secret_santa_fest_v1_937x394__1_.jpg" class="d-block w-100" alt="..." />
+      <img src="https://www.myg.in/images/promo/35/myg_digital_banners_secret_santa_fest_v1_937x394__1_.jpg"
+        class="d-block w-100" alt="..." />
     </div>
     <div class="carousel-item">
       <img src="https://www.myg.in/images/promo/33/myg_digital-banners_upto-5000-cashback-for-iphones_v1_937x394.jpg"
@@ -74,23 +74,30 @@
     <div class="p-4 row ">
       <div class="row">
         {{#each productsData}}
-        <div class="col-md-3 col-sm-6 col-12 single-item">
-          <div class="card m-2 p-2 mob-card" >
+        <div class="col-md-3 col-sm-6 col-12 single-item" >
+          <div class="card m-2 p-2 mob-card">
             <a href="/product/{{this._id}}" class="text-dark text-decoration-none">
-            <img src="/images/product-images/{{this._id}}.jpg" class="card-img-top" alt="" style="; height: 20rem;"/>
-            <div class="card-body">
-              <h5 class="card-title p-1 m-0">{{name}}</h5>
-             <div class="p-1 mb-1"> <b><span>₹ {{price}}</span></b></div>
-             <form action="/addToCart/{{this._id}}" method="post">
-              <button  type="submit" class="btn btn-dark px-3 py-1 d-flex gap-1 align-items-center"><span class="material-icons-sharp">add_shopping_cart</span> Add to Cart</button>
-             </form>
-            </div>
+              <img src="/images/product-images/{{this._id}}.jpg" class="card-img-top" alt="" style="; height: 20rem;" />
+
+              <div class="card-body">
+                <h5 class="card-title p-1 m-0">{{name}}</h5>
+                <div class="p-1 mb-1"> <b><span>₹ {{price}}</span></b></div>
             </a>
+            <button onclick="addToCart('{{this._id}}')"
+              class="btn btn-dark py-1 d-flex w-100 justify-content-center add-to-cart-btn">
+              <p class="m-0 gap-1 d-flex add-to-cart-text" id="add-to-cart-text{{_id}}"><span
+                class="material-icons-sharp">add_shopping_cart</span>   Add to Cart</p>
+              <div class="spinner-border add-to-cart-spinner" id="add-to-cart-spinner{{_id}}" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </button>
           </div>
+
         </div>
-        {{/each}}
       </div>
+      {{/each}}
     </div>
+  </div>
   </div>
 
 </section>

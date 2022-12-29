@@ -52,7 +52,6 @@ router.post("/adminlogin", (req, res) => {
 
 router.post("/add-product", (req, res) => {
   productHelper.addProduct(req.body).then((response) => {
-    console.log("added data id", response.data._id);
     const imgid = response.data._id;
     const image = req.files.image;
     image.mv(`./public/images/product-images/${imgid}.jpg`, (err) => {
@@ -61,7 +60,6 @@ router.post("/add-product", (req, res) => {
         res.redirect("/admin/addproduct");
         req.session.addedProduct = false;
       } else {
-        console.log(err);
         res.send("404 error failed uploading data");
       }
     });

@@ -63,7 +63,7 @@ module.exports = {
     },
 
 
-    addToCart: (userID, productID,quantity) => {
+    addToCart: (userID, productID, quantity) => {
         const UserID = new mongoose.Types.ObjectId(userID)
         const ProductID = new mongoose.Types.ObjectId(productID)
         return new Promise(async (resolve, reject) => {
@@ -76,13 +76,16 @@ module.exports = {
                         userId: userID,
                         products: [
                             {
-                                productId: productID,
+                                productId: ProductID,
                                 quantity: 1
                             }
                         ],
                         totalQty: 1
                     })
                     await newCart.save()
+                        .then((data) => {
+                            resolve({ status: true, data })
+                        })
                 } else {
                     // If they do have a cart add product into the cart
 
@@ -93,9 +96,12 @@ module.exports = {
                     const productIndex = productItem.findIndex(item => item.productId.toString() === ProductID.toString())
                     if (productIndex >= 0) {
                         // Increasing quantity of product in cart
-                        
-                        userCart.products[productIndex].quantity+=quantity;
-                       await userCart.save()
+
+                        userCart.products[productIndex].quantity += quantity;
+                        await userCart.save()
+                            .then((data) => {
+                                resolve({ status: true, data })
+                            })
                     }
                     else {
                         // Add new product to cart
@@ -103,7 +109,10 @@ module.exports = {
                             productId: productID,
                             quantity: 1,
                         }
-                        await cart.findOneAndUpdate({ userId: userID }, { $inc: { totalQty: 1 }, $push: { products: newProduct } })
+                        await cart.findOneAndUpdate({ userId: userID }, { $inc: { totalQty: 1 }, $push: { products: newProduct } }, { new: true })
+                            .then((data) => {
+                                resolve({ status: true, data })
+                            })
                     }
 
                 }
@@ -116,32 +125,121 @@ module.exports = {
     },
 
     getCartItems: (userID) => {
-        console.log("user id>>", userID);
         const ID = new mongoose.Types.ObjectId(userID)
         return new Promise(async (resolve, reject) => {
             try {
-                const jp = await cart.aggregate([
-                    {
-                        $match: { userId: { $in: [ID] } }
-                        // },{
-                        //     $lookup:{
-                        //         from:"products"
-                        //     }
+                const Cart = await cart.findOne({ userId: ID }).lean()
+                if (Cart) {
+                    console.log("cart",Cart);
+                    const cartItems = await cart.aggregate([
+                        {
+                            $match: { userId: ID }
+                        }, {
+                            $unwind: '$products'
+                        }, {
+                            $project: {
+                                productId: '$products.productId',
+                                quantity: '$products.quantity',
+                                totalQty: '$totalQty',
+                                totalCost: '$totalCost'
+                            }
+                        }, {
+                            $lookup: {
+                                from: 'products',
+                                localField: 'productId',
+                                foreignField: '_id',
+                                as: 'product'
+                            }
+                        }
+                    ])
+                    if (cartItems.length!==0) {
+                        resolve({ status: true, cartItems })
                     }
-                ])
-                console.log("jppppp", jp)
+                    else {
+                        resolve({ status: false })
+                    }
+                }
+                else {
+                    resolve({ status: false })
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+        })
+    },
+
+    getCartCount: (ID) => {
+
+        return new Promise(async (resolve, reject) => {
+            let count = 0
+            try {
+                await cart.findOne({ userId: ID }, { totalQty: 1 }).then((data) => {
+                    if (data) {
+                        resolve(data.totalQty)
+                    } else {
+                        resolve(0)
+                    }
+                })
+            } catch (error) {
+                throw error;
+            }
+
+        })
+    },
+
+    deleteCartProduct: (userID, productID, count) => {
+        const UserID = new mongoose.Types.ObjectId(userID)
+        const ProductID = new mongoose.Types.ObjectId(productID)
+        return new Promise(async (resolve, reject) => {
+            try {
+                await cart.updateOne({ userId: userID }, {
+                    $pull: { products: { productId: ProductID } },
+                    $inc: { totalQty: count }
+                }
+                ).then(() => {
+                    resolve({ status: true });
+                })
+            } catch (error) {
+                console.log(error);
+            }
+        })
+    },
+    changeCartProductCount: (userID, data) => {
+      
+        const count = parseInt(data.count)
+        const UserID = new mongoose.Types.ObjectId(userID)
+        const ProductID = new mongoose.Types.ObjectId(data.id)
+        return new Promise(async (resolve, reject) => {
+            try {
+                const cartitems = await cart.findOne({ userId: userID })
+                const productItem = cartitems.products
+                const productIndex = productItem.findIndex(item => item.productId.toString() === ProductID.toString())
+
+                if (productIndex >= 0) {
+                    if (count == -1 && cartitems.products[productIndex].quantity <= 1) {
+                        await cart.updateOne({ userId: UserID }, {
+                            $pull: { products: { productId: ProductID } },
+                            $inc: { totalQty: count }
+                        }
+                        ).then(() => {
+                            resolve({ status: true });
+                        })
+
+                    } else {
+                        cartitems.products[productIndex].quantity += count;
+                        await cartitems.save().then(() => {
+                            resolve({ status: true });
+
+                        })
+                    }
+                }
             } catch (error) {
                 console.log(error);
             }
         })
     }
-
-
-
-
-
-
-
+    ,
 
 
 }

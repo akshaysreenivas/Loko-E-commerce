@@ -20,7 +20,7 @@ const productSc = new mongoose.Schema({
         type: String,
         require: true
     },
-    quantity: {
+    stock: {
         type: Number,
         require: true
     },
