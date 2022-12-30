@@ -60,7 +60,6 @@ router.get("/login", (req, res) => {
   if (req.session.loggedIn)
     res.redirect("/");
   else {
-    console.log(">>>");
     const message = req.session.message;
     res.render("users/login", { message });
     req.session.message = " ";
@@ -126,8 +125,6 @@ router.get("/cart", verifyLogin, async (req, res) => {
     if (response.status) {
       totalItems = response.cartItems[0].totalQty;
       cartProducts = response.cartItems;
-      console.log("cartProducts", cartProducts);
-
     }
     res.render("users/cart", { cartProducts, totalCost, totalItems, user: req.session.user });
   });
@@ -137,7 +134,6 @@ router.get("/cart", verifyLogin, async (req, res) => {
 
 router.post("/addToCart/:productID", verifyLogin, async (req, res, next) => {
   const quantity = 1;
-  console.log("id", req.params.productID);
   await userHelper
     .addToCart(req.session.user._id, req.params.productID, quantity)
     .then((response) => {
@@ -166,9 +162,8 @@ router.post("/changeqty", verifyLogin, async (req, res) => {
   await userHelper
     .changeCartProductCount(req.session.user._id, req.body)
     .then((response) => {
-      userHelper.getCartTotalamount(req.session.user._id).then((response) => {     
+      userHelper.getCartTotalamount(req.session.user._id).then((response) => {
         totalCost = response.totalAmount[0].totalCost
-        console.log("response<<<<<<", totalCost);
         res.json({ totalCost });
       })
     });

@@ -2,16 +2,18 @@
 <section class=" admin-section d-flex gap-5">
     {{>adminSideBar}}
     <div class="vw-100 main px-5 pt-5 content-admin justify-content-center">
-{{#if done}}
-<div class="p-3 text-success alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
- <span class="material-icons-sharp">
-check_circle
-</span> <strong> Success!!,</strong> Product added
-  <button type="button" class="btn-close p-4" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-{{/if}}
+        {{#if done}}
+        <div class="p-3 text-success alert alert-success alert-dismissible fade show d-flex align-items-center"
+            role="alert">
+            <span class="material-icons-sharp">
+                check_circle
+            </span> <strong> Success!!,</strong> Product added
+            <button type="button" class="btn-close p-4" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {{/if}}
 
-        <form action="/admin/add-product" method="post" class="d-dlex justify-contents-center box-shadow p-5 mb-5" enctype="multipart/form-data">
+        <form action="/admin/add-product" method="post" class="d-dlex justify-contents-center box-shadow p-5 mb-5"
+            enctype="multipart/form-data">
             <fieldset class="px-5">
 
                 <!-- Form Name -->
@@ -43,23 +45,23 @@ check_circle
                     <div class="form-group mb-4 m-3 px-3 p-2">
                         <label class="col-md-4 control-label mb-3" for="product_name">PRODUCT
                             CATEGORY</label>
-                        <select class="form-select form-control-lg "
-                            aria-label="product category select " name="category" required>
+                        <select class="form-select form-control-lg " aria-label="product category select "
+                            name="category" required>
                             <option selected="" disabled> --Select-- </option>
                             <option value="Kurta">Kurta</option>
                             <option value="Jeans">Jeans</option>
                             <option value="Shirts">Shirts</option>
                             <option value="Pants">Pants</option>
                             <option value="other">other</option>
-                        </select >
+                        </select>
                     </div>
                     <!-- PRODUCT SIZE -->
 
                     <div class="form-group mb-4 m-3 px-3 p-2">
                         <label class="col-md-4 control-label mb-3" for="product_size">PRODUCT
                             SIZE</label>
-                        <select class="form-select form-control-lg " 
-                            aria-label="product size select " name="size" required>
+                        <select class="form-select form-control-lg " aria-label="product size select " name="size"
+                            required>
                             <option selected="" disabled>--Select-- </option>
                             <option>Small</option>
                             <option>Medium </option>
@@ -68,7 +70,7 @@ check_circle
                             <option>XXL</option>
                             <option>XXXL</option>
 
-                        </select >
+                        </select>
                     </div>
 
                     <!-- PRODUCT QUANTITY -->
@@ -77,17 +79,17 @@ check_circle
                         <label class="col-md-4 control-label mb-3" for="available_quantity">AVAILABLE QUANTITY</label>
                         <input id="available_quantity" min="1" name="quantity" placeholder="QTY"
                             class="form-control form-control-lg px-3" style="width: 100%;border-radius:25px" required=""
-                            type="number"  onchange=""/>
+                            type="number" onchange="" />
                     </div>
                 </div>
 
                 <!-- add images   -->
                 <div class="form-group mb-4 m-3 px-3 p-2">
                     <label class="col-md-4 control-label mb-3" for="image">ADD IMAGE</label>
-                    <input class="form-control form-control-lg p-2"  type="file" name="image" id="" onchange="viewImg(event)" required>
+                    <input class="form-control form-control-lg p-2" type="file" name="image" id=""
+                        onchange="viewImg(event)" required>
                     <div class="m-4">
-                        <img style="width:50px;height:70px;" src=""
-                            alt="" id="addedImg" >
+                        <img style="width:50px;height:70px;" src="" alt="" id="addedImg">
                     </div>
                 </div>
                 <!-- Textarea -->

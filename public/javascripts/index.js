@@ -1,54 +1,33 @@
 // modal opening querys
 
-// $(document).ready(function() {
-//     $('.side-a').addClass("active-btn");   
-
-//     $(".side-a").on("click",function () {
-//         $(".side-a").removeClass("active-btn");
-//         $(this).addClass("active-btn");   
-//     });
-//     });
-
-
-
 
 $(document).on("click", ".opendatamodal", function () {
-    
     const selectionId = $(this).data('email');
-    console.log(selectionId)
-
     $(".modal-body .selection").val(selectionId);
 
 });
 
-// $(document).on("click", "#opendatamodaldelete", function (e) {
-//     e.preventDefault()
-//     const Id = $(this).data('productId');
-//     console.log(Id)
-//     $('#dummy')
-    
-// });
 
 
-function deleteProduct(id){
+function deleteProduct(id) {
 
     $(".delete-modal .proid").html(id);
 }
-    
 
 
-function confirmDeleteProduct(){
-  let id= $(".delete-modal .proid").html()
+
+function confirmDeleteProduct() {
+    let id = $(".delete-modal .proid").html()
     $.ajax({
-        url:'/admin/deleteProduct',
-        method:'post',
-        data:{
-            Id:id
+        url: '/admin/deleteProduct',
+        method: 'post',
+        data: {
+            Id: id
         },
-        success:(response)=>{
-            if(response.status){
+        success: (response) => {
+            if (response.status) {
                 location.reload()
-            }else{
+            } else {
                 alert('cannot delete product')
             }
         }
@@ -61,7 +40,7 @@ function confirmDeleteProduct(){
 $(document).ready(function () {
     $('#userTable').DataTable();
     $('#productsTable').DataTable();
-   
+
 });
 
 
@@ -114,13 +93,8 @@ function addToCart(Id) {
 function deleteCartProduct(Id) {
     $.ajax({
         url: '/delete-cart-item/' + Id,
-
         method: "post",
         success: (response) => {
-            // console.log("response",response);
-            // let count = $('#cart-count').html().val - 1
-            // $('#cart-count').html(count)
-            // $('#single-cart-item'+Id).addClass("d-none")
             location.reload()
         }
     })
@@ -139,15 +113,14 @@ function addCount(Id, Count) {
         },
         method: 'post',
         success: (response) => {
-            console.log("v",response.totalCost)
             let count = $('#' + Id).val()
             let amount = $('#price' + Id).html()
-            let price = (amount/ count)
+            let price = (amount / count)
             count++
-            let newprice=price*count
+            let newprice = price * count
             $('#' + Id).val(count)
             $('#price' + Id).html(newprice)
-            $('.totalcost' ).html(response.totalCost)
+            $('.totalcost').html(response.totalCost)
             $('.reduce-item-quantity' + Id).removeClass('disabled')
         }
     })
@@ -169,16 +142,16 @@ function decCount(Id, Count) {
             if (response) {
                 let count = $('#' + Id).val()
                 let totalprice = $('#price' + Id).html()
-                let price = (totalprice/ count)
+                let price = (totalprice / count)
                 count--
                 if (count < 1) {
                     location.reload()
                     return
                 }
                 $('#' + Id).val(count)
-                let newprice=price*count
+                let newprice = price * count
                 $('#' + Id).val(count)
-                $('.totalcost' ).html(response.totalCost)
+                $('.totalcost').html(response.totalCost)
 
                 $('#price' + Id).html(newprice)
             }

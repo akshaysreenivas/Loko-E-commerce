@@ -37,8 +37,8 @@
                     <div class="form-group mb-4 m-3 px-3 p-2">
                         <label class="col-md-4 control-label mb-3" for="product_name">PRODUCT
                             CATEGORY</label>
-                        <select class="form-select form-control-lg" 
-                            aria-label="product category select " name="category" >
+                        <select class="form-select form-control-lg" aria-label="product category select "
+                            name="category">
                             <option value="{{tobeupdate.category}}" selected>{{tobeupdate.category}}</option>
                             <option value="Kurta">Kurta</option>
                             <option value="Jeans">Jeans</option>
@@ -53,9 +53,9 @@
                     <div class="form-group mb-4 m-3 px-3 p-2">
                         <label class="col-md-4 control-label mb-3" for="product_size">PRODUCT
                             SIZE</label>
-                        <select class="form-select form-control-lg "
-                            aria-label="product size select " name="size" required>
-                            <option value="{{tobeupdate.size}}"  selected>{{tobeupdate.size}}</option>
+                        <select class="form-select form-control-lg " aria-label="product size select " name="size"
+                            required>
+                            <option value="{{tobeupdate.size}}" selected>{{tobeupdate.size}}</option>
                             <option>Small</option>
                             <option>Medium </option>
                             <option>Large</option>
@@ -83,10 +83,11 @@
                     <div class="m-3">
 
                         <img style="width:50px;height:70px;" src="/./images/product-images/{{tobeupdate._id}}.jpg"
-                            alt="" id="newImg" >
+                            alt="" id="newImg">
                     </div>
                     <label class="col-md-4 control-label my-3" for="image">CHANGE IMAGE</label>
-                    <input class="form-control form-control-lg p-2" type="file" name="image" id="" onchange="newImgView(event)" required>
+                    <input class="form-control form-control-lg p-2" type="file" name="image" id=""
+                        onchange="newImgView(event)" required>
                 </div>
 
                 <!-- Textarea -->

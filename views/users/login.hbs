@@ -4,25 +4,25 @@
             <form action="/login" method="post" id="loginForm">
                 <div class="d-flex justify-content-center" style="width: 100%;">
                     <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign in to your account </h3>
-                
+
                 </div>
                 <div class="form-outline mb-2">
                     <h5 class="text-danger">{{message}}</h5>
                 </div>
                 <div class="mb-2 m-3 p-2">
                     <label class="p-2" for="email"> Enter Email ID</label>
-                    <input type="email" onblur="javascript:value=value.replace(/\s/g,'');" id="userEmail" name="email" class="form-control px-3 py-2 "
-                        style="width: 100%;border-radius:25px"  />
-                 <small id="emailerr" class="text-danger px-3"></small>
+                    <input type="email" onblur="javascript:value=value.replace(/\s/g,'');" id="userEmail" name="email"
+                        class="form-control px-3 py-2 " style="width: 100%;border-radius:25px" />
+                    <small id="emailerr" class="text-danger px-3"></small>
                 </div>
                 <div class=" mb-4 m-3 p-2">
                     <label class="p-2" for="password">Password</label>
-                    <input type="password"  id="userPassword" class="form-control px-3 py-2" name="password"
+                    <input type="password" id="userPassword" class="form-control px-3 py-2" name="password"
                         style="width: 100%;border-radius:25px " />
-                 <small id="passwordErr" class="text-danger px-3"></small>
+                    <small id="passwordErr" class="text-danger px-3"></small>
                 </div>
 
-                <div class=" mb-4 my-3 mx-auto p-2 d-flex justify-content-center"  style="width: 100%;">
+                <div class=" mb-4 my-3 mx-auto p-2 d-flex justify-content-center" style="width: 100%;">
                     <button class=" user-login-btn p-1" type="submit"
                         style="width: 30%;border-radius:25px;font-size: 20px;">Login</button>
                 </div>

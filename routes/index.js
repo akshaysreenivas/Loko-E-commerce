@@ -5,24 +5,24 @@ const productHelper = require("../helpers/productHelper");
 
 /* GET home page. */
 
-function verifyadminlogin(req,res,next){
+function verifyadminlogin(req, res, next) {
   if (req.session.adminloggedIn) {
     next()
-  }else{
+  } else {
     res.redirect("/admin/login")
   }
 }
 
-router.get("/",verifyadminlogin, function (req, res, next) {
-    res.redirect("admin/listProducts");
+router.get("/", verifyadminlogin, function (req, res, next) {
+  res.redirect("admin/listProducts");
 });
 
 // ---------admin login---------
 
 // get method
 router.get("/login", function (req, res, next) {
-  if (req.session.adminloggedIn) 
-  res.redirect("/admin");
+  if (req.session.adminloggedIn)
+    res.redirect("/admin");
   else {
     res.render("admin/login", { message: req.session.message });
     req.session.message = "";
@@ -56,7 +56,7 @@ router.post("/adminlogin", (req, res) => {
 
 // -------Add Product------
 
-router.post("/add-product",verifyadminlogin, (req, res) => {
+router.post("/add-product", verifyadminlogin, (req, res) => {
   productHelper.addProduct(req.body).then((response) => {
     const imgid = response.data._id;
     const image = req.files.image;
@@ -72,23 +72,23 @@ router.post("/add-product",verifyadminlogin, (req, res) => {
   });
 });
 
-router.get("/addproduct",verifyadminlogin, function (req, res, next) {
-    res.render("admin/addProduct", { done: req.session.addedProduct });
+router.get("/addproduct", verifyadminlogin, function (req, res, next) {
+  res.render("admin/addProduct", { done: req.session.addedProduct });
 });
 
 // -------Edit Product------
 
-router.get("/editProduct/:userId",verifyadminlogin, (req, res) => {
-    productHelper.getproduct(req.params.userId).then((response) => {
-      if (response.status) {
-        res.render("admin/editProduct", { tobeupdate: response.data });
-      }
-       else
-        res.send("fail");
-    });
+router.get("/editProduct/:userId", verifyadminlogin, (req, res) => {
+  productHelper.getproduct(req.params.userId).then((response) => {
+    if (response.status) {
+      res.render("admin/editProduct", { tobeupdate: response.data });
+    }
+    else
+      res.send("fail");
+  });
 });
 
-router.post("/editproduct",verifyadminlogin, function (req, res, next) {
+router.post("/editproduct", verifyadminlogin, function (req, res, next) {
   productHelper.editproduct(req.body).then((response) => {
     if (response.status) {
       res.redirect("/admin/listproducts");
@@ -98,21 +98,20 @@ router.post("/editproduct",verifyadminlogin, function (req, res, next) {
 
 // ===== List Products =====
 
-router.get("/listproducts", verifyadminlogin,function (req, res, next) {
-    productHelper.viewproducts().then((response) => {
-      if (response) {
-        const productsData = response.data;
-        res.render("admin/listProducts", { productsData });
-      }
-    });
+router.get("/listproducts", verifyadminlogin, function (req, res, next) {
+  productHelper.viewproducts().then((response) => {
+    if (response) {
+      const productsData = response.data;
+      res.render("admin/listProducts", { productsData });
+    }
+  });
 });
 
 // -------Delete Product------
 
-router.post("/deleteProduct",verifyadminlogin, (req, res) => {
-  console.log("jdj",req.body.Id);
+router.post("/deleteProduct", verifyadminlogin, (req, res) => {
   productHelper.deleteProduct(req.body).then((response) => {
-   res.json(response);
+    res.json(response);
   });
 });
 
@@ -125,19 +124,19 @@ router.post("/deleteProduct",verifyadminlogin, (req, res) => {
 
 // =====List Users=====
 
-router.get("/listusers",verifyadminlogin, function (req, res, next) {
-    adminHelper.getusersData().then((response) => {
-      if (response.status) {
-        res.render("admin/listUsers", { usersData: response.usersdata });
-      } else {
-        res.send(err);
-      }
-    });
+router.get("/listusers", verifyadminlogin, function (req, res, next) {
+  adminHelper.getusersData().then((response) => {
+    if (response.status) {
+      res.render("admin/listUsers", { usersData: response.usersdata });
+    } else {
+      res.send(err);
+    }
+  });
 });
 
 // =========block users=====
 
-router.post("/blockUser",verifyadminlogin, (req, res) => {
+router.post("/blockUser", verifyadminlogin, (req, res) => {
   adminHelper.blockUser(req.body).then(() => {
 
     res.redirect("/admin/listusers");
@@ -148,7 +147,7 @@ router.post("/blockUser",verifyadminlogin, (req, res) => {
 
 /// =======Unblock user =======
 
-router.post("/unBlockUser",verifyadminlogin, (req, res) => {
+router.post("/unBlockUser", verifyadminlogin, (req, res) => {
   adminHelper.unBlockUser(req.body).then(() => {
     res.redirect("/admin/listusers");
   });
@@ -156,7 +155,7 @@ router.post("/unBlockUser",verifyadminlogin, (req, res) => {
 
 // --------logout--------
 
-router.get("/logout",verifyadminlogin, (req, res) => {
+router.get("/logout", verifyadminlogin, (req, res) => {
   req.session.destroy();
   res.redirect("/admin/login");
 });

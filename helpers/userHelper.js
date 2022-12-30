@@ -161,7 +161,6 @@ module.exports = {
                         }
                     ])
                     if (cartItems.length !== 0) {
-                        console.log(cartItems);
                         resolve({ status: true, cartItems })
                     }
                     else {
@@ -230,12 +229,11 @@ module.exports = {
                         }, {
                             $group: {
                                 _id: null,
-                                 totalCost: { $sum: { $multiply: ['$quantity', '$product.price'] } }
+                                totalCost: { $sum: { $multiply: ['$quantity', '$product.price'] } }
                             }
                         }
                     ])
                     if (totalAmount.length !== 0) {
-                        console.log(">>>.", totalAmount);
                         resolve({ status: true, totalAmount })
                     }
                     else {

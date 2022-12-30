@@ -87,7 +87,6 @@ module.exports = {
   },
 
   deleteProduct: (data) => {
-    console.log(">>>>>>>>>>>>>>>>>>", data)
     return new Promise(async (resolve, reject) => {
       try {
         await products.deleteOne({ _id: data.Id }).then((data) => {
@@ -96,7 +95,7 @@ module.exports = {
           }
         })
       } catch (error) {
-        console.log("hiierrr",error)
+        console.log( error)
       }
     })
   }
