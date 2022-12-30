@@ -9,16 +9,13 @@
             <div class="col-md-8">
                 <div class="card mb-4">
                     <div class="card-header py-3">
-                        {{#each cartProducts }}
-                        {{!-- {{#each product }} --}}
+                        <h5 class="mb-0 ">Cart - {{totalItems}} items</h5>
 
-                        <h5 class="mb-0 ">Cart - {{total}} items</h5>
-                      
                     </div>
+                    <!-- Single item -->
+                    {{#each cartProducts }}
                     <div class="card-body p-5">
-                        <!-- Single item -->
-                     
-                        <div class="row card-body border rounded"  id="single-cart-item{{productId}}">
+                        <div class="row card-body border rounded" id="single-cart-item{{productId}}">
                             <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
                                 <!-- Image -->
                                 <div class="bg-image hover-overlay hover-zoom ripple rounded "
@@ -31,34 +28,26 @@
                                 </div>
                                 <!-- Image -->
                             </div>
-                            {{#each product}}
+
 
                             <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
                                 <!-- Data -->
-                                <p><strong>{{this.name}}</strong></p>
-                                <p> <small> {{this.category}} </small> </p>
+                                <p><strong>{{product.name}}</strong></p>
+                                <p> <small> {{product.category}} </small> </p>
                                 <p class="text-start ">
-                                    <strong>₹ {{this.price}} </strong>
+                                    <strong>₹ <span id="price{{product._id}}">{{amount}}</span> </strong>
                                 </p>
-                                {{!-- {{#if quantity>=1}}
-                                <p>Instock</p>
-                                {{else}}
-                                <p>Out of stock</p>
-                                {{/if}} --}}
-                                <p>Size: {{this.size}}</p>
+                                <p>Size: {{product.size}}</p>
                                 <div class="d-flex">
-                                    
-                                  
-                                        <button type="button" class="btn btn-danger btn-sm mb-2 d-flex gap-1"
-                                            data-mdb-toggle="tooltip" title="Move to the wish list">
-                                            <span class="material-icons-sharp">
-                                                favorite_border
-                                            </span> Move to Wishlist </button>
-                                 
+                                    <button type="button" class="btn btn-danger btn-sm mb-2 d-flex gap-1"
+                                        data-mdb-toggle="tooltip" title="Move to the wish list">
+                                        <span class="material-icons-sharp">
+                                            favorite_border
+                                        </span> Move to Wishlist </button>
+
                                 </div>
                             </div>
-                            {{/each}}
-                              {{!-- {{/each}} --}}
+
 
                             <div class="col-lg-4 col-md-6 mb-4 mb-lg-0 d-flex mb-4  justify-content-center  ">
                                 <!-- Quantity -->
@@ -72,32 +61,31 @@
                                     </button>
 
                                     <div class=" w-50 p-2 ">
-                                        <input id="{{productId}}" min="1"  name="quantity" value="{{quantity}}" type="number"
-                                            class="form-control" />
+                                        <input id="{{productId}}" min="1" name="quantity" value="{{quantity}}"
+                                            type="number" class="form-control" />
                                     </div>
 
-                                    <button class="btn  p-0"
-                                        onclick="addCount('{{productId}}',1)">
+                                    <button class="btn  p-0" onclick="addCount('{{productId}}',1)">
                                         <span class="material-icons-sharp">add</span>
                                     </button>
 
                                 </div>
                                 <button onclick="deleteCartProduct('{{productId}}')" class="btn align-self-start p-0">
                                     <span class="material-icons-sharp text-secondary">
-                                    delete
-                                </span>
+                                        delete
+                                    </span>
                                 </button>
                             </div>
                         </div>
 
-                                         {{/each}}
-  
+
                     </div>
+                    {{/each}}
                 </div>
                 <div class="card mb-4">
                     <div class="card-body">
                         <p><strong>Expected shipping delivery</strong></p>
-                        <p class="mb-0">12.10.2020 - 14.10.2020</p>
+                        <p class="mb-0">5.1.2023 - 7.1.2023</p>
                     </div>
                 </div>
                 <div class="card mb-4 mb-lg-0">
@@ -116,7 +104,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 position-sticky top-5">
                 <div class="card mb-4">
                     <div class="card-header py-3">
                         <h5 class="mb-0">Summary</h5>
@@ -126,7 +114,7 @@
                             <li
                                 class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                                 Products
-                                <span>{{this.totalCost}}</span>
+                                <span> ₹ <span  class="totalcost">{{totalCost}}</span></span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                                 Shipping
@@ -135,12 +123,12 @@
                             <li
                                 class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                                 <div>
-                                    <strong>Total amount</strong>
+                                    <strong >Total amount</strong>
                                     <strong>
                                         <p class="mb-0">(including GST)</p>
                                     </strong>
                                 </div>
-                                <span><strong>$53.98</strong></span>
+                                <strong> ₹ <span class="totalcost"> {{totalCost}}</span></strong>
                             </li>
                         </ul>
 

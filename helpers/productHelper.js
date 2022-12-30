@@ -87,15 +87,16 @@ module.exports = {
   },
 
   deleteProduct: (data) => {
+    console.log(">>>>>>>>>>>>>>>>>>", data)
     return new Promise(async (resolve, reject) => {
       try {
-        await products.deleteOne({ _id: data.id }).then((data) => {
+        await products.deleteOne({ _id: data.Id }).then((data) => {
           if (data) {
             resolve({ status: true })
           }
         })
       } catch (error) {
-        throw error;
+        console.log("hiierrr",error)
       }
     })
   }

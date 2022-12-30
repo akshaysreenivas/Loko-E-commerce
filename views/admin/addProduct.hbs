@@ -33,7 +33,7 @@ check_circle
                         <label class="col-md-4 control-label mb-3" for="product_price">PRODUCT
                             PRICE</label>
 
-                        <input type="number" id="email" name="price" placeholder="PRODUCT PRICE"
+                        <input type="number" min="1" id="email" name="price" placeholder="PRODUCT PRICE"
                             class="form-control form-control-lg px-3" style="width: 100%;border-radius:25px" required />
                     </div>
                 </div>
@@ -43,24 +43,24 @@ check_circle
                     <div class="form-group mb-4 m-3 px-3 p-2">
                         <label class="col-md-4 control-label mb-3" for="product_name">PRODUCT
                             CATEGORY</label>
-                        <select class="form-select form-control-lg px-3" style="width: 100%;"
+                        <select class="form-select form-control-lg "
                             aria-label="product category select " name="category" required>
-                            <option selected="">Select </option>
+                            <option selected="" disabled> --Select-- </option>
                             <option value="Kurta">Kurta</option>
                             <option value="Jeans">Jeans</option>
                             <option value="Shirts">Shirts</option>
                             <option value="Pants">Pants</option>
                             <option value="other">other</option>
-                        </select>
+                        </select >
                     </div>
                     <!-- PRODUCT SIZE -->
 
                     <div class="form-group mb-4 m-3 px-3 p-2">
                         <label class="col-md-4 control-label mb-3" for="product_size">PRODUCT
                             SIZE</label>
-                        <select class="form-select form-control-lg px-3" style="width: 100%;"
+                        <select class="form-select form-control-lg " 
                             aria-label="product size select " name="size" required>
-                            <option selected="">Select </option>
+                            <option selected="" disabled>--Select-- </option>
                             <option>Small</option>
                             <option>Medium </option>
                             <option>Large</option>
@@ -68,14 +68,14 @@ check_circle
                             <option>XXL</option>
                             <option>XXXL</option>
 
-                        </select>
+                        </select >
                     </div>
 
                     <!-- PRODUCT QUANTITY -->
 
                     <div class="form-group mb-4 m-3 px-3 p-2">
                         <label class="col-md-4 control-label mb-3" for="available_quantity">AVAILABLE QUANTITY</label>
-                        <input id="available_quantity" name="quantity" placeholder="QTY"
+                        <input id="available_quantity" min="1" name="quantity" placeholder="QTY"
                             class="form-control form-control-lg px-3" style="width: 100%;border-radius:25px" required=""
                             type="number"  onchange=""/>
                     </div>
@@ -84,7 +84,7 @@ check_circle
                 <!-- add images   -->
                 <div class="form-group mb-4 m-3 px-3 p-2">
                     <label class="col-md-4 control-label mb-3" for="image">ADD IMAGE</label>
-                    <input class="form-control form-control-lg p-2"  type="file" name="image" id="" onchange="viewImg(event)">
+                    <input class="form-control form-control-lg p-2"  type="file" name="image" id="" onchange="viewImg(event)" required>
                     <div class="m-4">
                         <img style="width:50px;height:70px;" src=""
                             alt="" id="addedImg" >

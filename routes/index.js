@@ -5,10 +5,16 @@ const productHelper = require("../helpers/productHelper");
 
 /* GET home page. */
 
-router.get("/", function (req, res, next) {
+function verifyadminlogin(req,res,next){
   if (req.session.adminloggedIn) {
+    next()
+  }else{
+    res.redirect("/admin/login")
+  }
+}
+
+router.get("/",verifyadminlogin, function (req, res, next) {
     res.redirect("admin/listProducts");
-  } else res.redirect("/admin/login");
 });
 
 // ---------admin login---------
@@ -50,7 +56,7 @@ router.post("/adminlogin", (req, res) => {
 
 // -------Add Product------
 
-router.post("/add-product", (req, res) => {
+router.post("/add-product",verifyadminlogin, (req, res) => {
   productHelper.addProduct(req.body).then((response) => {
     const imgid = response.data._id;
     const image = req.files.image;
@@ -66,16 +72,13 @@ router.post("/add-product", (req, res) => {
   });
 });
 
-router.get("/addproduct", function (req, res, next) {
-  if (req.session.adminloggedIn) {
+router.get("/addproduct",verifyadminlogin, function (req, res, next) {
     res.render("admin/addProduct", { done: req.session.addedProduct });
-  } else res.redirect("/admin/login");
 });
 
 // -------Edit Product------
 
-router.get("/editProduct/:userId", (req, res) => {
-  if (req.session.adminloggedIn) {
+router.get("/editProduct/:userId",verifyadminlogin, (req, res) => {
     productHelper.getproduct(req.params.userId).then((response) => {
       if (response.status) {
         res.render("admin/editProduct", { tobeupdate: response.data });
@@ -83,10 +86,9 @@ router.get("/editProduct/:userId", (req, res) => {
        else
         res.send("fail");
     });
-  } else res.redirect("/admin/login");
 });
 
-router.post("/editproduct", function (req, res, next) {
+router.post("/editproduct",verifyadminlogin, function (req, res, next) {
   productHelper.editproduct(req.body).then((response) => {
     if (response.status) {
       res.redirect("/admin/listproducts");
@@ -96,22 +98,21 @@ router.post("/editproduct", function (req, res, next) {
 
 // ===== List Products =====
 
-router.get("/listproducts", function (req, res, next) {
-  if (req.session.adminloggedIn) {
+router.get("/listproducts", verifyadminlogin,function (req, res, next) {
     productHelper.viewproducts().then((response) => {
       if (response) {
         const productsData = response.data;
         res.render("admin/listProducts", { productsData });
       }
     });
-  } else res.redirect("/admin/login");
 });
 
 // -------Delete Product------
 
-router.post("/deleteProduct", (req, res) => {
+router.post("/deleteProduct",verifyadminlogin, (req, res) => {
+  console.log("jdj",req.body.Id);
   productHelper.deleteProduct(req.body).then((response) => {
-    res.redirect("/admin/listproducts");
+   res.json(response);
   });
 });
 
@@ -124,8 +125,7 @@ router.post("/deleteProduct", (req, res) => {
 
 // =====List Users=====
 
-router.get("/listusers", function (req, res, next) {
-  if (req.session.adminloggedIn) {
+router.get("/listusers",verifyadminlogin, function (req, res, next) {
     adminHelper.getusersData().then((response) => {
       if (response.status) {
         res.render("admin/listUsers", { usersData: response.usersdata });
@@ -133,12 +133,11 @@ router.get("/listusers", function (req, res, next) {
         res.send(err);
       }
     });
-  } else res.redirect("/admin/login");
 });
 
 // =========block users=====
 
-router.post("/blockUser", (req, res) => {
+router.post("/blockUser",verifyadminlogin, (req, res) => {
   adminHelper.blockUser(req.body).then(() => {
 
     res.redirect("/admin/listusers");
@@ -149,7 +148,7 @@ router.post("/blockUser", (req, res) => {
 
 /// =======Unblock user =======
 
-router.post("/unBlockUser", (req, res) => {
+router.post("/unBlockUser",verifyadminlogin, (req, res) => {
   adminHelper.unBlockUser(req.body).then(() => {
     res.redirect("/admin/listusers");
   });
@@ -157,7 +156,7 @@ router.post("/unBlockUser", (req, res) => {
 
 // --------logout--------
 
-router.get("/logout", (req, res) => {
+router.get("/logout",verifyadminlogin, (req, res) => {
   req.session.destroy();
   res.redirect("/admin/login");
 });

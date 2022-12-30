@@ -130,7 +130,6 @@ module.exports = {
             try {
                 const Cart = await cart.findOne({ userId: ID }).lean()
                 if (Cart) {
-                    console.log("cart",Cart);
                     const cartItems = await cart.aggregate([
                         {
                             $match: { userId: ID }
@@ -150,9 +149,19 @@ module.exports = {
                                 foreignField: '_id',
                                 as: 'product'
                             }
+                        }, {
+                            $project: {
+                                productId: 1, quantity: 1, totalQty: 1, product: { $arrayElemAt: ['$product', 0] }
+                            }
+                        }, {
+                            $project: {
+
+                                productId: 1, quantity: 1, totalQty: 1, product: 1, amount: { $sum: { $multiply: ['$quantity', '$product.price'] } }
+                            }
                         }
                     ])
-                    if (cartItems.length!==0) {
+                    if (cartItems.length !== 0) {
+                        console.log(cartItems);
                         resolve({ status: true, cartItems })
                     }
                     else {
@@ -168,6 +177,7 @@ module.exports = {
             }
         })
     },
+
 
     getCartCount: (ID) => {
 
@@ -185,6 +195,60 @@ module.exports = {
                 throw error;
             }
 
+        })
+    },
+
+    getCartTotalamount: (userID) => {
+        const usercartID = new mongoose.Types.ObjectId(userID)
+        return new Promise(async (resolve, reject) => {
+            try {
+                const Cart = await cart.findOne({ userId: usercartID }).lean()
+                if (Cart) {
+                    const totalAmount = await cart.aggregate([
+                        {
+                            $match: { userId: usercartID }
+                        }, {
+                            $unwind: '$products'
+                        }, {
+                            $project: {
+                                productId: '$products.productId',
+                                quantity: '$products.quantity',
+                                totalQty: '$totalQty',
+                                totalCost: '$totalCost'
+                            }
+                        }, {
+                            $lookup: {
+                                from: 'products',
+                                localField: 'productId',
+                                foreignField: '_id',
+                                as: 'product'
+                            }
+                        }, {
+                            $project: {
+                                productId: 1, quantity: 1, totalQty: 1, product: { $arrayElemAt: ['$product', 0] }
+                            }
+                        }, {
+                            $group: {
+                                _id: null,
+                                 totalCost: { $sum: { $multiply: ['$quantity', '$product.price'] } }
+                            }
+                        }
+                    ])
+                    if (totalAmount.length !== 0) {
+                        console.log(">>>.", totalAmount);
+                        resolve({ status: true, totalAmount })
+                    }
+                    else {
+                        resolve({ status: false })
+                    }
+                }
+                else {
+                    resolve({ status: false })
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
         })
     },
 
@@ -206,7 +270,7 @@ module.exports = {
         })
     },
     changeCartProductCount: (userID, data) => {
-      
+
         const count = parseInt(data.count)
         const UserID = new mongoose.Types.ObjectId(userID)
         const ProductID = new mongoose.Types.ObjectId(data.id)

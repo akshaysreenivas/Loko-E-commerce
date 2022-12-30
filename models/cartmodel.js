@@ -19,23 +19,14 @@ const CartSchema = new mongoose.Schema({
                 type:Number,
                  defaut:1
             },
-            totalPrice:{
-                type:Number,
-
-            } 
-
+           
         }
     ],
     totalQty:{
         type:Number,
         default:0
     },
-    totalCost: {
-        type: Number,
-        default:0,
-        required: true
-        },
-
+    
 })
 
 

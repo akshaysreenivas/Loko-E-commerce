@@ -152,8 +152,6 @@ aside {
  cursor: pointer;
 }
 
-
-
 /* new nav */
 
 #sidebar {
@@ -375,6 +373,9 @@ aside {
 
 /* Media Queries */
 @media(max-width: 1199.5px) {
+    aside{
+        display: none;
+    }
     nav ul li {
         padding: 0 10px;
     }
@@ -396,6 +397,9 @@ aside {
 }
 
 @media(max-width: 440px) {
+    aside{
+        display: none;
+    }
     #main-content {
         padding: 20px;
     }

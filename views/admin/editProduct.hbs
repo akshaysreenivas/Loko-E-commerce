@@ -9,7 +9,7 @@
 
                 <legend class="mb-4">EDIT PRODUCT</legend>
                 <input type="text" class="d-none" name="productId" value="{{tobeupdate._id}}">
-                <div class="container d-flex align-items-center ">
+                <div class="container d-flex align-items-center justify-content-around ">
                     <!-- PRODUCT NAME -->
 
                     <div class="form-group mb-4 m-3 px-3 p-2">
@@ -31,31 +31,31 @@
                             class="form-control form-control-lg px-3" style="width: 100%;border-radius:25px" required />
                     </div>
                 </div>
-                <div class="container d-flex align-items-center justify-content-between">
+                <div class="container d-flex  justify-content-evenly">
                     <!-- PRODUCT CATEGORY -->
 
                     <div class="form-group mb-4 m-3 px-3 p-2">
                         <label class="col-md-4 control-label mb-3" for="product_name">PRODUCT
                             CATEGORY</label>
-                        <select class="form-select form-control-lg px-3" style="width: 10rem;"
-                            aria-label="product category select " name="category" required>
+                        <select class="form-select form-control-lg" 
+                            aria-label="product category select " name="category" >
                             <option value="{{tobeupdate.category}}" selected>{{tobeupdate.category}}</option>
                             <option value="Kurta">Kurta</option>
                             <option value="Jeans">Jeans</option>
                             <option value="Shirts">Shirts</option>
                             <option value="Pants">Pants</option>
                             <option value="other">other</option>
-                        </select>
+                        </select required>
                     </div>
 
                     <!-- PRODUCT SIZE -->
 
-                    <div class="form-group ">
+                    <div class="form-group mb-4 m-3 px-3 p-2">
                         <label class="col-md-4 control-label mb-3" for="product_size">PRODUCT
                             SIZE</label>
-                        <select class="form-select form-control-lg px-3" style="width: 10rem;"
+                        <select class="form-select form-control-lg "
                             aria-label="product size select " name="size" required>
-                            <option value="{{tobeupdate.size}}" selected>{{tobeupdate.size}}</option>
+                            <option value="{{tobeupdate.size}}"  selected>{{tobeupdate.size}}</option>
                             <option>Small</option>
                             <option>Medium </option>
                             <option>Large</option>
@@ -86,7 +86,7 @@
                             alt="" id="newImg" >
                     </div>
                     <label class="col-md-4 control-label my-3" for="image">CHANGE IMAGE</label>
-                    <input class="form-control form-control-lg p-2" type="file" name="image" id="" onchange="newImgView(event)" >
+                    <input class="form-control form-control-lg p-2" type="file" name="image" id="" onchange="newImgView(event)" required>
                 </div>
 
                 <!-- Textarea -->

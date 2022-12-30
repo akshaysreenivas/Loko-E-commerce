@@ -1,6 +1,8 @@
 // modal opening querys
 
 // $(document).ready(function() {
+//     $('.side-a').addClass("active-btn");   
+
 //     $(".side-a").on("click",function () {
 //         $(".side-a").removeClass("active-btn");
 //         $(this).addClass("active-btn");   
@@ -11,23 +13,55 @@
 
 
 $(document).on("click", ".opendatamodal", function () {
+    
     const selectionId = $(this).data('email');
-    const Id = $(this).data('id');
+    console.log(selectionId)
+
     $(".modal-body .selection").val(selectionId);
-    $(".modal-body .select").val(Id);
 
 });
+
+// $(document).on("click", "#opendatamodaldelete", function (e) {
+//     e.preventDefault()
+//     const Id = $(this).data('productId');
+//     console.log(Id)
+//     $('#dummy')
+    
+// });
+
+
+function deleteProduct(id){
+
+    $(".delete-modal .proid").html(id);
+}
+    
+
+
+function confirmDeleteProduct(){
+  let id= $(".delete-modal .proid").html()
+    $.ajax({
+        url:'/admin/deleteProduct',
+        method:'post',
+        data:{
+            Id:id
+        },
+        success:(response)=>{
+            if(response.status){
+                location.reload()
+            }else{
+                alert('cannot delete product')
+            }
+        }
+    })
+
+}
 
 // datatable
 
 $(document).ready(function () {
     $('#userTable').DataTable();
     $('#productsTable').DataTable();
-    let count = $('reduce-item-quantity').val()
-    count--
-    if (count <= 1) {
-        $('.reduce-item-quantity' + Id).addClass('disabled')
-    }
+   
 });
 
 
@@ -57,18 +91,18 @@ function newImgView(event) {
 // addtocart
 
 function addToCart(Id) {
-    $("#add-to-cart-text"+Id).addClass("d-none");
-    $("#add-to-cart-spinner"+Id).addClass("spinner-border");
+    $("#add-to-cart-text" + Id).addClass("d-none");
+    $("#add-to-cart-spinner" + Id).addClass("spinner-border");
     $.ajax({
-        url: '/addToCart/'+Id,
+        url: '/addToCart/' + Id,
         method: 'post',
-        data:{
-productid:Id
+        data: {
+            productid: Id
         },
         success: (response) => {
             let count = response.itemCount.totalQty;
             $('#cart-count').html(count)
-            $("#add-to-cart-text"+Id).removeClass("d-none");
+            $("#add-to-cart-text" + Id).removeClass("d-none");
             $(".spinner-border").removeClass("spinner-border");
         }
     })
@@ -80,7 +114,7 @@ productid:Id
 function deleteCartProduct(Id) {
     $.ajax({
         url: '/delete-cart-item/' + Id,
-       
+
         method: "post",
         success: (response) => {
             // console.log("response",response);
@@ -96,18 +130,24 @@ function deleteCartProduct(Id) {
 
 // change single item quantity 
 
-function addCount(Id,Count) {
+function addCount(Id, Count) {
     $.ajax({
         url: '/changeqty/',
-        data:{
-            id:Id,
-            count:Count
-         },
+        data: {
+            id: Id,
+            count: Count
+        },
         method: 'post',
         success: (response) => {
+            console.log("v",response.totalCost)
             let count = $('#' + Id).val()
+            let amount = $('#price' + Id).html()
+            let price = (amount/ count)
             count++
+            let newprice=price*count
             $('#' + Id).val(count)
+            $('#price' + Id).html(newprice)
+            $('.totalcost' ).html(response.totalCost)
             $('.reduce-item-quantity' + Id).removeClass('disabled')
         }
     })
@@ -117,22 +157,30 @@ function addCount(Id,Count) {
 
 
 
-function decCount(Id,Count) {
+function decCount(Id, Count) {
     $.ajax({
         url: '/changeqty/',
-        data:{
-            id:Id,
-            count:Count
-         },
+        data: {
+            id: Id,
+            count: Count
+        },
         method: 'post',
         success: (response) => {
             if (response) {
                 let count = $('#' + Id).val()
+                let totalprice = $('#price' + Id).html()
+                let price = (totalprice/ count)
                 count--
-                if (count <= 1) {
-                    $('.reduce-item-quantity' + Id).addClass('disabled')
+                if (count < 1) {
+                    location.reload()
+                    return
                 }
                 $('#' + Id).val(count)
+                let newprice=price*count
+                $('#' + Id).val(count)
+                $('.totalcost' ).html(response.totalCost)
+
+                $('#price' + Id).html(newprice)
             }
         }
     })
