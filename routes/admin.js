@@ -1,19 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const adminHelper = require("../helpers/adminHelper");
-const productHelper = require("../helpers/productHelper");
+const adminController = require("../controllers/adminController");
+const productHelper = require("../controllers/productController");
+const verifylogin = require('../middleware/loginverify')
 
 /* GET home page. */
 
-function verifyadminlogin(req, res, next) {
-  if (req.session.adminloggedIn) {
-    next()
-  } else {
-    res.redirect("/admin/login")
-  }
-}
 
-router.get("/", verifyadminlogin, function (req, res, next) {
+
+router.get("/", verifylogin.verifyadminlogin, function (req, res, next) {
   res.redirect("admin/listProducts");
 });
 
@@ -32,7 +27,7 @@ router.get("/login", function (req, res, next) {
 // post method
 
 router.post("/adminlogin", (req, res) => {
-  adminHelper.adminLogin(req.body).then((response) => {
+  adminController.adminLogin(req.body).then((response) => {
     if (response.admin) {
       if (response.status) {
         req.session.adminloggedIn = true;
@@ -52,11 +47,11 @@ router.post("/adminlogin", (req, res) => {
 
 // =========Product Management=======
 
-
+// router.post("/addCategory",productHelper.addCategorys)
 
 // -------Add Product------
 
-router.post("/add-product", verifyadminlogin, (req, res) => {
+router.post("/add-product", verifylogin.verifyadminlogin, (req, res) => {
   productHelper.addProduct(req.body).then((response) => {
     const imgid = response.data._id;
     const image = req.files.image;
@@ -72,13 +67,13 @@ router.post("/add-product", verifyadminlogin, (req, res) => {
   });
 });
 
-router.get("/addproduct", verifyadminlogin, function (req, res, next) {
+router.get("/addproduct", verifylogin.verifyadminlogin, function (req, res, next) {
   res.render("admin/addProduct", { done: req.session.addedProduct });
 });
 
 // -------Edit Product------
 
-router.get("/editProduct/:userId", verifyadminlogin, (req, res) => {
+router.get("/editProduct/:userId", verifylogin.verifyadminlogin, (req, res) => {
   productHelper.getproduct(req.params.userId).then((response) => {
     if (response.status) {
       res.render("admin/editProduct", { tobeupdate: response.data });
@@ -88,7 +83,7 @@ router.get("/editProduct/:userId", verifyadminlogin, (req, res) => {
   });
 });
 
-router.post("/editproduct", verifyadminlogin, function (req, res, next) {
+router.post("/editproduct", verifylogin.verifyadminlogin, function (req, res, next) {
   productHelper.editproduct(req.body).then((response) => {
     if (response.status) {
       res.redirect("/admin/listproducts");
@@ -98,7 +93,7 @@ router.post("/editproduct", verifyadminlogin, function (req, res, next) {
 
 // ===== List Products =====
 
-router.get("/listproducts", verifyadminlogin, function (req, res, next) {
+router.get("/listproducts", verifylogin.verifyadminlogin, function (req, res, next) {
   productHelper.viewproducts().then((response) => {
     if (response) {
       const productsData = response.data;
@@ -109,7 +104,7 @@ router.get("/listproducts", verifyadminlogin, function (req, res, next) {
 
 // -------Delete Product------
 
-router.post("/deleteProduct", verifyadminlogin, (req, res) => {
+router.post("/deleteProduct", verifylogin.verifyadminlogin, (req, res) => {
   productHelper.deleteProduct(req.body).then((response) => {
     res.json(response);
   });
@@ -124,8 +119,8 @@ router.post("/deleteProduct", verifyadminlogin, (req, res) => {
 
 // =====List Users=====
 
-router.get("/listusers", verifyadminlogin, function (req, res, next) {
-  adminHelper.getusersData().then((response) => {
+router.get("/listusers", verifylogin.verifyadminlogin, function (req, res, next) {
+  adminController.getusersData().then((response) => {
     if (response.status) {
       res.render("admin/listUsers", { usersData: response.usersdata });
     } else {
@@ -136,8 +131,8 @@ router.get("/listusers", verifyadminlogin, function (req, res, next) {
 
 // =========block users=====
 
-router.post("/blockUser", verifyadminlogin, (req, res) => {
-  adminHelper.blockUser(req.body).then(() => {
+router.post("/blockUser", verifylogin.verifyadminlogin, (req, res) => {
+  adminController.blockUser(req.body).then(() => {
 
     res.redirect("/admin/listusers");
 
@@ -147,17 +142,14 @@ router.post("/blockUser", verifyadminlogin, (req, res) => {
 
 /// =======Unblock user =======
 
-router.post("/unBlockUser", verifyadminlogin, (req, res) => {
-  adminHelper.unBlockUser(req.body).then(() => {
+router.post("/unBlockUser", verifylogin.verifyadminlogin, (req, res) => {
+  adminController.unBlockUser(req.body).then(() => {
     res.redirect("/admin/listusers");
   });
 });
 
 // --------logout--------
 
-router.get("/logout", verifyadminlogin, (req, res) => {
-  req.session.destroy();
-  res.redirect("/admin/login");
-});
+router.get("/logout",adminController.logout);
 
 module.exports = router;

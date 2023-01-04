@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 const bcrypt = require("bcrypt");
 const adminslist = require('../models/adminmodel')
-const userslist = require('../models/usermodel');
+const userslist = require('../models/usermodel')
 
 module.exports = {
-    adminLogin: (data) => {
+     adminLogin: (data) => {
         return new Promise(async (resolve, reject) => {
             try {
                 const admindoc = await adminslist.findOne({ email: data.email })
@@ -28,11 +28,8 @@ module.exports = {
             }
 
         })
-    },
-
-
-
-    getusersData: () => {
+     },
+      getusersData: () => {
         return new Promise(async (resolve, reject) => {
             try {
                 await userslist.find({}).lean().then((usersdata) => {
@@ -47,8 +44,7 @@ module.exports = {
             }
         })
     },
-
-    blockUser: (data) => {
+     blockUser: (data) => {
         return new Promise(async (resolve, reject) => {
             try {
                 await userslist.findOneAndUpdate({ email: data.email }, { blocked: true }, { new: true })
@@ -63,7 +59,7 @@ module.exports = {
             }
         })
     },
-    unBlockUser: (data) => {
+     unBlockUser: (data) => {
         return new Promise(async (resolve, reject) => {
             try {
                 await userslist.findOneAndUpdate({ email: data.email }, { blocked: false }, { new: true })
@@ -74,9 +70,12 @@ module.exports = {
                     })
             } catch (err) {
                 throw err;
-
             }
         })
+    },
+     logout: (req, res) => {
+        req.session.destroy();
+        res.redirect("/admin/login");
     }
 
 

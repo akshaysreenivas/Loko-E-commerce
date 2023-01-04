@@ -1,42 +1,86 @@
-const userslist = require('../models/usermodel');
+const users = require('../models/usermodel');
 const cart = require('../models/cartmodel')
-const products = require("../models/productmodel");
-
+const nodemailer = require('../config/nodemailer')
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 const bcrypt = require("bcrypt");
-const { resolve } = require('path');
-
 
 
 module.exports = {
-    userSignup: (userdata) => {
-        return new Promise(async (resolve, reject) => {
+    userSignup: (req, res) => {
+        userdata = req.body
+        new Promise(async (resolve, reject) => {
             try {
-                const newUser = new userslist({
-                    name: userdata.name,
-                    email: userdata.email,
-                    password: userdata.confirmPassword
-                })
-                return await newUser.save()
-                    .then((data) => {
-                        resolve({ status: true, data })
+                const user = await users.findOne({ email: userdata.email })
+                if (user) {
+                    console.log(user, "user")
+                    if (user.verified) {
+                        res.redirect("/signup", { message: "Looks like already have an account with this email! , login instead? " });
+                    } else {
+                        nodemailer.otpGenerator(userdata.email)
+                            .then((response) => {
+                                console.log("hii");
+                                if (response.status) {
+                                    req.session.tempuseremail = user.email
+
+                                    req.session.otp = response.otp
+                                    console.log(req.session.otp);
+                                    res.render('users/otp')
+                                }
+                            })
+                    }
+                }
+                else {
+                    const newUser = new users({
+                        name: userdata.name,
+                        email: userdata.email,
+                        password: userdata.confirmPassword,
                     })
-                    .catch((err) => {
-                        resolve({ status: false })
-                    })
+                    return await newUser.save()
+                        .then(() => {
+                            nodemailer.otpGenerator(userdata.email)
+                                .then((response) => {
+                                    console.log("hii");
+                                    if (response.status) {
+                                        req.session.tempuseremail = newUser.email
+                                        req.session.otp = response.otp
+                                        res.redirect('/otp-validation')
+                                    }
+                                })
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
             }
             catch (error) {
-                throw error;
+                console.log(error)
             }
         })
+
+    },
+    otpValidator: async (req, res) => {
+        let originalotp = parseInt(req.session.otp)
+        let enteredotp = parseInt(req.body.otp)
+
+        if (enteredotp === originalotp) {
+            await users.findOneAndUpdate({ email: req.session.tempuseremail }, { $set: { verified: true } })
+            res.redirect('/login')
+        } else {
+            req.session.invalidOtp="Invalid OTP"
+            res.redirect('/otp-validation')
+        }
     },
 
     dologin: (data) => {
         return new Promise(async (resolve, reject) => {
             try {
-                const userdoc = await userslist.findOne({ email: data.email })
+                const userdoc = await users.findOne({ email: data.email })
                 if (userdoc) {
+                    if (!userdoc.verified) {
+                        nodemailer.otpGenerator(userdata.email)
+                        return
+                    }
                     if (userdoc.blocked) {
                         resolve({ user: true, blocked: true })
                     }
@@ -61,7 +105,6 @@ module.exports = {
             }
         })
     },
-
 
     addToCart: (userID, productID, quantity) => {
         const UserID = new mongoose.Types.ObjectId(userID)
@@ -177,7 +220,6 @@ module.exports = {
         })
     },
 
-
     getCartCount: (ID) => {
 
         return new Promise(async (resolve, reject) => {
@@ -267,6 +309,7 @@ module.exports = {
             }
         })
     },
+
     changeCartProductCount: (userID, data) => {
 
         const count = parseInt(data.count)
@@ -303,6 +346,10 @@ module.exports = {
     }
     ,
 
+    logout: (req, res) => {
+        req.session.destroy();
+        res.redirect("/");
+    }
 
 }
 

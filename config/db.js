@@ -3,9 +3,9 @@ mongoose.set("strictQuery", true);
 
 module.exports = {
   dbConnect: async () => {
-    const uri = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/lokoEcom";
+    const uri = process.env.MONGO_URI;
     try {
-      await mongoose
+      await mongoose 
         .connect(uri, {
           useNewUrlParser: true,
           useUnifiedTopology: true,

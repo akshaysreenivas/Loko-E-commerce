@@ -3,13 +3,17 @@ const express = require('express');
 const path = require('path');
 const logger = require('morgan');
 const hbs = require('express-handlebars');
+const handlebars=require("handlebars")
 const dbConnect = require('./config/db')
-const indexRouter = require('./routes');
+const adminRouter = require('./routes/admin');
 const usersRouter = require('./routes/users');
 const session = require('express-session')
 const fileUpload = require('express-fileupload')
+
 const app = express();
 dbConnect.dbConnect()
+
+const _ = require('lodash');
 
 // view engine setup
 app.engine('hbs', hbs.engine({ extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layout/', partialsDir: __dirname + '/views/partials/' }))
@@ -29,6 +33,12 @@ app.use(session({
   saveUninitialized: true,
   cookie: { maxAge: 60 * 60 * 24 * 1 * 1000 },
 }));
+ 
+handlebars.registerHelper('truncate', function(string, length) {
+  return _.truncate(string, { 'length': length });
+});
+
+
 
 // prevent cache last page
 app.use((req, res, next) => {
@@ -36,7 +46,7 @@ app.use((req, res, next) => {
   next();
 })
 
-app.use('/admin', indexRouter);
+app.use('/admin', adminRouter);
 app.use('/', usersRouter);
 
 // catch 404 and forward to error handler
@@ -54,5 +64,8 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+
 
 module.exports = app;

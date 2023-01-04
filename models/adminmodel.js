@@ -7,4 +7,4 @@ const adminsDatasc = new mongoose.Schema({
     email: String
 })
 
-module.exports = new mongoose.model('adminsList', adminsDatasc)
+module.exports = new mongoose.model('admin', adminsDatasc)

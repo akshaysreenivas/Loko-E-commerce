@@ -1,5 +1,4 @@
-const { rejects } = require("assert");
-const { resolve } = require("path");
+
 const products = require("../models/productmodel");
 
 
@@ -99,14 +98,6 @@ module.exports = {
       }
     })
   }
-
-
-
-
-
-
-
-
 
 
 

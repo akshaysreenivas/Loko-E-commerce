@@ -133,18 +133,6 @@ aside {
 }
 
 
- 
-
-
-/* image zoom  */
-
-
-
-
-
-
-
-
 
 /* product listing   */
 
@@ -185,6 +173,15 @@ aside {
 
 #sidebar ul li a {
     display: block;
+}
+#sidebar ul li a:hover {
+    transform: scale(1.05);
+}
+
+#sidebar ul li:hover {
+    background-color: #2a2e37;
+
+    overflow: hidden !important;
 }
 
 

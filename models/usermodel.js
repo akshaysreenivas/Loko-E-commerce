@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const { date } = require("random-js");
 const saltRounds = 10;
 const userSc = new mongoose.Schema({
     name: {
@@ -11,9 +12,17 @@ const userSc = new mongoose.Schema({
         index: { unique: true },
         required: true,
     },
+    created: {
+        type: date,
+        default: new Date().toISOString(),
+    },
     password: {
         type: String,
         required: true,
+    },
+    verified: {
+        type: Boolean,
+        default: false,
     },
     blocked: {
         type: Boolean,
@@ -24,23 +33,25 @@ const userSc = new mongoose.Schema({
 userSc.pre("save", function (next) {
     const user = this;
     if (this.isModified("password") || this.isNew) {
-        bcrypt.genSalt(saltRounds, (err, salt) => {
-            if (err) {
-                return next(err);
-            }
-            else {
-                bcrypt.hash(user.password, salt)
-                    .then((hash) => {
-                        user.password = hash;
-                        next();
-                    })
-                    .catch((err) => {
-                        return next(err);
-                    });
-
-            }
-
-        });
+        try {
+            bcrypt.genSalt(saltRounds, (err, salt) => {
+                if (err) {
+                    return next(err);
+                }
+                else {
+                    bcrypt.hash(user.password, salt)
+                        .then((hash) => {
+                            user.password = hash;
+                            next();
+                        })
+                        .catch((err) => {
+                            return next(err);
+                        });
+                }
+            })
+        } catch (err) {
+            console.log(err);
+        }
     }
 
 
@@ -48,4 +59,4 @@ userSc.pre("save", function (next) {
 });
 
 
-module.exports = new mongoose.model('userslist', userSc)
+module.exports = new mongoose.model('users', userSc)

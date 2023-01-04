@@ -1,5 +1,7 @@
 {{>userNavbar}}
 
+<!-------------Product view ------------>
+
 <section class="py-5 contents px-5">
     <div class="container p-4 px-lg-5  border rounded">
         <div class="row gx-4 gx-lg-5 align-items-center">
@@ -18,27 +20,21 @@
                     <h5>Size : {{product.size}} </h5>
                 </div>
 
-
-
-
                 <td class="p-2 "></td>
                 <p class="lead">{{product.product_description}}</p>
                 <div class="d-flex">
 
-                    <form action="" method="post">
-                        <button class="btn btn-outline-dark flex-shrink-0 d-flex align-items-center p-2 gap-1 m-2 "
-                            type="button" href="/cart/{{product._id}}">
-                            <span class="material-icons-sharp ">favorite_border</span>Move Wishlist</button>
-                    </form>
+                    <button class="btn btn-outline-dark flex-shrink-0 d-flex align-items-center p-2 gap-1 m-2 "
+                        type="button" onclick="addToCart('{{product._id}}')">
+                        <span class="material-icons-sharp">add_shopping_cart</span>
+                        Add to cart
+                    </button>
 
-                    <form action="" method="post">
-                        <button class="btn btn-outline-dark flex-shrink-0 d-flex align-items-center p-2 gap-1 m-2 "
-                            type="button" href="/cart/{{product._id}}">
-                            <span class="material-icons-sharp">add_shopping_cart</span>
-                            Add to cart
-                        </button>
-                    </form>
-
+                    <a class="btn btn-outline-dark flex-shrink-0 d-flex align-items-center p-2 gap-1 m-2 "
+                        type="button" href="/checkout">
+                        <span class="material-icons-sharp">bolt</span>
+                        Buy This Now
+                    </a>
 
                 </div>
 
