@@ -33,8 +33,13 @@
                                 <td class="p-2 ">{{this.category}}</td>
                                 <td class="p-2 ">{{this.stock}}</td>
                                 <td class="p-2 ">{{this.product_description}}</td>
-                                <td class="p-2 "><img style="max-width:50px; max-height:70px"
-                                        src="/images/product-images/{{this._id}}.jpg" alt=""></td>
+                                <td class="p-2 ">
+                                    {{#each images}}
+                                    <img style="max-width:40px; max-height:40px"
+                                        src="/{{data}}" alt="">
+                                    {{/each}}
+                                    
+                                        </td>
 
                                 <!---=============== Edit product ==============--->
 

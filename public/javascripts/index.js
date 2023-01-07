@@ -46,21 +46,21 @@ $(document).ready(function () {
 
 //  show img in add product
 
-$(document).ready(function () {
-    $('#addedImg').hide();
-    $(".spinner-border").removeClass("spinner-border");
-})
+// $(document).ready(function () {
+//     $('#addedImg').hide();
+//     $(".spinner-border").removeClass("spinner-border");
+// })
 
-function viewImg(event) {
-    const addImg = document.getElementById('addedImg')
-    $('#addedImg').show();
-    addImg.src = URL.createObjectURL(event.target.files[0])
-}
+// function viewImg(event) {
+//     const addImg = document.getElementById('addedImg')
+//     $('#addedImg').show();
+//     addImg.src = URL.createObjectURL(event.target.files[0])
+// }
 
 //  show new img in edit product
 
 
-function newImgView(event) {
-    document.getElementById('newImg').src = URL.createObjectURL(event.target.files[0])
-}
+// function newImgView(event) {
+//     document.getElementById('newImg').src = URL.createObjectURL(event.target.files[0])
+// }
 

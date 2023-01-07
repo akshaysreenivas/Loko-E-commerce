@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const adminslist = require('../models/adminmodel')
 const userslist = require('../models/usermodel')
 
+  
 module.exports = {
      adminLogin: (data) => {
         return new Promise(async (resolve, reject) => {

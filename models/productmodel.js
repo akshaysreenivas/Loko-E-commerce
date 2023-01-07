@@ -13,9 +13,16 @@ const productSc = new mongoose.Schema({
     size: {
         type: String,
     },
-    image_path: {
-        type: String
-    },
+    images: [{
+        data: {
+          type: String,
+          required: true
+        },
+        contentType: {
+          type: String,
+          required: true
+        }
+      }],
     category: {
         type: String,
         require: true

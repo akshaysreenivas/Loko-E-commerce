@@ -15,18 +15,22 @@ router.get("/signup", (req, res) => {
 });
 
 
-router.get('/otp-validation', (req, res) => {
-  if (req.session.loggedIn) res.redirect("/");
-  else{
-    res.render('users/otp',{invalidOtp:req.session.invalidOtp})
-    req.session.invalidOtp=""
-  }
-})
+
+
+
 // ------post method------
 
 router.post("/signup", userController.userSignup)
 
 //----------- user validation with otp  ---------
+
+router.get('/otp-validation', (req, res) => {
+  if (req.session.loggedIn) res.redirect("/");
+  else {
+    res.render('users/otp', { invalidOtp: req.session.invalidOtp })
+    req.session.invalidOtp = ""
+  }
+})
 
 router.post("/otp-validation", userController.otpValidator)
 
@@ -80,8 +84,15 @@ router.get("/", async (req, res) => {
     totalItems = await userController.getCartCount(req.session.user._id);
   }
   await productController.viewproducts().then((response) => {
-    const productsData = response.data;
-
+    const productsDatas = response.data;
+    const productsData = productsDatas.map((productsDatas) => {
+      return {
+        _id: productsDatas._id,
+        name: productsDatas.name,
+        price: productsDatas.price,
+        image: productsDatas.images[0].data
+      };
+    });
     res.render("users/home", { productsData, totalItems, user: req.session.user });
   });
 });
@@ -95,11 +106,12 @@ router.get("/profile", verifylogin.verifyLogin, (req, res) => {
 // product view ------
 
 router.get("/product/:productID", async (req, res) => {
-  const product = await productController.getproduct(req.params.productID);
-  res.render("users/product", {
-    user: req.session.user,
-    product: product.data,
-  });
+  let productimage;
+  let product = await productController.getproduct(req.params.productID);
+  if(product){
+    productimage = product.data.images[0].data
+  }
+  res.render("users/product", { user: req.session.user, product: product.data, productimage });
 });
 
 // cart --------
@@ -156,8 +168,11 @@ router.post("/changeqty", verifylogin.verifyLogin, async (req, res) => {
     .changeCartProductCount(req.session.user._id, req.body)
     .then((response) => {
       userController.getCartTotalamount(req.session.user._id).then((response) => {
-        totalCost = response.totalAmount[0].totalCost
-        res.json({ totalCost });
+        if (response.totalAmount) {
+          totalCost = response.totalAmount[0].totalCost
+          res.json({ totalCost });
+
+        }
       })
     });
 });

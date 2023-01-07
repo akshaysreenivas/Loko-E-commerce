@@ -1,11 +1,15 @@
 // ajax for cart
 
+$( document ).ready(function() {
+    $(".add-to-cart-spinner").addClass("d-none");
+
+});
 
 
 // addtocart
 
 function addToCart(Id) {
-    $("#add-to-cart-text" + Id).addClass("d-none");
+    // $("#add-to-cart-text" + Id).addClass("d-none");
     $("#add-to-cart-spinner" + Id).addClass("spinner-border");
     $.ajax({
         url: '/addToCart/' + Id,
@@ -18,7 +22,7 @@ function addToCart(Id) {
             $('#cart-count').html(count)
             $("#add-to-cart-text" + Id).removeClass("d-none");
             $(".spinner-border").removeClass("spinner-border");
-            swal("Good job!", "You clicked the button!", "success");
+            swal("Added to cart!", "Item added to cart Successfully!", "success");
         }
     })
 
@@ -30,10 +34,10 @@ function deleteCartProduct(Id) {
     $.ajax({
         url: '/delete-cart-item/' + Id,
         method: "post",
-        success:async (response) => {
+        success: async (response) => {
             location.reload()
 
-                swal("hello")
+            swal("hello")
         }
     })
 }
@@ -62,9 +66,6 @@ function addCount(Id, Count) {
         }
     })
 }
-
-
-
 
 
 function decCount(Id, Count) {
@@ -96,6 +97,25 @@ function decCount(Id, Count) {
 
 }
 
+// adding new categorys
+
+$("#addCategoryForm").submit(function (e) {
+    e.preventDefault();
+    $.ajax({
+        url: "/admin/addCategory",
+        method: "POST",
+        dataType: "json",
+        data: $(this).serialize(),
+        success: function (response) {
+            if(response.status){
+                swal("Category ", "success fully added New category!", "success")       
+                 }
+                 if( response.exist){
+                    swal("Category already exists!")
+                 }
+        }
+    });
+});
 
 
 

@@ -80,14 +80,14 @@
 
                 <div class="form-group mb-4 m-3 px-3 p-2">
                     <label class="col-md-4 control-label mb-3" for="image">IMAGE</label>
-                    <div class="m-3">
-
-                        <img style="width:50px;height:70px;" src="/./images/product-images/{{tobeupdate._id}}.jpg"
+                    <div class="m-3 d-flex gap-2">
+                    {{#each tobeupdate.images}}
+                        <img style="width:50px;height:70px;" src="/{{data}}"
                             alt="" id="newImg">
+                    {{/each}}
                     </div>
                     <label class="col-md-4 control-label my-3" for="image">CHANGE IMAGE</label>
-                    <input class="form-control form-control-lg p-2" type="file" name="image" id=""
-                        onchange="newImgView(event)" required>
+                    <input class="form-control form-control-lg p-2" type="file" name="photos" id=""  multiple/>
                 </div>
 
                 <!-- Textarea -->

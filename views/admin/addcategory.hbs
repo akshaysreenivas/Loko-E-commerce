@@ -1,0 +1,95 @@
+{{>adminNavbar}}
+<section class=" admin-section d-flex gap-5">
+  {{>adminSideBar}}
+  <div class="vw-100 main px-5 pt-5 content-admin justify-content-center">
+    <h1>Add New Category</h1>
+    <form id="addCategoryForm" class="d-flex gap-3 mt-5">
+      <label for="name">Category Name:</label>
+      <div>
+        <input class="categoryName" type="text" name="title" id="categoryName" required />
+        <div> <small class="text-danger" id="Inalid-Category"></small></div>
+      </div>
+      <div>
+        <button type="submit">Add Category</button>
+
+      </div>
+    </form>
+ 
+
+  <div class="mt-5">
+    <table class="py-4 mb-3 table table-hover table-bordered " id="productsTable">
+                        <thead class="bg-dark text-white">
+                            <tr>
+                                <th class="p-2" scope="col">ID</th>
+                                <th class="p-2" scope="col">Category Name</th>
+                                <th class="p-2" scope="col">Edit</th>
+                                <th class="p-2" scope="col">Delete</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each categoriesData}}
+
+                            <tr class="p-2 ">
+                                <td class="p-2 ">{{this._id}}</td>
+                                <td class="p-2 ">{{this.name}}</td>
+                                <td class="p-2 ">{{this.price}}</td>
+
+                                <!---=============== Edit Category ==============--->
+
+                                <td class="p-2 "><a class=" d-flex justify-content-center"
+                                        href="/admin/editProduct/{{this._id}}">
+                                        <span class="material-icons-sharp">edit</span></a>
+                                </td>
+
+                                <!---=============== Delete Category==============--->
+
+                                <td class="p-2 ">
+                                    <a role="button" onclick="deleteProduct('{{_id}}')" data-bs-toggle="modal"
+                                        id="opendatamodal" data-productId="hoi" data-bs-target="#delete-product">
+                                        <span class="material-icons-sharp text-danger">delete</span>
+                                    </a>
+                                </td>
+
+
+
+
+                                <div class="modal fade " id="delete-product" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                    aria-hidden="true">
+                                    <div
+                                        class=" d-flex justify-content-center align-items-center modal-dialog-centered">
+                                        <div class="modal-dialog bg-success">
+                                            <div class="modal-content p-4">
+                                                <div class="modal-header p-2">
+                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete product
+                                                    </h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+
+                                                <div class="modal-body delete-modal p-3">
+                                                    <p>Are you sure? Delete product with ID</p>
+                                                    <p class="proid"></p>
+                                                    <input type="text" class="border-0 select " name="id" value="">
+
+                                                </div>
+                                                <div class="modal-footer p-2">
+                                                    <button type="button" class="btn btn-secondary  p-2"
+                                                        data-bs-dismiss="modal">Cancel</button>
+                                                    <button onclick="confirmDeleteProduct()"
+                                                        class="btn btn-success mx-4 px-4 p-2">Delete</button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+  </div>
+ </div>
+</section>

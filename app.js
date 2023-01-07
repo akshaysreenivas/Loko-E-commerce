@@ -8,7 +8,6 @@ const dbConnect = require('./config/db')
 const adminRouter = require('./routes/admin');
 const usersRouter = require('./routes/users');
 const session = require('express-session')
-const fileUpload = require('express-fileupload')
 
 const app = express();
 dbConnect.dbConnect()
@@ -26,7 +25,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '/public')));
-app.use(fileUpload())
+app.use(express.static(path.join(__dirname, '/uploads')));
 app.use(session({
   secret: 'keyboard cat',
   resave: false,

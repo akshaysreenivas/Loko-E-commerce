@@ -1,4 +1,4 @@
- {{>userNavbar}}
+{{>userNavbar}}
 {{!-- <div class="container contents">
   <nav class="container  px-5 m-2 row justify-content-center align-items-center">
     <div class="img-fluid col-md-4 col-12 img-div">
@@ -71,12 +71,15 @@
     <h1>New Arrivals</h1>
     <div class="p-4 row ">
       <div class="row">
+
         {{#each productsData}}
         <div class="col-md-3 col-sm-6 col-12 single-item">
           <div class="card m-2 p-2 mob-card">
-            <a href="/product/{{this._id}}" class="text-dark text-decoration-none">
-              <img src="/images/product-images/{{this._id}}.jpg" class="card-img-top" alt="" style="; height: 20rem;" />
 
+            <a href="/product/{{this._id}}" class="text-dark text-decoration-none">
+             
+              <img src="/{{image}}" class="card-img-top" alt="" style="; height: 17rem;" />
+             
               <div class="card-body">
                 <h5 class="card-title p-1 m-0">{{truncate name 18}}</h5>
                 <div class="p-1 mb-1"> <b><span>₹ {{price}}</span></b></div>
@@ -93,81 +96,150 @@
 
         </div>
       </div>
+
       {{/each}}
     </div>
   </div>
+  <div class="">
+    <h1>Shirts</h1>
+    <div class="p-4 row ">
+      <div class="row">
+
+        {{#each productsData}}
+        <div class="col-md-3 col-sm-6 col-12 single-item">
+          <div class="card m-2 p-2 mob-card">
+
+            <a href="/product/{{this._id}}" class="text-dark text-decoration-none">
+             
+              <img src="/{{image}}" class="card-img-top" alt="" style="; height: 15rem;" />
+             
+              <div class="card-body">
+                <h5 class="card-title p-1 m-0">{{truncate name 18}}</h5>
+                <div class="p-1 mb-1"> <b><span>₹ {{price}}</span></b></div>
+            </a>
+            <button onclick="addToCart('{{this._id}}')"
+              class="btn btn-dark py-1 d-flex w-100 justify-content-center add-to-cart-btn">
+              <p class="m-0 gap-1 d-flex add-to-cart-text" id="add-to-cart-text{{_id}}"><span
+                  class="material-icons-sharp">add_shopping_cart</span> Add to Cart</p>
+              <div class="spinner-border add-to-cart-spinner" id="add-to-cart-spinner{{_id}}" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      {{/each}}
+    </div>
   </div>
+  <div class="">
+    <h1>Pants</h1>
+    <div class="p-4 row ">
+      <div class="row">
+
+        {{#each productsData}}
+        <div class="col-md-3 col-sm-6 col-12 single-item">
+          <div class="card m-2 p-2 mob-card">
+
+            <a href="/product/{{this._id}}" class="text-dark text-decoration-none">
+             
+              <img src="/{{image}}" class="card-img-top" alt="" style="; height: 15rem;" />
+             
+              <div class="card-body">
+                <h5 class="card-title p-1 m-0">{{truncate name 18}}</h5>
+                <div class="p-1 mb-1"> <b><span>₹ {{price}}</span></b></div>
+            </a>
+            <button onclick="addToCart('{{this._id}}')"
+              class="btn btn-dark py-1 d-flex w-100 justify-content-center add-to-cart-btn">
+              <p class="m-0 gap-1 d-flex add-to-cart-text" id="add-to-cart-text{{_id}}"><span
+                  class="material-icons-sharp">add_shopping_cart</span> Add to Cart</p>
+              <div class="spinner-border add-to-cart-spinner" id="add-to-cart-spinner{{_id}}" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      {{/each}}
+    </div>
+  </div>
+  
 
 </section>
- 
+
 {{!-- <div class="container">
-   
-    <div class="d-flex justify-content-center align-items-center mt-5"> <button class="btn btn-dark">OUR CATEGORIES</button> </div>
-    <div class="d-flex justify-content-center mt-3"> <span class="text text-center">Finding Best Products Now<br> in Your Fingertips</span> </div>
-    <div class="row mt-2 g-4">
-        <div class="col-md-3">
-            <div class="card p-1">
-                <div class="d-flex justify-content-between align-items-center p-2">
-                    <div class="flex-column lh-1 imagename"> <span>Mobile</span> <span>Phones</span> </div>
-                    <div> <img src="https://i.imgur.com/b9zkoz0.jpg" height="100" width="100" /> </div>
-                </div>
-            </div>
+
+  <div class="d-flex justify-content-center align-items-center mt-5"> <button class="btn btn-dark">OUR
+      CATEGORIES</button> </div>
+  <div class="d-flex justify-content-center mt-3"> <span class="text text-center">Finding Best Products Now<br> in Your
+      Fingertips</span> </div>
+  <div class="row mt-2 g-4">
+    <div class="col-md-3">
+      <div class="card p-1">
+        <div class="d-flex justify-content-between align-items-center p-2">
+          <div class="flex-column lh-1 imagename"> <span>Mobile</span> <span>Phones</span> </div>
+          <div> <img src="https://i.imgur.com/b9zkoz0.jpg" height="100" width="100" /> </div>
         </div>
-        <div class="col-md-3">
-            <div class="card p-2">
-                <div class="d-flex justify-content-between align-items-center p-2">
-                    <div class="flex-column lh-1 imagename"> <span>Head</span> <span>Phones</span> </div>
-                    <div> <img src="https://i.imgur.com/SHWASPG.png" height="100" width="100" /> </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card p-2">
-                <div class="d-flex justify-content-between align-items-center p-2">
-                    <div class="flex-column lh-1 imagename"> <span>Smart</span> <span>Watches</span> </div>
-                    <div> <img src=" https://i.imgur.com/Ya0OXCv.png" height="100" width="100" /> </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card p-2">
-                <div class="d-flex justify-content-between align-items-center p-2">
-                    <div class="flex-column lh-1 imagename"> <span>Air</span> <span>Purifiers</span> </div>
-                    <div> <img src="https://i.imgur.com/2gvGwbh.png" height="100" width="100" /> </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card p-2tr5">
-                <div class="d-flex justify-content-between align-items-center p-2">
-                    <div class="flex-column lh-1 imagename"> <span>Vacuum</span> <span>Cleaners</span> </div>
-                    <div> <img src="https://i.imgur.com/UMQJpSG.png" height="100" width="100" /> </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card p-2">
-                <div class="d-flex justify-content-between align-items-center p-2">
-                    <div class="flex-column lh-1 imagename"> <span>Washing</span> <span>Machines</span> </div>
-                    <div> <img src="https://i.imgur.com/e9CyhXR.png" height="100" width="100" /> </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card p-2">
-                <div class="d-flex justify-content-between align-items-center p-2">
-                    <div class="flex-column lh-1 imagename"> <span>Smart</span> <span>Televisions</span> </div>
-                    <div> <img src=" https://i.imgur.com/Zq8VigZ.png" height="100" width="100" /> </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card p-2">
-                <div class="d-flex justify-content-between align-items-center p-2">
-                    <div class="flex-column lh-1 imagename"> <span>Laptops</span> </div>
-                    <div> <img src="https://i.imgur.com/6pK5oZl.jpg" height="100" width="100" /> </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+    <div class="col-md-3">
+      <div class="card p-2">
+        <div class="d-flex justify-content-between align-items-center p-2">
+          <div class="flex-column lh-1 imagename"> <span>Head</span> <span>Phones</span> </div>
+          <div> <img src="https://i.imgur.com/SHWASPG.png" height="100" width="100" /> </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-2">
+        <div class="d-flex justify-content-between align-items-center p-2">
+          <div class="flex-column lh-1 imagename"> <span>Smart</span> <span>Watches</span> </div>
+          <div> <img src=" https://i.imgur.com/Ya0OXCv.png" height="100" width="100" /> </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-2">
+        <div class="d-flex justify-content-between align-items-center p-2">
+          <div class="flex-column lh-1 imagename"> <span>Air</span> <span>Purifiers</span> </div>
+          <div> <img src="https://i.imgur.com/2gvGwbh.png" height="100" width="100" /> </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-2tr5">
+        <div class="d-flex justify-content-between align-items-center p-2">
+          <div class="flex-column lh-1 imagename"> <span>Vacuum</span> <span>Cleaners</span> </div>
+          <div> <img src="https://i.imgur.com/UMQJpSG.png" height="100" width="100" /> </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-2">
+        <div class="d-flex justify-content-between align-items-center p-2">
+          <div class="flex-column lh-1 imagename"> <span>Washing</span> <span>Machines</span> </div>
+          <div> <img src="https://i.imgur.com/e9CyhXR.png" height="100" width="100" /> </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-2">
+        <div class="d-flex justify-content-between align-items-center p-2">
+          <div class="flex-column lh-1 imagename"> <span>Smart</span> <span>Televisions</span> </div>
+          <div> <img src=" https://i.imgur.com/Zq8VigZ.png" height="100" width="100" /> </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-2">
+        <div class="d-flex justify-content-between align-items-center p-2">
+          <div class="flex-column lh-1 imagename"> <span>Laptops</span> </div>
+          <div> <img src="https://i.imgur.com/6pK5oZl.jpg" height="100" width="100" /> </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div> --}}

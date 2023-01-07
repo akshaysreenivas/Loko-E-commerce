@@ -2,7 +2,7 @@
 <section class=" admin-section d-flex gap-5">
     {{>adminSideBar}}
     <div class="vw-100 main px-5 pt-5 content-admin justify-content-center">
-        {{#if done}}
+        {{#if productAdded}}
         <div class="p-3 text-success alert alert-success alert-dismissible fade show d-flex align-items-center"
             role="alert">
             <span class="material-icons-sharp">
@@ -12,7 +12,7 @@
         </div>
         {{/if}}
 
-        <form action="/admin/add-product" method="post" class="d-dlex justify-contents-center box-shadow p-5 mb-5"
+        <form id="addProductForm" method="post" action="/admin/add-product" class="d-dlex justify-contents-center box-shadow p-5 mb-5"
             enctype="multipart/form-data">
             <fieldset class="px-5">
 
@@ -48,11 +48,10 @@
                         <select class="form-select form-control-lg " aria-label="product category select "
                             name="category" required>
                             <option selected="" disabled> --Select-- </option>
-                            <option value="Kurta">Kurta</option>
-                            <option value="Jeans">Jeans</option>
-                            <option value="Shirts">Shirts</option>
-                            <option value="Pants">Pants</option>
-                            <option value="other">other</option>
+
+                            {{#each Categorys}}
+                            <option value="{{title}}">{{title}}</option>
+                            {{/each}}
                         </select>
                     </div>
                     <!-- PRODUCT SIZE -->
@@ -86,11 +85,10 @@
                 <!-- add images   -->
                 <div class="form-group mb-4 m-3 px-3 p-2">
                     <label class="col-md-4 control-label mb-3" for="image">ADD IMAGE</label>
-                    <input class="form-control form-control-lg p-2" type="file" name="image" id=""
-                        onchange="viewImg(event)" required>
-                    <div class="m-4">
+                    <input class="form-control form-control-lg p-2" type="file" name="photos" id=""  multiple/>
+                    {{!-- <div class="m-4">
                         <img style="width:50px;height:70px;" src="" alt="" id="addedImg">
-                    </div>
+                    </div> --}}
                 </div>
                 <!-- Textarea -->
                 <div class="form-group mb-4 m-3 px-3 p-2">
