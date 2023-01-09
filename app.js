@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const logger = require('morgan');
 const hbs = require('express-handlebars');
-const handlebars=require("handlebars")
+const handlebars = require("handlebars")
 const dbConnect = require('./config/db')
 const adminRouter = require('./routes/admin');
 const usersRouter = require('./routes/users');
@@ -32,8 +32,8 @@ app.use(session({
   saveUninitialized: true,
   cookie: { maxAge: 60 * 60 * 24 * 1 * 1000 },
 }));
- 
-handlebars.registerHelper('truncate', function(string, length) {
+
+handlebars.registerHelper('truncate', function (string, length) {
   return _.truncate(string, { 'length': length });
 });
 

@@ -1,0 +1,41 @@
+{{>userNavbar}}
+
+
+<section class="contents py-5 px-5">
+  <div class="">
+    <h1>{{category}}</h1>
+    <div class="p-4 row ">
+      <div class="row">
+
+        {{#each productsdata}}
+        <div class="col-md-3 col-sm-6 col-12 single-item">
+          <div class="card m-2 p-2 mob-card">
+
+            <a href="/product/{{this._id}}" class="text-dark text-decoration-none">
+             
+              <img src="/{{image}}" class="card-img-top" alt="" style="; height: 18rem;" />
+             
+              <div class="card-body">
+                <h5 class="card-title p-1 m-0">{{truncate name 18}}</h5>
+                <div class="p-1 mb-1"> <b><span>₹ {{price}}</span></b></div>
+            </a>
+            <button onclick="addToCart('{{this._id}}')"
+              class="btn btn-dark py-1 d-flex w-100 justify-content-center add-to-cart-btn">
+              <p class="m-0 gap-1 d-flex add-to-cart-text" id="add-to-cart-text{{_id}}"><span
+                  class="material-icons-sharp">add_shopping_cart</span> Add to Cart</p>
+              <div class="spinner-border add-to-cart-spinner" id="add-to-cart-spinner{{_id}}" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      {{/each}}
+    </div>
+  </div>
+ 
+  
+
+</section>

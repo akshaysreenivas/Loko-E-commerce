@@ -20,7 +20,7 @@
                                 <!-- Image -->
                                 <div class="bg-image hover-overlay hover-zoom ripple rounded "
                                     data-mdb-ripple-color="light">
-                                    <img src="/images/product-images/{{productId}}.jpg" class="w-100 img-fluid"
+                                    <img src="/{{image.data}}" class="w-100 img-fluid"
                                         style="max-width: 10rem; max-height:12rem;" />
                                     <a href="#!">
                                         <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
@@ -55,22 +55,22 @@
                                 <div class="d-flex mb-4 align-items-center justify-content-center "
                                     style="max-width: 300px ">
 
-                                    <button class="btn p-0 reduce-item-quantity{{productId}} "
-                                        onclick="decCount('{{productId}}',-1)">
+                                    <button class="btn p-0 reduce-item-quantity{{product._id}} "
+                                        onclick="decCount('{{product._id}}',-1)">
                                         <span class="material-icons-sharp">remove</span>
                                     </button>
 
                                     <div class=" w-50 p-2 ">
-                                        <input id="{{productId}}" min="1" name="quantity" value="{{quantity}}"
+                                        <input id="{{product._id}}" min="1" name="quantity" value="{{quantity}}"
                                             type="number" class="form-control" />
                                     </div>
 
-                                    <button class="btn  p-0" onclick="addCount('{{productId}}',1)">
+                                    <button class="btn  p-0" onclick="addCount('{{product._id}}',1)">
                                         <span class="material-icons-sharp">add</span>
                                     </button>
 
                                 </div>
-                                <button onclick="deleteCartProduct('{{productId}}')" class="btn align-self-start p-0">
+                                <button onclick="deleteCartProduct('{{product._id}}')" class="btn align-self-start p-0">
                                     <span class="material-icons-sharp text-secondary">
                                         delete
                                     </span>
@@ -133,8 +133,8 @@
                         </ul>
 
                         <a 
-                            class="btn btn-dark  py-1 d-flex gap-3 align-items-center justify-content-center">
-                            <span class="material-icons-sharp" href="/checkout">shopping_cart_checkout</span>
+                            class="btn btn-dark  py-1 d-flex gap-3 align-items-center justify-content-center" href="/checkout">
+                            <span class="material-icons-sharp" >shopping_cart_checkout</span>
                             Proceed to checkout
                         </a>
 

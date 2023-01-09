@@ -67,7 +67,51 @@
   </button>
 </div> --}}
 <section class="contents py-5 px-5">
-  <div class="container">
+
+<div class="container">
+
+  <div class="d-flex justify-content-center align-items-center mt-5"> <button class="btn btn-dark">OUR
+      CATEGORIES</button> </div>
+  <div class="d-flex justify-content-center mt-3"> <span class="text text-center">Finding Best Products Now<br> in Your
+      Fingertips</span> </div>
+  <div class="row mt-2 g-4 ">
+    <div class="col-md-3 ">
+      <a class="card p-1 box-shadow text-decoration-none text-dark" href="/categories/Shirts">
+        <div class="d-flex justify-content-between align-items-center p-2">
+          <div class="flex-column lh-1 imagename"> <span>Shirts</span></div>
+          <div> <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6dRkl_xrntGJhuazAfp0Fs3wpqBvp8qWnuNTZMrMCFbQwg4aY19YZ&usqp=CAE&s" height="100" width="100" /> </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a class="card p-2 box-shadow text-decoration-none text-dark" href="/categories/Pants">
+        <div class="d-flex justify-content-between align-items-center p-2">
+          <div class="flex-column lh-1 imagename"> <span>Pants</span></div>
+          <div> <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUQPMfT2RMcTYNcAdpst12JIt2vIJ-4lNVtXPtjtrZPMZxMOwmdcwNxH_hfQ5s5D0lxfU&usqp=CAU" height="100" width="100" /> </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a class="card p-2 box-shadow text-decoration-none text-dark" href="/categories/Kurta">
+        <div class="d-flex justify-content-between align-items-center p-2">
+          <div class="flex-column lh-1 imagename"> <span>Kurtas</span></div>
+          <div> <img src="https://m.media-amazon.com/images/I/61TrmpaafpL._UX679_.jpg" height="100" width="100" /> </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3 ">
+      <a class="card p-2 box-shadow text-decoration-none text-dark" href="/categories/Jeans">
+        <div class="d-flex justify-content-between align-items-center p-2">
+          <div class="flex-column lh-1 imagename"> <span>Jeans</span></div>
+          <div> <img src="https://imageio.forbes.com/specials-images/imageserve/605b71255b7e628858c667dd/AGOLDE-Criss-Cross-Upsized-Jean/960x0.jpg?height=640&width=640&fit=bounds" height="100" width="100" /> </div>
+        </div>
+      </a>
+    </div>
+  
+  </div>
+</div> 
+
+  <div class="container mt-4">
     <h1>New Arrivals</h1>
     <div class="p-4 row ">
       <div class="row">
@@ -100,146 +144,5 @@
       {{/each}}
     </div>
   </div>
-  <div class="">
-    <h1>Shirts</h1>
-    <div class="p-4 row ">
-      <div class="row">
-
-        {{#each productsData}}
-        <div class="col-md-3 col-sm-6 col-12 single-item">
-          <div class="card m-2 p-2 mob-card">
-
-            <a href="/product/{{this._id}}" class="text-dark text-decoration-none">
-             
-              <img src="/{{image}}" class="card-img-top" alt="" style="; height: 15rem;" />
-             
-              <div class="card-body">
-                <h5 class="card-title p-1 m-0">{{truncate name 18}}</h5>
-                <div class="p-1 mb-1"> <b><span>₹ {{price}}</span></b></div>
-            </a>
-            <button onclick="addToCart('{{this._id}}')"
-              class="btn btn-dark py-1 d-flex w-100 justify-content-center add-to-cart-btn">
-              <p class="m-0 gap-1 d-flex add-to-cart-text" id="add-to-cart-text{{_id}}"><span
-                  class="material-icons-sharp">add_shopping_cart</span> Add to Cart</p>
-              <div class="spinner-border add-to-cart-spinner" id="add-to-cart-spinner{{_id}}" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </button>
-          </div>
-
-        </div>
-      </div>
-
-      {{/each}}
-    </div>
-  </div>
-  <div class="">
-    <h1>Pants</h1>
-    <div class="p-4 row ">
-      <div class="row">
-
-        {{#each productsData}}
-        <div class="col-md-3 col-sm-6 col-12 single-item">
-          <div class="card m-2 p-2 mob-card">
-
-            <a href="/product/{{this._id}}" class="text-dark text-decoration-none">
-             
-              <img src="/{{image}}" class="card-img-top" alt="" style="; height: 15rem;" />
-             
-              <div class="card-body">
-                <h5 class="card-title p-1 m-0">{{truncate name 18}}</h5>
-                <div class="p-1 mb-1"> <b><span>₹ {{price}}</span></b></div>
-            </a>
-            <button onclick="addToCart('{{this._id}}')"
-              class="btn btn-dark py-1 d-flex w-100 justify-content-center add-to-cart-btn">
-              <p class="m-0 gap-1 d-flex add-to-cart-text" id="add-to-cart-text{{_id}}"><span
-                  class="material-icons-sharp">add_shopping_cart</span> Add to Cart</p>
-              <div class="spinner-border add-to-cart-spinner" id="add-to-cart-spinner{{_id}}" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </button>
-          </div>
-
-        </div>
-      </div>
-
-      {{/each}}
-    </div>
-  </div>
-  
-
 </section>
 
-{{!-- <div class="container">
-
-  <div class="d-flex justify-content-center align-items-center mt-5"> <button class="btn btn-dark">OUR
-      CATEGORIES</button> </div>
-  <div class="d-flex justify-content-center mt-3"> <span class="text text-center">Finding Best Products Now<br> in Your
-      Fingertips</span> </div>
-  <div class="row mt-2 g-4">
-    <div class="col-md-3">
-      <div class="card p-1">
-        <div class="d-flex justify-content-between align-items-center p-2">
-          <div class="flex-column lh-1 imagename"> <span>Mobile</span> <span>Phones</span> </div>
-          <div> <img src="https://i.imgur.com/b9zkoz0.jpg" height="100" width="100" /> </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card p-2">
-        <div class="d-flex justify-content-between align-items-center p-2">
-          <div class="flex-column lh-1 imagename"> <span>Head</span> <span>Phones</span> </div>
-          <div> <img src="https://i.imgur.com/SHWASPG.png" height="100" width="100" /> </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card p-2">
-        <div class="d-flex justify-content-between align-items-center p-2">
-          <div class="flex-column lh-1 imagename"> <span>Smart</span> <span>Watches</span> </div>
-          <div> <img src=" https://i.imgur.com/Ya0OXCv.png" height="100" width="100" /> </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card p-2">
-        <div class="d-flex justify-content-between align-items-center p-2">
-          <div class="flex-column lh-1 imagename"> <span>Air</span> <span>Purifiers</span> </div>
-          <div> <img src="https://i.imgur.com/2gvGwbh.png" height="100" width="100" /> </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card p-2tr5">
-        <div class="d-flex justify-content-between align-items-center p-2">
-          <div class="flex-column lh-1 imagename"> <span>Vacuum</span> <span>Cleaners</span> </div>
-          <div> <img src="https://i.imgur.com/UMQJpSG.png" height="100" width="100" /> </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card p-2">
-        <div class="d-flex justify-content-between align-items-center p-2">
-          <div class="flex-column lh-1 imagename"> <span>Washing</span> <span>Machines</span> </div>
-          <div> <img src="https://i.imgur.com/e9CyhXR.png" height="100" width="100" /> </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card p-2">
-        <div class="d-flex justify-content-between align-items-center p-2">
-          <div class="flex-column lh-1 imagename"> <span>Smart</span> <span>Televisions</span> </div>
-          <div> <img src=" https://i.imgur.com/Zq8VigZ.png" height="100" width="100" /> </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card p-2">
-        <div class="d-flex justify-content-between align-items-center p-2">
-          <div class="flex-column lh-1 imagename"> <span>Laptops</span> </div>
-          <div> <img src="https://i.imgur.com/6pK5oZl.jpg" height="100" width="100" /> </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> --}}

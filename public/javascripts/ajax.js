@@ -1,6 +1,9 @@
+
+
+
 // ajax for cart
 
-$( document ).ready(function() {
+$(document).ready(function () {
     $(".add-to-cart-spinner").addClass("d-none");
 
 });
@@ -22,6 +25,7 @@ function addToCart(Id) {
             $('#cart-count').html(count)
             $("#add-to-cart-text" + Id).removeClass("d-none");
             $(".spinner-border").removeClass("spinner-border");
+
             swal("Added to cart!", "Item added to cart Successfully!", "success");
         }
     })
@@ -31,15 +35,26 @@ function addToCart(Id) {
 // delete from cart 
 
 function deleteCartProduct(Id) {
-    $.ajax({
-        url: '/delete-cart-item/' + Id,
-        method: "post",
-        success: async (response) => {
-            location.reload()
-
-            swal("hello")
-        }
+    swal({
+        title: "Are you sure?",
+        text: "Delete this item from Cart",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
     })
+        .then((willDelete) => {
+            if (willDelete) {
+                $.ajax({
+                    url: '/delete-cart-item/' + Id,
+                    method: "post",
+                    success: (response) => {
+                        location.reload()
+                    }
+                })
+            }
+        });
+
+
 }
 
 
@@ -82,9 +97,8 @@ function decCount(Id, Count) {
                 let totalprice = $('#price' + Id).html()
                 let price = (totalprice / count)
                 count--
-                if (count < 1) {
+                if (count <= 1) {
                     location.reload()
-                    return
                 }
                 $('#' + Id).val(count)
                 let newprice = price * count
@@ -107,16 +121,46 @@ $("#addCategoryForm").submit(function (e) {
         dataType: "json",
         data: $(this).serialize(),
         success: function (response) {
-            if(response.status){
-                swal("Category ", "success fully added New category!", "success")       
-                 }
-                 if( response.exist){
-                    swal("Category already exists!")
-                 }
+            if (response.status) {
+                swal("Category ", "success fully added New category!", "success")
+            }
+            if (response.exist) {
+                swal("Category already exists!")
+            }
         }
     });
 });
 
 
+$("#addAddressForm").submit(function (e) {
+    e.preventDefault();
+    $.ajax({
+        url: "/addAddress",
+        method: "POST",
+        dataType: "json",
+        data: $(this).serialize(),
+        success: function (response) {
+            if (response.status) {
+                // redirect to checkout page---
+                location.href = '/checkout';
+            }
+        }
+    })
+
+})
+$("#placeOrderForm").submit(function (e) {
+    e.preventDefault();
+    $.ajax({
+        url: "/placeOrder",
+        method: "POST",
+        dataType: "json",
+        data: $(this).serialize(),
+        success: function (response) {
+            if (response.status) {
+                location.href = '/placeOrder';
+            }
+        }
+    })
+})
 
 

@@ -5,7 +5,7 @@ module.exports = {
   dbConnect: async () => {
     const uri = process.env.MONGO_URI;
     try {
-      await mongoose 
+      await mongoose
         .connect(uri, {
           useNewUrlParser: true,
           useUnifiedTopology: true,

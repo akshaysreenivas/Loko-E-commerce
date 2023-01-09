@@ -5,7 +5,7 @@ const productController = require("../controllers/productController");
 const verifylogin = require('../middleware/loginverify')
 
 
-// --------user signup ---------
+// --------------- user signup ----------------
 
 // ------get method------
 
@@ -14,15 +14,11 @@ router.get("/signup", (req, res) => {
   else res.render("users/signup");
 });
 
-
-
-
-
 // ------post method------
 
 router.post("/signup", userController.userSignup)
 
-//----------- user validation with otp  ---------
+//--- user validation with otp  -----
 
 router.get('/otp-validation', (req, res) => {
   if (req.session.loggedIn) res.redirect("/");
@@ -36,7 +32,7 @@ router.post("/otp-validation", userController.otpValidator)
 
 
 
-// --------- user login---------
+// --------------- user login ----------------
 
 // get login
 
@@ -97,6 +93,14 @@ router.get("/", async (req, res) => {
   });
 });
 
+
+// -------    viewproductsbycategory    ------
+
+router.get('/categories/:category', productController.viewproductsbycategory)
+
+
+
+
 // profile UI--------
 
 router.get("/profile", verifylogin.verifyLogin, (req, res) => {
@@ -108,7 +112,7 @@ router.get("/profile", verifylogin.verifyLogin, (req, res) => {
 router.get("/product/:productID", async (req, res) => {
   let productimage;
   let product = await productController.getproduct(req.params.productID);
-  if(product){
+  if (product) {
     productimage = product.data.images[0].data
   }
   res.render("users/product", { user: req.session.user, product: product.data, productimage });
@@ -151,14 +155,8 @@ router.post("/addToCart/:productID", verifylogin.verifyLogin, async (req, res, n
 
 // delete product from cart 
 
-router.post("/delete-cart-item/:productID", verifylogin.verifyLogin, (req, res) => {
-  let count = -1;
-  userController
-    .deleteCartProduct(req.session.user._id, req.params.productID, count)
-    .then((response) => {
-      res.json({ response });
-    });
-});
+router.post("/delete-cart-item/:productID", verifylogin.verifyLogin, userController.deleteCartProduct);
+
 
 // change quantity of a single item in cart  
 
@@ -171,6 +169,9 @@ router.post("/changeqty", verifylogin.verifyLogin, async (req, res) => {
         if (response.totalAmount) {
           totalCost = response.totalAmount[0].totalCost
           res.json({ totalCost });
+        }
+        else {
+          res.json({ removed: true });
 
         }
       })
@@ -180,13 +181,29 @@ router.post("/changeqty", verifylogin.verifyLogin, async (req, res) => {
 
 
 // checkout page -------
+router.get('/checkout', verifylogin.verifyLogin, userController.viewAddress)
 
+// ------add address new address------
 
-router.get('/checkout', (req, res) => {
-  res.render('users/checkout')
+router.get('/addAddress', verifylogin.verifyLogin, (req, res) => {
+  res.render('users/addaddress', { user: req.session.user })
 })
 
-// wishlist -------
+router.post('/addAddress', verifylogin.verifyLogin, userController.addAddress)
+
+
+// ------ place order -------
+
+router.post('/placeOrder', verifylogin.verifyLogin, userController.placeOrder)
+
+
+// confirm order  
+
+router.get('/placeOrder', verifylogin.verifyLogin, (req, res) => {
+  res.render('users/orderConfirm', { user: req.session.user })
+})
+
+
 
 
 // =======logout=====

@@ -24,6 +24,28 @@ const userSc = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    phone_number: {
+        type: String,
+    },
+
+    addressDetails: [
+        {
+
+            name: String,
+            phone: String,
+            street: String,
+            city: String,
+            state: String,
+            pin_code: Number,
+            country: {
+                type: String,
+                default: "India"
+            }
+
+        }
+
+    ],
+
     blocked: {
         type: Boolean,
         default: false

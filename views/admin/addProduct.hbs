@@ -12,8 +12,8 @@
         </div>
         {{/if}}
 
-        <form id="addProductForm" method="post" action="/admin/add-product" class="d-dlex justify-contents-center box-shadow p-5 mb-5"
-            enctype="multipart/form-data">
+        <form id="addProductForm" method="post" action="/admin/add-product"
+            class="d-dlex justify-contents-center box-shadow p-5 mb-5" enctype="multipart/form-data">
             <fieldset class="px-5">
 
                 <!-- Form Name -->
@@ -48,10 +48,11 @@
                         <select class="form-select form-control-lg " aria-label="product category select "
                             name="category" required>
                             <option selected="" disabled> --Select-- </option>
-
+                            {{#if Categorys}}
                             {{#each Categorys}}
                             <option value="{{title}}">{{title}}</option>
                             {{/each}}
+                            {{/if}}
                         </select>
                     </div>
                     <!-- PRODUCT SIZE -->
@@ -85,7 +86,7 @@
                 <!-- add images   -->
                 <div class="form-group mb-4 m-3 px-3 p-2">
                     <label class="col-md-4 control-label mb-3" for="image">ADD IMAGE</label>
-                    <input class="form-control form-control-lg p-2" type="file" name="photos" id=""  multiple/>
+                    <input class="form-control form-control-lg p-2" type="file" name="photos" id="" multiple />
                     {{!-- <div class="m-4">
                         <img style="width:50px;height:70px;" src="" alt="" id="addedImg">
                     </div> --}}

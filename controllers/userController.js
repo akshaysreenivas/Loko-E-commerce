@@ -1,6 +1,7 @@
 const users = require('../models/usermodel');
 const cart = require('../models/cartmodel')
 const nodemailer = require('../config/nodemailer')
+const orders = require('../models/ordersmodel')
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 const bcrypt = require("bcrypt");
@@ -13,18 +14,14 @@ module.exports = {
             try {
                 const user = await users.findOne({ email: userdata.email })
                 if (user) {
-                    console.log(user, "user")
                     if (user.verified) {
                         res.redirect("/signup", { message: "Looks like already have an account with this email! , login instead? " });
                     } else {
                         nodemailer.otpGenerator(userdata.email)
                             .then((response) => {
-                                console.log("hii");
                                 if (response.status) {
                                     req.session.tempuseremail = user.email
-
                                     req.session.otp = response.otp
-                                    console.log(req.session.otp);
                                     res.render('users/otp')
                                 }
                             })
@@ -40,7 +37,6 @@ module.exports = {
                         .then(() => {
                             nodemailer.otpGenerator(userdata.email)
                                 .then((response) => {
-                                    console.log("hii");
                                     if (response.status) {
                                         req.session.tempuseremail = newUser.email
                                         req.session.otp = response.otp
@@ -49,12 +45,12 @@ module.exports = {
                                 })
                         })
                         .catch((err) => {
-                            console.log(err)
+                            throw err
                         })
                 }
             }
             catch (error) {
-                console.log(error)
+                throw error
             }
         })
 
@@ -67,7 +63,7 @@ module.exports = {
             await users.findOneAndUpdate({ email: req.session.tempuseremail }, { $set: { verified: true } })
             res.redirect('/login')
         } else {
-            req.session.invalidOtp="Invalid OTP"
+            req.session.invalidOtp = "Invalid OTP"
             res.redirect('/otp-validation')
         }
     },
@@ -201,6 +197,12 @@ module.exports = {
 
                                 productId: 1, quantity: 1, totalQty: 1, product: 1, amount: { $sum: { $multiply: ['$quantity', '$product.price'] } }
                             }
+
+                        }, {
+                            $project: {
+
+                                productId: 1, quantity: 1, totalQty: 1, product: 1, amount: 1, image: { $arrayElemAt: ['$product.images', 0] }
+                            }
                         }
                     ])
                     if (cartItems.length !== 0) {
@@ -215,7 +217,7 @@ module.exports = {
                 }
 
             } catch (error) {
-                console.log(error);
+                throw error
             }
         })
     },
@@ -287,34 +289,33 @@ module.exports = {
                 }
 
             } catch (error) {
-                console.log(error);
+                throw error
             }
         })
     },
 
-    deleteCartProduct: (userID, productID, count) => {
-        const UserID = new mongoose.Types.ObjectId(userID)
-        const ProductID = new mongoose.Types.ObjectId(productID)
-        return new Promise(async (resolve, reject) => {
-            try {
-                await cart.updateOne({ userId: userID }, {
-                    $pull: { products: { productId: ProductID } },
-                    $inc: { totalQty: count }
-                }
-                ).then(() => {
-                    resolve({ status: true });
-                })
-            } catch (error) {
-                console.log(error);
+    deleteCartProduct: async (req, res) => {
+        let count = -1;
+        let userID = req.session.user._id
+        let productID = req.params.productID
+        try {
+            await cart.updateOne({ userId: userID }, {
+                $pull: { products: { productId: productID } },
+                $inc: { totalQty: count }
             }
-        })
+            ).then(() => {
+                res.json({ status: true });
+            })
+        } catch (error) {
+            throw error
+        }
+
     },
 
     changeCartProductCount: (userID, data) => {
-
-        const count = parseInt(data.count)
-        const UserID = new mongoose.Types.ObjectId(userID)
-        const ProductID = new mongoose.Types.ObjectId(data.id)
+        let count = parseInt(data.count)
+        let UserID = new mongoose.Types.ObjectId(userID)
+        let ProductID = new mongoose.Types.ObjectId(data.id)
         return new Promise(async (resolve, reject) => {
             try {
                 const cartitems = await cart.findOne({ userId: userID })
@@ -322,7 +323,7 @@ module.exports = {
                 const productIndex = productItem.findIndex(item => item.productId.toString() === ProductID.toString())
 
                 if (productIndex >= 0) {
-                    if (count == -1 && cartitems.products[productIndex].quantity <= 1) {
+                    if (count == -1 && cartitems.products[productIndex].quantity == 1) {
                         await cart.updateOne({ userId: UserID }, {
                             $pull: { products: { productId: ProductID } },
                             $inc: { totalQty: count }
@@ -340,12 +341,116 @@ module.exports = {
                     }
                 }
             } catch (error) {
-                console.log(error);
+                throw error
             }
         })
     }
     ,
+    addAddress: async (req, res) => {
+        let userid = req.session.user._id
+        let newaddressDetails = {
+            name: req.body.name,
+            phone: req.body.phone,
+            street: req.body.address,
+            city: req.body.city,
+            state: req.body.state,
+            pin_code: req.body.pin,
+        }
+        try {
+            await users.updateOne({ _id: userid }, { $push: { addressDetails: newaddressDetails } }, { new: true }).then(() => {
+                res.json({ status: true })
 
+            })
+        } catch (err) {
+            throw err
+        }
+    }
+    ,
+
+    viewAddress: async (req, res) => {
+        try {
+            let userid = req.session.user._id
+            let userAddress;
+            let address = await users.findOne({ _id: userid }, 'addressDetails').lean()
+            if (address) {
+                userAddress = address.addressDetails
+            }
+            res.render('users/checkout', { userAddress, user: req.session.user })
+        } catch (err) {
+            throw err
+        }
+    },
+    placeOrder: async (req, res) => {
+        try {
+            let addressId = req.body.address
+            let userid = req.session.user._id
+            let ID = new mongoose.Types.ObjectId(userid)
+
+            const Address = await users.findOne({ _id: userid }, { addressDetails: { $elemMatch: { _id: addressId } } })
+            let items = await cart.aggregate([
+                {
+                    $match: { userId: ID }
+                }
+                , {
+                    $unwind: '$products'
+                }, {
+                    $project: {
+                        productId: '$products.productId',
+                        quantity: '$products.quantity',
+                        totalQty: '$totalQty',
+                        totalCost: '$totalCost'
+                    }
+                }, {
+                    $lookup: {
+                        from: 'products',
+                        localField: 'productId',
+                        foreignField: '_id',
+                        as: 'product'
+                    }
+                }, {
+                    $project: {
+                        productId: 1, quantity: 1, totalQty: 1, product: { $arrayElemAt: ['$product', 0] }
+                    }
+                }, {
+                    $project: {
+
+                        productId: 1, quantity: 1, totalQty: 1, product: 1, amount: { $sum: { $multiply: ['$quantity', '$product.price'] } }
+                    }
+
+                }, {
+                    $project: {
+
+                        productId: 1, quantity: 1, totalQty: 1, amount: 1
+                    }
+                }
+            ])
+            const OrderItems = items.map((items) => {
+                return {
+                    product_Id: items.productId,
+                    price: items.amount,
+                    quantity: items.quantity
+                }
+            });
+            let TotalAmount = items.reduce((acc, crr) => acc + crr.amount, 0)
+            const newOrder = new orders({
+                user_Id: userid,
+                address: Address.addressDetails[0],
+                paymentMethod: req.body.paymentMethod,
+                totalAmount: TotalAmount,
+                orderItems: OrderItems,
+
+
+
+            })
+            await newOrder.save().then(() => {
+                res.json({ status: true })
+            })
+
+        } catch (err) {
+            throw err
+        }
+    }
+    ,
     logout: (req, res) => {
         req.session.destroy();
         res.redirect("/");

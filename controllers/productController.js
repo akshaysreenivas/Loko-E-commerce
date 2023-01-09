@@ -5,7 +5,6 @@ const categorys = require('../models/categorymodel');
 
 module.exports = {
   addCategory: async (req, res) => {
-    console.log("called", req.body);
     try {
       const category = await categorys.findOne({ title: req.body.title })
       if (category) {
@@ -20,33 +19,25 @@ module.exports = {
         })
       }
     } catch (err) {
-      console.log(err);
+      throw err
     }
 
   },
 
-  viewCategory: async (req, res) => {
+  viewCategory: () => new Promise(async (resolve, reject) => {
     try {
-      const Categorys = await categorys.find({}).lean()
-      let productAdded = false
-      if (req.session.productAdded) {
-        productAdded = req.session.productAdded
-      }
+      const Categorys = await categorys.find({}).lean();
       if (Categorys) {
-        res.render("admin/addProduct", { Categorys, productAdded });
-        req.session.productAdded = false
-
+        resolve({ Categorys })
       }
     } catch (err) {
-      console.log(err);
+      throw err
     }
+  }),
 
-
-  },
   addProduct: async (req, res) => {
     let data = req.body
-    console.log("fi", data)
-    console.log("files", req.files)
+
     try {
       const newProduct = new products({
         name: data.name,
@@ -80,7 +71,6 @@ module.exports = {
   editproduct: (req, res) => {
     let data = req.body
     let images = req.files
-    console.log(images);
 
 
     new Promise(async (resolve, reject) => {
@@ -109,19 +99,26 @@ module.exports = {
   },
 
 
-  viewproductsbycategory: (req, res) => {
-    new Promise(async (resolve, reject) => {
-      try {
-        await products.find({ category: data }).lean().then((data) => {
-          resolve({ status: true, data })
-        }).catch((error) => {
-          throw error;
-        })
-      } catch (error) {
+  viewproductsbycategory: async (req, res) => {
+    try {
+      let category = req.params.category
+      await products.find({ category: category }).lean().then((data) => {
+        const productsdata = data.map((data) => {
+          return {
+            _id: data._id,
+            name: data.name,
+            price: data.price,
+            image: data.images[0].data
+          };
+        });
+        res.render('users/productByCategory', { productsdata, category })
+      }).catch((error) => {
         throw error;
-      }
+      })
+    } catch (error) {
+      throw error;
+    }
 
-    })
   },
   viewproducts: (data) => {
     return new Promise(async (resolve, reject) => {
@@ -161,7 +158,7 @@ module.exports = {
           }
         })
       } catch (error) {
-        console.log(error)
+        throw error
       }
     })
   }

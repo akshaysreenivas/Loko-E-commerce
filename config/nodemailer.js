@@ -6,7 +6,7 @@ module.exports = {
   otpGenerator: (useremail) => {
     return new Promise((resolve, reject) => {
       let otp = parseInt(Math.random() * 9000)
-      
+
       // Set the email options
       let mailOptions = {
         from: "lokoecommerse@gmail.com",
@@ -23,11 +23,9 @@ module.exports = {
       })
       transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
-          console.log(error);
           resolve({ status: false })
         } else {
-          console.log("Email sent: " + info.response);
-          resolve({ status: true ,otp})
+          resolve({ status: true, otp })
         }
       });
     })

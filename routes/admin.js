@@ -45,10 +45,7 @@ router.get("/img", (req, res) => {
   res.render("admin/img");
 });
 
-router.post("/uploadmultiple", store.array("imgs", 12), (req, res) => {
-  console.log(req.files);
-  res.send("kkll");
-});
+
 
 // =========Product Management=======
 
@@ -60,24 +57,28 @@ router.post("/addCategory", productController.addCategory);
 
 // -------Add Product------
 
-router.post("/add-product",store.array("photos", 6),productController.addProduct);
+router.post("/add-product", store.array("photos", 6), productController.addProduct);
 
-router.get("/addproduct",verifylogin.verifyadminlogin,productController.viewCategory
-);
+router.get("/addproduct", verifylogin.verifyadminlogin, async (req, res) => {
+  await productController.viewCategory().then((response) => {
+    Categorys = response.Categorys
+  })
+  res.render("admin/addProduct", { Categorys, productAdded: req.session.productAdded });
+  req.session.productAdded = false
+})
 
 // -------Edit Product------
 
 router.get("/editProduct/:userId", verifylogin.verifyadminlogin, (req, res) => {
   productController.getproduct(req.params.userId).then((response) => {
     if (response.status) {
-      console.log(response.data );
       res.render("admin/editProduct", { tobeupdate: response.data });
     } else res.send("fail");
   });
 });
 
-router.post( "/editproduct",verifylogin.verifyadminlogin,store.array("photos", 6),productController.editproduct);
- 
+router.post("/editproduct", verifylogin.verifyadminlogin, store.array("photos", 6), productController.editproduct);
+
 // ===== List Products =====
 
 router.get(
@@ -87,7 +88,6 @@ router.get(
     productController.viewproducts().then((response) => {
       if (response) {
         const productsData = response.data;
-        console.log(productsData);
         res.render("admin/listProducts", { productsData });
       }
     });
