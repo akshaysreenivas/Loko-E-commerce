@@ -21,14 +21,12 @@ const orderSchema = new schema({
     {
       product_Id: {
         type: ObjectId,
-
       },
       price: {
         type: Number
       },
       quantity: {
         type: Number,
-
       }
     }
   ],

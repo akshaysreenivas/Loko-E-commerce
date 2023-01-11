@@ -80,14 +80,13 @@
 
                 <div class="form-group mb-4 m-3 px-3 p-2">
                     <label class="col-md-4 control-label mb-3" for="image">IMAGE</label>
-                    <div class="m-3 d-flex gap-2">
                     {{#each tobeupdate.images}}
-                        <img style="width:50px;height:70px;" src="/{{data}}"
-                            alt="" id="newImg">
-                    {{/each}}
+                    <div class="m-3 d-flex gap-2">
+                        <img style="width:50px;height:70px;" src="/images/{{data}}" alt="" id="newImg{{_id}}">
                     </div>
+                    <input class="form-control form-control-lg p-2" value="{{data}}" type="file" name="photos" id="" />
+                    {{/each}}
                     <label class="col-md-4 control-label my-3" for="image">CHANGE IMAGE</label>
-                    <input class="form-control form-control-lg p-2" type="file" name="photos" id=""  multiple/>
                 </div>
 
                 <!-- Textarea -->
@@ -95,7 +94,6 @@
                     <label class="col-md-4 control-label mb-3" for="product_description">PRODUCT DESCRIPTION</label>
                     <textarea class="form-control form-control-lg p-2" style="width: 70%;border-radius:5px"
                         id="product_description" name="description">{{tobeupdate.product_description}}</textarea>
-
                 </div>
 
                 <!-- Button -->

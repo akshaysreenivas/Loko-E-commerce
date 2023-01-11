@@ -3,8 +3,11 @@ const router = express.Router();
 const adminController = require("../controllers/adminController");
 const productController = require("../controllers/productController");
 const verifylogin = require("../middleware/loginverify");
-// const uploadProductImage  = require("../middleware/image-upload");
-const store = require("../middleware/image-upload");
+const upload = require("../middleware/image-upload");
+
+
+
+
 /* GET home page. */
 
 router.get("/", verifylogin.verifyadminlogin, function (req, res, next) {
@@ -41,43 +44,47 @@ router.post("/adminlogin", (req, res) => {
   });
 });
 
-router.get("/img", (req, res) => {
-  res.render("admin/img");
-});
-
-
 
 // =========Product Management=======
 
-router.get("/addCategory", verifylogin.verifyadminlogin, (req, res) => {
-  res.render("admin/addcategory");
-});
+// ------- add categorys -----
 
-router.post("/addCategory", productController.addCategory);
+router.get("/addCategory", verifylogin.verifyadminlogin,productController.loadcategory) 
+router.post("/addCategory",verifylogin.verifyadminlogin,upload.single('categoryimage'), productController.addCategory);
+
+
+//  ------ edit categorys -----
+
+router.get ("/editCategory/:categoryId",verifylogin.verifyadminlogin,productController.loadEditCategory)
+router.post("/editCategory",verifylogin.verifyadminlogin,upload.single('categoryimage'),productController.editCategory)
+
+// -------Delete Categorys-------
+router.post("/deleteCategory/:categoryId/:imgpath",verifylogin.verifyadminlogin,productController.deleteCategory)
+
 
 // -------Add Product------
 
-router.post("/add-product", store.array("photos", 6), productController.addProduct);
+router.post("/add-product",verifylogin.verifyadminlogin,upload.array('photos',4),productController.addProduct);
 
-router.get("/addproduct", verifylogin.verifyadminlogin, async (req, res) => {
-  await productController.viewCategory().then((response) => {
-    Categorys = response.Categorys
-  })
-  res.render("admin/addProduct", { Categorys, productAdded: req.session.productAdded });
-  req.session.productAdded = false
+router.get("/addproduct",verifylogin.verifyadminlogin,async(req,res)=>{  
+ await productController.viewCategory().then((response)=>{
+  Categorys= response.Categorys
+ })
+  res.render("admin/addProduct", { Categorys, productAdded:req.session.productAdded });
+  req.session.productAdded=false
 })
 
 // -------Edit Product------
 
-router.get("/editProduct/:userId", verifylogin.verifyadminlogin, (req, res) => {
-  productController.getproduct(req.params.userId).then((response) => {
+router.get("/editProduct/:productId", verifylogin.verifyadminlogin, (req, res) => {
+  productController.getproduct(req.params.productId).then((response) => {
     if (response.status) {
       res.render("admin/editProduct", { tobeupdate: response.data });
     } else res.send("fail");
   });
 });
 
-router.post("/editproduct", verifylogin.verifyadminlogin, store.array("photos", 6), productController.editproduct);
+router.post( "/editproduct",verifylogin.verifyadminlogin,upload.array('photos',4),productController.editproduct);
 
 // ===== List Products =====
 
@@ -94,7 +101,7 @@ router.get(
   }
 );
 
-// -------Delete Product------
+// ------- change status of  product------
 
 router.post("/deleteProduct", verifylogin.verifyadminlogin, (req, res) => {
   productController.deleteProduct(req.body).then((response) => {

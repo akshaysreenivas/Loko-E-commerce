@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const { date } = require("random-js");
 const saltRounds = 10;
-const userSc = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -52,7 +52,7 @@ const userSc = new mongoose.Schema({
     }
 });
 
-userSc.pre("save", function (next) {
+userSchema.pre("save", function (next) {
     const user = this;
     if (this.isModified("password") || this.isNew) {
         try {
@@ -81,4 +81,4 @@ userSc.pre("save", function (next) {
 });
 
 
-module.exports = new mongoose.model('users', userSc)
+module.exports = new mongoose.model('users', userSchema)

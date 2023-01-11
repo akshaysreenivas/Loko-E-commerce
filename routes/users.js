@@ -183,7 +183,7 @@ router.post("/changeqty", verifylogin.verifyLogin, async (req, res) => {
 // checkout page -------
 router.get('/checkout', verifylogin.verifyLogin, userController.viewAddress)
 
-// ------add address new address------
+// ------add new address------
 
 router.get('/addAddress', verifylogin.verifyLogin, (req, res) => {
   res.render('users/addaddress', { user: req.session.user })
@@ -194,7 +194,7 @@ router.post('/addAddress', verifylogin.verifyLogin, userController.addAddress)
 
 // ------ place order -------
 
-router.post('/placeOrder', verifylogin.verifyLogin, userController.placeOrder)
+router.post('/placeOrder', verifylogin.verifyLogin, userController.cartPlaceOrder)
 
 
 // confirm order  

@@ -1,19 +1,35 @@
 const mongoose = require("mongoose");
+const { string } = require("random-js");
 const Schema = mongoose.Schema;
-const slug = require("mongoose-slug-updater");
 
-mongoose.plugin(slug);
-
-const categorySc = Schema({
+const categorySchema = new Schema({
   title: {
     type: String,
     required: true,
+    unique: true
   },
-  slug: {
+
+  description: {
     type: String,
-    unique: true,
-    slug: "title",
+    default: ""
   },
+  image: {
+    type: String,
+    default: ""
+  },
+  path: {
+    type: String,
+    default: ""
+
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
-module.exports = new mongoose.model("categorys", categorySc)
+module.exports = new mongoose.model("categorys", categorySchema)

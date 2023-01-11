@@ -1,19 +1,37 @@
 
-
-
 const multer = require('multer');
 
 // set storage
-var storage = multer.diskStorage({
+
+const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads')
+        cb(null, './public/images')
     },
     filename: function (req, file, cb) {
-        // image.jpg
-        var ext = file.originalname.substr(file.originalname.lastIndexOf('.'));
-
-        cb(null, file.fieldname + file.originalname + '-' + Date.now() + ext)
+        cb(null, `${file.fieldname}_${Date.now()}_${file.originalname}`)
     }
 })
 
-module.exports = store = multer({ storage: storage })
+
+//Upload Setting
+const upload = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+        if (
+            file.mimetype == 'image/jpeg' ||
+            file.mimetype == 'image/jpg'  ||
+            file.mimetype == 'image/png'  ||
+            file.mimetype == 'image/gif'  ||
+            file.mimetype == 'image/webp'
+
+        ) {
+            cb(null, true)
+        }
+        else {
+            cb(null, false);
+            cb(new Error('Only jpeg,  jpg , png, and gif Image allow'))
+        }
+    }
+})
+
+module.exports = upload;

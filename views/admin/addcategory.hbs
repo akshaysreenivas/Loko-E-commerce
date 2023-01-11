@@ -1,98 +1,80 @@
 {{>adminNavbar}}
 <section class=" admin-section d-flex gap-5">
-  {{>adminSideBar}}
-  <div class="vw-100 main px-5 pt-5 content-admin ">
-    <h1>Add New Category</h1>
+    {{>adminSideBar}}
+    <div class="vw-100 main px-5 pt-5 content-admin ">
 
-    
+                {{#if categoryAdded}}
+        <div class="p-3 my-2 text-success alert alert-success alert-dismissible fade show d-flex align-items-center"
+            role="alert">
+            <span class="material-icons-sharp">
+                check_circle
+            </span> <strong> Success!!,</strong> Category Added
+            <button type="button" class="btn-close p-4" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {{/if}}
+        {{#if categoryEdited}}
+        <div class="p-3 my-2 text-success alert alert-success alert-dismissible fade show d-flex align-items-center"
+            role="alert">
+            <span class="material-icons-sharp">
+                check_circle
+            </span> <strong> Success!!,</strong> Category Successfully Edited
+            <button type="button" class="btn-close p-4" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {{/if}}
 
-   
-    <form id="addCategoryForm" class="d-flex align-items-center  gap-3 mt-5">
-      <label for="name">Category Name:</label>
-      <div>
-        <input class="categoryName p-2 m-1" type="text" name="title" id="categoryName" required />
-      </div>
-      <div>
-        <button type="submit"class="btn btn-dark p-2">Add Category</button>
-      </div>
-    </form>
-        <div> <small class="text-danger" id="Inalid-Category"></small></div>
-
-
-  {{!-- <div class="mt-5">
-    <table class="py-4 mb-3 table table-hover table-bordered " id="productsTable">
-                        <thead class="bg-dark text-white">
-                            <tr>
-                                <th class="p-2" scope="col">ID</th>
-                                <th class="p-2" scope="col">Category Name</th>
-                                <th class="p-2" scope="col">Edit</th>
-                                <th class="p-2" scope="col">Delete</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{#each categoriesData}}
-
-                            <tr class="p-2 ">
-                                <td class="p-2 ">{{this._id}}</td>
-                                <td class="p-2 ">{{this.name}}</td>
-                                <td class="p-2 ">{{this.price}}</td>
-
-                                <!---=============== Edit Category ==============--->
-
-                                <td class="p-2 "><a class=" d-flex justify-content-center"
-                                        href="/admin/editProduct/{{this._id}}">
-                                        <span class="material-icons-sharp">edit</span></a>
-                                </td>
-
-                                <!---=============== Delete Category==============--->
-
-                                <td class="p-2 ">
-                                    <a role="button" onclick="deleteProduct('{{_id}}')" data-bs-toggle="modal"
-                                        id="opendatamodal" data-productId="hoi" data-bs-target="#delete-product">
-                                        <span class="material-icons-sharp text-danger">delete</span>
-                                    </a>
-                                </td>
+        <h2 class="text-center">Add New Category</h2>
+        <div class="row container mb-5">
+            <div class="col-md-4 col-12 p-3 m-auto" style="background-color: #ddddddc9;">
+                <form id="addCategoryForm">
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" name="category" id="category"
+                            aria-describedby="emailHelp">
+                    </div>
+                    <div class="drag-image m-auto">
+                        <span id="uploadIcon" class="material-icons-sharp">cloud_upload</span>
+                        <img id="addedImg" src="" alt="">
+                    </div>
+                    <div class="d-block text-center p-3">
+                    <input onchange="viewImg(event)" type="file" id="image" name="categoryimage">
+                    </div>
+                    <div class="d-flex justify-content-center my-2">
+                        <button type="submit" class="btn btn-outline-dark ">Submit</button>
+                    </div>
+                </form>
 
 
+            </div>
+        </div>
+        <div class="row container my-5">
+            <div class="col-md-8 col-12 m-auto">
+                <h2 class="mb-3">Categorys</h2>
+                <table class="py-4 mb-3 table table-bordered table-hover" id="categoriesTable">
+                    <thead>
+                        <tr class="bg-dark text-white">
+                            <th scope="col">category Id</th>
+                            <th scope="col">category Name</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Manage</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-light">
+                        {{#each categorys }}
+                        <tr>
+                            <th scope="row">{{_id}}</th>
+                            <td>{{title}}</td>
+                            <td><img class="m-1" style="max-width:50px; max-height:50px" src="/images/{{image}}" alt=""></td>
+                            <td>
+                                <a id="category_edit" href="/admin/editCategory/{{_id}}" class="btn"><span class="material-icons-sharp">edit</span></a>
+                                <button onclick="deleteCategory('{{_id}}','{{image}}')"class="btn"><span class="material-icons-sharp">delete</span></button>
+                            </td>
+                        </tr>
+                       {{/each}}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
 
-                                <div class="modal fade " id="delete-product" data-bs-backdrop="static"
-                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                    aria-hidden="true">
-                                    <div
-                                        class=" d-flex justify-content-center align-items-center modal-dialog-centered">
-                                        <div class="modal-dialog bg-success">
-                                            <div class="modal-content p-4">
-                                                <div class="modal-header p-2">
-                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete product
-                                                    </h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-
-                                                <div class="modal-body delete-modal p-3">
-                                                    <p>Are you sure? Delete product with ID</p>
-                                                    <p class="proid"></p>
-                                                    <input type="text" class="border-0 select " name="id" value="">
-
-                                                </div>
-                                                <div class="modal-footer p-2">
-                                                    <button type="button" class="btn btn-secondary  p-2"
-                                                        data-bs-dismiss="modal">Cancel</button>
-                                                    <button onclick="confirmDeleteProduct()"
-                                                        class="btn btn-success mx-4 px-4 p-2">Delete</button>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </tr>
-                            {{/each}}
-                        </tbody>
-                    </table>
-  </div> --}}
- </div>
 </section>

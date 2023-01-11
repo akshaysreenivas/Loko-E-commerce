@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
+const { string } = require("random-js");
 
 
-const productSc = new mongoose.Schema({
+const productSchema = new mongoose.Schema({
     name: {
         type: String,
         require: true
@@ -12,6 +13,7 @@ const productSc = new mongoose.Schema({
     },
     size: {
         type: String,
+        require:true
     },
     images: [{
         data: {
@@ -34,7 +36,11 @@ const productSc = new mongoose.Schema({
     product_description: {
         type: String,
         require: true
+    },
+    status:{
+        type:String,
+        default:'Active'
     }
 })
 
-module.exports = new mongoose.model("products", productSc)
+module.exports = new mongoose.model("products", productSchema)

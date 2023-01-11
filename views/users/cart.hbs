@@ -20,7 +20,7 @@
                                 <!-- Image -->
                                 <div class="bg-image hover-overlay hover-zoom ripple rounded "
                                     data-mdb-ripple-color="light">
-                                    <img src="/{{image.data}}" class="w-100 img-fluid"
+                                    <img src="/images/{{image.data}}" class="w-100 img-fluid"
                                         style="max-width: 10rem; max-height:12rem;" />
                                     <a href="#!">
                                         <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
@@ -62,7 +62,7 @@
 
                                     <div class=" w-50 p-2 ">
                                         <input id="{{product._id}}" min="1" name="quantity" value="{{quantity}}"
-                                            type="number" class="form-control" />
+                                            type="number" class="form-control" disabled />
                                     </div>
 
                                     <button class="btn  p-0" onclick="addCount('{{product._id}}',1)">

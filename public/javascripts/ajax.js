@@ -1,18 +1,72 @@
 
 
+// --------adding new categorys---------
 
-// ajax for cart
 
 $(document).ready(function () {
-    $(".add-to-cart-spinner").addClass("d-none");
-
+    $("#addCategoryForm").submit(function (event) {
+        event.preventDefault();
+        let formData = new FormData();
+        let image = $("#image")[0].files[0];
+        formData.append("categoryimage", image);
+        formData.append("category", $("#category").val());
+        $.ajax({
+            url: "/admin/addCategory",
+            method: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.status) {
+                    location.reload()
+                }
+                if (response.exists) {
+                    swal("Category already exists");
+                }
+            },
+            error: function (error) {
+                swal("Failed!", error, "error");
+            }
+        });
+    });
 });
 
 
+
+
+// ------- delete category-------
+function deleteCategory(Id,image ){ 
+    swal({
+        title: "Are you sure?",
+        text: "Delete this category",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+        .then((willDelete) => {
+            if (willDelete) {
+                $.ajax({
+                    url: '/admin/deleteCategory/'+Id+'/'+image,
+                    method: "POST",
+                    success: (response) => {
+                        if(response.status)
+                        location.reload()
+                        else
+                        swal("Failed!", error, "error");
+
+                    }
+                })
+            }
+        });
+
+
+}
+
+
+// -------ajax for cart-------
 // addtocart
 
 function addToCart(Id) {
-    // $("#add-to-cart-text" + Id).addClass("d-none");
     $("#add-to-cart-spinner" + Id).addClass("spinner-border");
     $.ajax({
         url: '/addToCart/' + Id,
@@ -111,26 +165,7 @@ function decCount(Id, Count) {
 
 }
 
-// adding new categorys
-
-$("#addCategoryForm").submit(function (e) {
-    e.preventDefault();
-    $.ajax({
-        url: "/admin/addCategory",
-        method: "POST",
-        dataType: "json",
-        data: $(this).serialize(),
-        success: function (response) {
-            if (response.status) {
-                swal("Category ", "success fully added New category!", "success")
-            }
-            if (response.exist) {
-                swal("Category already exists!")
-            }
-        }
-    });
-});
-
+// --------Address Form---------
 
 $("#addAddressForm").submit(function (e) {
     e.preventDefault();
@@ -148,6 +183,9 @@ $("#addAddressForm").submit(function (e) {
     })
 
 })
+
+// --------placeOrder Form---------
+
 $("#placeOrderForm").submit(function (e) {
     e.preventDefault();
     $.ajax({
@@ -162,5 +200,6 @@ $("#placeOrderForm").submit(function (e) {
         }
     })
 })
+
 
 

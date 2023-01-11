@@ -8,11 +8,10 @@ const dbConnect = require('./config/db')
 const adminRouter = require('./routes/admin');
 const usersRouter = require('./routes/users');
 const session = require('express-session')
-
 const app = express();
 dbConnect.dbConnect()
 
-const _ = require('lodash');
+const _=require('lodash')
 
 // view engine setup
 app.engine('hbs', hbs.engine({ extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layout/', partialsDir: __dirname + '/views/partials/' }))
@@ -25,7 +24,6 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '/public')));
-app.use(express.static(path.join(__dirname, '/uploads')));
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
@@ -47,6 +45,8 @@ app.use((req, res, next) => {
 
 app.use('/admin', adminRouter);
 app.use('/', usersRouter);
+
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

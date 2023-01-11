@@ -1,0 +1,50 @@
+{{>adminNavbar}}
+<section class=" admin-section d-flex gap-5">
+    {{>adminSideBar}}
+    <div class="vw-100 main px-5 pt-5 content-admin ">
+
+
+        
+
+        <h2 class="text-center">Edit Category</h2>
+        <div class="row container mb-5">
+            <div class="col-md-4 col-12 p-3 m-auto" style="background-color: #ddddddc9;">
+                <form action="/admin/editCategory" method="post" enctype="multipart/form-data">
+                    <input type="text" name="categoryid" value="{{Category._id}}" hidden>
+                    <!---- category name   -------- -->
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Category Name</label>
+                        <input type="text" value="{{Category.title}}" placeholder="{{Category.title}}"
+                            class="form-control" name="category" id="category" aria-describedby="emailHelp">
+                    </div>
+                    <!----old image--- -->
+
+                    <label for="exampleInputEmail1" class="form-label">Category Image</label>
+                    <div class="drag-image m-auto col-md-4">
+                        <img src="/images/{{Category.image}}" alt="">
+                    </div>
+
+                    <!---------------- new image    ------------ -->
+
+                    <h4>Add new image here</h4>
+
+                    <!--- image preview --->
+                    <div class="drag-image m-auto col-md-4 ">
+                        <span id="uploadIcon" class="material-icons-sharp">cloud_upload</span>
+                        <img id="addedImg" src="" alt="">
+                    </div>
+                    <div class="d-block text-center p-3">
+                        <input onchange="viewImg(event)" value="" type="file" id="newimage" name="categoryimage">
+                    </div>
+
+                    <div class="d-flex justify-content-center my-2">
+                        <button type="submit" class="btn btn-outline-dark ">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+
+</section>

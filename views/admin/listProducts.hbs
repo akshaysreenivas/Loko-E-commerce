@@ -35,8 +35,8 @@
                                 <td class="p-2 ">{{this.product_description}}</td>
                                 <td class="p-2 ">
                                     {{#each images}}
-                                    <img style="max-width:40px; max-height:40px"
-                                        src="/{{data}}" alt="">
+                                    <img class="m-1" style="max-width:40px; max-height:40px"
+                                        src="/images/{{data}}" alt="">
                                     {{/each}}
                                     
                                         </td>
@@ -95,41 +95,7 @@
 
 
 
-                                <!-- Modal -->
-
-                                <!---=== Delete product modal ===--->
-                                {{!--
-                                <div class="modal fade " id="deletemodal{{_id}}" data-bs-backdrop="static"
-                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                    aria-hidden="true">
-                                    <div
-                                        class=" d-flex justify-content-center align-items-center modal-dialog-centered">
-                                        <div class="modal-dialog bg-success">
-                                            <div class="modal-content p-4">
-                                                <div class="modal-header p-2">
-                                                    </h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-
-                                                <div class="modal-body p-3">
-                                                    <p>Are you sure? </p>
-                                                    <p id="content-modal"></p>
-
-                                                    {{!-- <input type="text" class="border-0 select " id="select"
-                                                        name="id" value="{{this._id}}" disabled> --}}
-                                                    {{!--
-                                                </div>
-                                                <div class="modal-footer p-2">
-                                                    <button type="button" class="btn btn-secondary  p-2"
-                                                        data-bs-dismiss="modal">Cancel</button>
-                                                    <button type="" class="btn btn-danger mx-4 px-4 p-2">Delete</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> --}}
-
+                               
 
                             </tr>
                             {{/each}}
