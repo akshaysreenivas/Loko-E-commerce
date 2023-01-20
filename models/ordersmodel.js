@@ -1,16 +1,19 @@
 const mongoose = require('mongoose')
 const { date } = require('random-js')
 const schema = mongoose.Schema
-const ObjectId = schema.ObjectId
+const IndianTime = new Date();
+const options = { timeZone: 'Asia/Kolkata' };
+
+
 
 const orderSchema = new schema({
 
-  user_Id: {
-    type: ObjectId,
-    required: true
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'users'
   },
   address: {
-    type: String,
+    type: Object,
     required: true,
   },
   paymentMethod: {
@@ -19,8 +22,9 @@ const orderSchema = new schema({
   },
   orderItems: [
     {
-      product_Id: {
-        type: ObjectId,
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'products'
       },
       price: {
         type: Number
@@ -34,26 +38,32 @@ const orderSchema = new schema({
     type: Number,
 
   },
-  orderStatus: {
-    type: String,
-    default: "Pending",
+  timeline: [
+    {
+      status: {
+        type: String,
+        required: true
+      },
+      timestamp: {
+        type: String,
+        required: true
+      }
+    }
+  ],
+  currentStatus: {
+    type: Object,
+    required:true
   },
-
   paymentStatus: {
     type: String,
     default: "Not Paid",
   },
   orderOn: {
-    type: date,
-    default: new Date().toISOString(),
+    type: String,
+    default: IndianTime.toLocaleString('IND', options),
   },
   deliveryDate: {
-    type: date,
+    type: String,
   },
-},
-  {
-    timestamps: true
-  }
-
-)
+})
 module.exports = mongoose.model('order', orderSchema)

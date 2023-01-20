@@ -4,7 +4,6 @@ const userController = require("../controllers/userController");
 const productController = require("../controllers/productController");
 const verifylogin = require('../middleware/loginverify')
 
-
 // --------------- user signup ----------------
 
 // ------get method------
@@ -29,8 +28,6 @@ router.get('/otp-validation', (req, res) => {
 })
 
 router.post("/otp-validation", userController.otpValidator)
-
-
 
 // --------------- user login ----------------
 
@@ -94,6 +91,7 @@ router.get("/", async (req, res) => {
 });
 
 
+
 // -------    viewproductsbycategory    ------
 
 router.get('/categories/:category', productController.viewproductsbycategory)
@@ -101,11 +99,25 @@ router.get('/categories/:category', productController.viewproductsbycategory)
 
 
 
-// profile UI--------
+// -----profile UI--------
 
-router.get("/profile", verifylogin.verifyLogin, (req, res) => {
-  res.render("users/profile", { user: req.session.user });
-});
+router.get("/profile", verifylogin.verifyLogin,userController.viewProfile)
+router.get("/orders",verifylogin.verifyLogin,userController.orderManage)
+router.get("/profile_manage",verifylogin.verifyLogin,userController.manageProfile)
+router.get("/address_book",verifylogin.verifyLogin,userController.manageAddress)
+router.get('/profile/editaddress/:addressid', verifylogin.verifyLogin, userController.addressTobeEdited)
+router.get('/changeuserdetailsOtp', verifylogin.verifyLogin, userController.otpPage)
+
+
+router.post('/generate_otp_changeuserdetails',verifylogin.verifyLogin,userController.otpGeneration)
+router.post('/submit_otp_changePassword',verifylogin.verifyLogin,userController.otpVerification)
+router.post('/changePassword',verifylogin.verifyLogin,userController.changePassword)
+router.post('/changeEmail',verifylogin.verifyLogin,userController.changeEmail)
+router.post('/addAddress', verifylogin.verifyLogin, userController.addAddress)
+router.post('/editaddress', verifylogin.verifyLogin, userController.editAddress)
+router.post('/deleteAddress',verifylogin.verifyLogin,userController.deleteAddress)
+
+router.post('/changeName',verifylogin.verifyLogin,userController.changeName)
 
 // product view ------
 
@@ -121,7 +133,6 @@ router.get("/product/:productID", async (req, res) => {
 // cart --------
 
 router.get("/cart", verifylogin.verifyLogin, async (req, res) => {
-
   let totalCost = 0;
   await userController.getCartTotalamount(req.session.user._id).then((response) => {
     if (response.status) {
@@ -181,7 +192,7 @@ router.post("/changeqty", verifylogin.verifyLogin, async (req, res) => {
 
 
 // checkout page -------
-router.get('/checkout', verifylogin.verifyLogin, userController.viewAddress)
+router.get('/checkout', verifylogin.verifyLogin, userController.viewCheckout)
 
 // ------add new address------
 

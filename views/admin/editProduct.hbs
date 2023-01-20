@@ -2,13 +2,14 @@
 <section class=" admin-section d-flex gap-5">
     {{>adminSideBar}}
     <div class="vw-100 main px-5 pt-5 content-admin justify-content-center">
-        <form action="/admin/editproduct" method="post" class="d-dlex justify-contents-center box-shadow p-5 mb-5">
+        <form  id="editProduct"  class="d-dlex justify-contents-center box-shadow p-5 mb-5">
             <fieldset class="px-5">
 
                 <!-- Form Name -->
 
                 <legend class="mb-4">EDIT PRODUCT</legend>
-                <input type="text" class="d-none" name="productId" value="{{tobeupdate._id}}">
+
+                <input type="text" name="productId" value="{{tobeupdate._id}}" hidden>
                 <div class="container d-flex align-items-center justify-content-around ">
                     <!-- PRODUCT NAME -->
 
@@ -27,7 +28,13 @@
                         <label class="col-md-4 control-label mb-3" for="product_name">PRODUCT
                             PRICE</label>
 
-                        <input type="number" id="email" name="price" value="{{tobeupdate.price}}"
+                        <input type="number" id="email" name="price" value="{{tobeupdate.price}}" 
+                            class="form-control form-control-lg px-3" style="width: 100%;border-radius:25px" required />
+                    </div>
+                    <div class="form-group mb-4 m-3 px-3 p-2">
+                        <label class="col-md-4 control-label mb-3" for="product_price">PRODUCT
+                            SELLING PRICE</label>
+                        <input type="number" min="1" id="email" name="sellingPrice" value="{{tobeupdate.selling_price}}"
                             class="form-control form-control-lg px-3" style="width: 100%;border-radius:25px" required />
                     </div>
                 </div>
@@ -82,10 +89,12 @@
                     <label class="col-md-4 control-label mb-3" for="image">IMAGE</label>
                     {{#each tobeupdate.images}}
                     <div class="m-3 d-flex gap-2">
-                        <img style="width:50px;height:70px;" src="/images/{{data}}" alt="" id="newImg{{_id}}">
+                        <img style="width:50px;height:70px;" src="/{{filename}}" alt="" id="newImg{{_id}}">
                     </div>
-                    <input class="form-control form-control-lg p-2" value="{{data}}" type="file" name="photos" id="" />
                     {{/each}}
+                    <input type="text" id="filename" value="{{filename}}" hidden>
+                    <input class="form-control form-control-lg p-2" value="" type="file" name="photos{{filename}}"
+                        id="" />
                     <label class="col-md-4 control-label my-3" for="image">CHANGE IMAGE</label>
                 </div>
 

@@ -64,7 +64,7 @@ router.post("/deleteCategory/:categoryId/:imgpath",verifylogin.verifyadminlogin,
 
 // -------Add Product------
 
-router.post("/add-product",verifylogin.verifyadminlogin,upload.array('photos',4),productController.addProduct);
+router.post("/add-product",verifylogin.verifyadminlogin,upload.array('photos'),productController.addProduct);
 
 router.get("/addproduct",verifylogin.verifyadminlogin,async(req,res)=>{  
  await productController.viewCategory().then((response)=>{
@@ -84,7 +84,7 @@ router.get("/editProduct/:productId", verifylogin.verifyadminlogin, (req, res) =
   });
 });
 
-router.post( "/editproduct",verifylogin.verifyadminlogin,upload.array('photos',4),productController.editproduct);
+router.post( "/editproduct",verifylogin.verifyadminlogin,productController.editproduct);
 
 // ===== List Products =====
 
@@ -126,6 +126,11 @@ router.get(
     });
   }
 );
+
+
+
+router.get('/orders', verifylogin.verifyadminlogin,adminController.listOrders)
+router.get('/orderdeatails/:orderId', verifylogin.verifyadminlogin,adminController.viewOrder)
 
 // =========block users=====
 

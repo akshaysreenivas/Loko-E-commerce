@@ -1,0 +1,72 @@
+{{>userNavbar}}
+
+<div class="container mt-5 py-5">
+  <div class="row py-5">
+    {{>userSidebar}}
+    <div class="col-lg-9 my-lg-0 my-1">
+      <h4 class="mb-3">Edit Address</h4>
+      <form class="needs-validation" id="editAddress">
+      <input type="text" value="{{useraddress._id}}" name="addressid" hidden>
+        <div class="row">
+          <div class="mb-3">
+
+            <label class="form-label" for="name">Your Name</label>
+            <input type="text" id="signupname" value="{{useraddress.name}}" name="name" class="form-control p-2" placeholder="" required />
+            <small class="text-danger px-2" id="signameErr"></small>
+          </div>
+
+          <div class="mb-3">
+            <label for="">Phone Number </label>
+            <input type="tel" class="form-control" value="{{useraddress.phone}}"  name="phone" id="phone" required />
+            <div class="invalid-feedback">
+              Please enter a valid Phone Number for shipping updates.
+            </div>
+          </div>
+
+
+          <div class="mb-3">
+            <label for="address">Address</label>
+            <textarea class="form-control" id="address" name="address" placeholder="1234 Main St" required>{{useraddress.street}}</textarea>
+            <div class="invalid-feedback">
+              Please enter your shipping address.
+            </div>
+          </div>
+          <div class="row">
+
+            <div class="col-md-4 mb-3">
+              <label for="state">State</label>
+              <select class="custom-select d-block w-100" name="state" id="state" required>
+                <option>{{useraddress.state}}</option>
+                <option>Kerala</option>
+                <option>Tamilnadu</option>
+                <option>Andhra Pradesh</option>
+                <option>Karnataka</option>
+                <option>Telengana</option>
+              </select>
+              <div class="invalid-feedback">
+                Please provide a valid state.
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <label for="city">City/District/Town</label>
+              <input type="text" class="form-control" value="{{useraddress.city}}"  name="city" id="city" placeholder="" required>
+              <div class="invalid-feedback">
+                Please provide a valid state.
+              </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+              <label for="zip">Pin</label>
+              <input type="" class="form-control" value="{{useraddress.pin_code}}"  name="pin" id="pin" placeholder="" required>
+              <div class="invalid-feedback">
+                Pin code required.
+              </div>
+            </div>
+          </div>
+          <hr class="mb-4">
+          <button class="btn btn-primary btn-lg btn-block" type="submit">Save</button>
+      </form>
+  </div>
+</div>
+</div>

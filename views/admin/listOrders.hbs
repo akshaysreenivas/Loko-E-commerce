@@ -1,0 +1,54 @@
+{{>adminNavbar}}
+<section class=" admin-section d-flex gap-5">
+    {{>adminSideBar}}
+    <div class="vw-100 main px-5 pt-5 content-admin justify-content-center">
+        <div class=" container-fluid p-3 mt-2 mb-5 box-shadow">
+            <div class="container  border-primary">
+                <h2 class="my-4 text-center">Orders </h2>
+                <div class="table-responsive ">
+                    <table class="py-4 mb-3 table table-hover table-bordered " id="productsTable">
+                        <thead class="bg-dark text-white">
+                            <tr>
+                                <th class="p-2" scope="col"># order ID</th>
+                                <th class="p-2" scope="col">Customer Name</th>
+                                <th class="p-2" scope="col">Address</th>
+                                <th class="p-2" scope="col">Payment Method</th>
+                                <th class="p-2" scope="col">Total Amount</th>
+                                <th class="p-2" scope="col">Status</th>
+                                <th class="p-2" scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each ordersData}}
+
+                            <tr class="p-2 ">
+                                <td class="p-2 ">#{{truncate _id 10}}</td>
+                                <td class="p-2 ">{{user.name}}</td>
+                                <td class="p-2 "><div>
+                                    <div>{{address.name}},</div>
+                                    <div>{{address.phone}},</div>
+                                    <div>{{address.street}},</div>
+                                    <div>{{address.city}},{{address.state}},{{address.pin_code}}</div>
+                                </div></td>
+                                <td class="p-2 ">{{paymentMethod}}</td>
+                                <td class="p-2 ">₹ {{totalAmount}}</td>
+                                <td class="p-2 ">{{currentStatus.status}}</td>
+                                <td class="p-2 text-center"><a href="/admin//orderdeatails/{{_id}}" class="view" title="View Details" data-toggle="tooltip"><span class="material-icons-sharp">arrow_circle_right</span>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+     
+
+        </div>
+    </div>
+
+
+
+</section>
+
+<!-- Modal -->

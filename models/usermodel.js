@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const { date } = require("random-js");
 const saltRounds = 10;
+const IndianTime = new Date();
+const options = { timeZone: 'Asia/Kolkata' };
+
+
+
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -14,7 +19,7 @@ const userSchema = new mongoose.Schema({
     },
     created: {
         type: date,
-        default: new Date().toISOString(),
+        default: IndianTime.toLocaleString('en-US', options),
     },
     password: {
         type: String,
@@ -45,7 +50,6 @@ const userSchema = new mongoose.Schema({
         }
 
     ],
-
     blocked: {
         type: Boolean,
         default: false
@@ -75,9 +79,6 @@ userSchema.pre("save", function (next) {
             console.log(err);
         }
     }
-
-
-
 });
 
 

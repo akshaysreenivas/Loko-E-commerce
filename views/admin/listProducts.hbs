@@ -11,7 +11,7 @@
                             <tr>
                                 <th class="p-2" scope="col">ID</th>
                                 <th class="p-2" scope="col">Name</th>
-                                <th class="p-2" scope="col">Price</th>
+                                <th class="p-2" scope="col">Price (₹)</th>
                                 <th class="p-2" scope="col">Size</th>
                                 <th class="p-2" scope="col">Category</th>
                                 <th class="p-2" scope="col">Stock</th>
@@ -26,9 +26,9 @@
                             {{#each productsData}}
 
                             <tr class="p-2 ">
-                                <td class="p-2 ">{{this._id}}</td>
+                                <td class="p-2 ">{{truncate this._id 10}}</td>
                                 <td class="p-2 ">{{this.name}}</td>
-                                <td class="p-2 ">{{this.price}}</td>
+                                <td class="p-2 ">₹ {{this.price}}</td>
                                 <td class="p-2 ">{{this.size}}</td>
                                 <td class="p-2 ">{{this.category}}</td>
                                 <td class="p-2 ">{{this.stock}}</td>

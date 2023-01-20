@@ -1,4 +1,5 @@
 {{>userNavbar}}
+
 <div class="container mt-5 py-5">
     <div class="row py-5">
         {{>userSidebar}}
@@ -8,78 +9,31 @@
                     <div class="h5">Hello {{user.name}},</div>
                     <div>Logged in as: {{user.email}}</div>
                 </div>
+                {{user}}
                 <div class="d-flex my-4 flex-wrap">
-                    <a class="box me-4 my-1 bg-light text-decoration-none cursor-pointer" title="orders"
-                        data-toggle="tooltip" href="/orders">
-                        <img src="/images/cardboard-box.png" alt="">
+                    <a class="box me-4 my-1 bg-light text-decoration-none cursor-pointer">
+                        <img src="/images/cardboard-box.png"
+                            alt="">
                         <div class="d-flex align-items-center mt-2">
                             <div class="tag">Orders placed</div>
                         </div>
                     </a>
-                    <a class="box me-4 my-1 bg-light text-decoration-none cursor-pointer" title="cart"
-                        data-toggle="tooltip" href="/cart">
-                        <img src="/images/shopping-cart.png" alt="">
+                    <a class="box me-4 my-1 bg-light text-decoration-none cursor-pointer" href="/cart">
+                        <img src="/images/shopping-cart.png"
+                            alt="">
                         <div class="d-flex align-items-center mt-2">
                             <div class="tag">Items in Cart</div>
                         </div>
                     </a>
-                    <a class="box me-4 my-1 bg-light text-decoration-none cursor-pointer" title="wishlist"
-                        data-toggle="tooltip" href="/wishlist">
-                        <img src="/images/wishlist.png" alt="">
+                    <a class="box me-4 my-1 bg-light text-decoration-none cursor-pointer">
+                        <img src="/images/wishlist.png"
+                            alt="">
                         <div class="d-flex align-items-center mt-2">
                             <div class="tag">Wishlist</div>
                         </div>
                     </a>
                 </div>
-                <h4 class="mb-3">Edit Profile</h4>
-                <!---------edit name ----->
-                <form id="changeName">
-                    <div class="mb-3 row">
-                        <div class="d-flex align-items-center gap-3 mb-2 col-lg-12">
-                            <label class="form-label" for="name">Your Name</label>
-                            <button id="toggleButton" type="button" class="text-primary h6 border-0">Edit</button>
-                        </div>
-                        <div class="d-flex align-items-center gap-3 mb-2 col-lg-6">
-
-                            <input type="text" id="myInputname" value="{{user.name}}" name="name"
-                                class=" form-control rounded p-2" placeholder="{{user.name}}" readonly />
-                            <button id="nameSubmitButton" class="btn btn-outline-dark"
-                                style="display:none">Save</button>
-                        </div>
-                    </div>
-                </form>
-
-                <!--------edit email-------->
-                <form id="changeEmail">
-                    <div class="mb-3 row">
-                        <div class="d-flex align-items-center gap-3 mb-2 col-lg-12">
-                            <label class="form-label" for="name">Your Email Address</label>
-                            <button id="toggleBtn" type="button" class="text-primary h6 border-0">Edit</button>
-                        </div>
-                        <div class="d-flex align-items-center gap-3 mb-2 col-lg-6">
-
-                            <input type="text" id="myInputemail" value="{{user.email}}" name="email"
-                                class="form-control rounded p-2" placeholder="" readonly />
-                            <button id="emailSubmitButton" class="btn btn-outline-dark"
-                                style="display:none">Save</button>
-                        </div>
-                    </div>
-
-
-                </form>
-                <!------Change Password---->
-                <div class="mb-3 row">
-                    <form id="changePassword">
-                        <input type="email" name="email" value="{{user.email}}" hidden>
-                        <button type="submit" id="btn_submit" class="text-primary h6 border-0">Change Password ?</button>
-                        <div class="spinner-border text-primary" id="spinner_password" style="display:none" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </form>
-                </div>
-
-
-                {{!-- <div class="text-uppercase">My recent orders</div>
+                <div class="text-uppercase">My recent orders</div>
                 <div class="order my-3 bg-light">
                     <div class="row">
                         <div class="col-lg-4">
@@ -123,7 +77,7 @@
                             </div>
                         </div>
                     </div>
-                </div> --}}
+                </div>
             </div>
         </div>
     </div>

@@ -70,8 +70,9 @@ function newImgView(event) {
 const input = document.getElementById("images");
 const preview = document.getElementById("preview");
 
-
-input.addEventListener("change", updatePreview);
+if(input){
+  input.addEventListener("change", updatePreview);
+}
 
 function updatePreview() {
   while (preview.firstChild) {
@@ -91,9 +92,7 @@ function updatePreview() {
   });
 }
 
-function editImage(){
 
-}
 
 
 

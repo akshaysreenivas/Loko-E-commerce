@@ -3,8 +3,8 @@
                 <h5 class="">Email verification</h5><span class="mobile-text">Enter the code we just send on your Email
                         Address to continue <b class="text-danger"></b></span>
                         <div class="text-center">
-                                <form action="/otp-validation" method="post"> 
-                <div class="d-flex flex-row m-3"><input type="text" class="" autofocus="" name="otp" id="otp"></div>
+                                <form  action="/otp-validation" method="post"> 
+                <div class="d-flex flex-row m-3"><input type="text" class="" autofocus="" maxlength="4" name="otp" id="otp"></div>
                                 <small class="text-danger">{{invalidOtp}}</small>
                 <div><button class=" user-login-btn p-1 mb-2" type="submit">Submit</button></div>
                 </form>

@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 const bcrypt = require("bcrypt");
 const adminslist = require('../models/adminmodel')
-const userslist = require('../models/usermodel')
+const userslist = require('../models/usermodel');
+const orders = require("../models/ordersmodel");
 
 
 
@@ -74,6 +75,39 @@ const unBlockUser = (data) => {
         }
     })
 }
+
+
+const listOrders = async (req, res) => {
+    try {
+        let ordersData=await orders.find({}).populate({ path: "user", model: 'users'})
+        .lean()
+        if(ordersData.length>0){
+            console.log("ordersData",ordersData);
+            console.log("ordersData",ordersData[0].orderItems);
+            console.log("ordersData",ordersData[0].orderItems[0]);
+        }
+        res.render("admin/listOrders",{ordersData})
+    } catch (error) {
+        throw error
+    }
+}
+const viewOrder= async (req, res) => {
+    try {
+        let orderData=await orders.find({_id:req.params.orderId}).populate({ path: "orderItems.product" }).populate({ path: "user", model: 'users'})
+        .lean()
+        if(orderData.length>[0]){
+            console.log("orderData>>>>",orderData);
+            console.log("orderData<<<<<<<",orderData[0].orderItems);
+            console.log("orderData<<<<<<<",orderData[0].timeline);
+        }
+        res.render("admin/viewOrders",{orderData})
+    } catch (error) {
+        throw error
+    }
+}
+
+
+
 const logout = (req, res) => {
     req.session.adminloggedIn = false;
     res.redirect("/admin/login");
@@ -88,5 +122,7 @@ module.exports = {
     getusersData,
     blockUser,
     unBlockUser,
+    listOrders,
+    viewOrder,
     logout
 }

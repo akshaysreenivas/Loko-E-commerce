@@ -5,6 +5,8 @@ const orders = require('../models/ordersmodel')
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 const bcrypt = require("bcrypt");
+const IndianTime = new Date();
+const options = { timeZone: 'Asia/Kolkata' };
 
 
 
@@ -12,7 +14,7 @@ const userSignup = (req, res) => {
     userdata = req.body
     new Promise(async (resolve, reject) => {
         try {
-            const user = await users.findOne({ email: userdata.email })
+            let user = await users.findOne({ email: userdata.email })
             if (user) {
                 if (user.verified) {
                     res.redirect("/signup", { message: "Looks like already have an account with this email! , login instead? " });
@@ -63,6 +65,7 @@ const otpValidator = async (req, res) => {
     if (enteredotp === originalotp) {
         await users.findOneAndUpdate({ email: req.session.tempuseremail }, { $set: { verified: true } })
         res.redirect('/login')
+        req.session.otp = null;
     } else {
         req.session.invalidOtp = "Invalid OTP"
         res.redirect('/otp-validation')
@@ -101,6 +104,181 @@ const dologin = (data) => {
             throw error;
         }
     })
+}
+
+const userdetails = async (user_Id) => {
+    try {
+        return await users.findOne({ _id: user_Id }).lean()
+
+    } catch (error) {
+        throw error
+    }
+}
+
+const viewProfile = async (req, res) => {
+    let user = await userdetails(req.session.user._id)
+    res.render("users/profile", { user: user });
+}
+const manageProfile = async (req, res) => {
+
+    res.render('users/profileManage', { user: req.session.user })
+}
+const addAddress = async (req, res) => {
+    let userid = req.session.user._id
+    let newaddressDetails = {
+        name: req.body.name,
+        phone: req.body.phone,
+        street: req.body.address,
+        city: req.body.city,
+        state: req.body.state,
+        pin_code: req.body.pin,
+    }
+    try {
+        await users.updateOne({ _id: userid }, { $push: { addressDetails: newaddressDetails } }, { new: true }).then(() => {
+            res.json({ status: true })
+        })
+    } catch (err) {
+        throw err
+    }
+}
+
+const manageAddress = async (req, res) => {
+    let userid = req.session.user._id
+    let userAddress;
+    let address = await users.findOne({ _id: userid }, 'addressDetails').lean()
+    if (address) {
+        userAddress = address.addressDetails
+    }
+    res.render('users/addressBook', { userAddress, user: req.session.user, })
+}
+const orderManage = async (req, res) => {
+    let allOrders = await orders.find({ user: req.session.user._id }).populate({ path: "orderItems.product" }).lean()
+    console.log("allOrders", allOrders);
+    res.render('users/orders', { allOrders, user: req.session.user })
+}
+
+const addressTobeEdited = async (req, res) => {
+    let useraddress;
+    let address = await users.findOne({ _id: req.session.user._id, "addressDetails._id": req.params.addressid }, { "addressDetails.$": 1 }).lean()
+    if (address) {
+        useraddress = address.addressDetails[0]
+    }
+    res.render("users/editaddress", { user: req.session.user, useraddress })
+}
+
+
+
+const editAddress = async (req, res) => {
+    try {
+        let newAddress = {
+            _id: req.body.addressid,
+            name: req.body.name,
+            phone: req.body.phone,
+            street: req.body.address,
+            city: req.body.city,
+            state: req.body.state,
+            pin_code: req.body.pin,
+        }
+        await users.findOneAndUpdate({ _id: req.session.user._id, "addressDetails._id": req.body.addressid }, { $set: { "addressDetails.$": newAddress } })
+            .then(() => {
+                res.json({ status: true })
+            })
+    } catch (error) {
+        res.json({ status: false, error })
+    }
+}
+
+const deleteAddress = async (req, res) => {
+
+    try {
+        await users.updateOne({ _id: req.session.user._id }, { $pull: { addressDetails: { _id: req.body.Id } } })
+            .then(() => {
+                res.json({ status: true })
+            })
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+const changeName = async (req, res) => {
+    try {
+        await users.findOneAndUpdate({ _id: req.session.user._id }, { $set: { name: req.body.name } })
+            .then(() => {
+                req.session.user.name = req.body.name
+                res.json({ status: true })
+            })
+    } catch (error) {
+        res.json({ error, status: false })
+    }
+}
+
+const otpGeneration = async (req, res) => {
+    try {
+        nodemailer.otpGenerator(req.body.email)
+            .then((response) => {
+                if (response.status) {
+                    req.session.otp = response.otp
+                    res.json({ status: true })
+                } else {
+                    res.json({ status: false })
+
+                }
+            })
+    } catch (error) {
+        res.json({ status: false, error })
+
+    }
+}
+const otpPage = (req, res) => {
+    res.render('users/otpsubmit', { invalidOtp: req.session.invalidOtp })
+    req.session.invalidOtp = null
+}
+const otpVerification = async (req, res) => {
+    let originalotp = parseInt(req.session.otp)
+    let enteredotp = parseInt(req.body.otp)
+
+    try {
+        if (originalotp === enteredotp) {
+            res.render("users/changePassword")
+            req.session.otp = null
+        } else {
+            req.session.invalidOtp = "Invalid OTP"
+
+            res.redirect("/changeuserdetailsOtp")
+        }
+    } catch (error) {
+        res.json({ status: true, error })
+    }
+
+}
+
+
+
+const changePassword = async (req, res) => {
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.password1, 10);
+        await users.findOneAndUpdate({ _id: req.session.user._id }, { $set: { password: hashedPassword } })
+            .then(() => {
+                res.redirect("/profile")
+            }).catch((error) => {
+                res.json({ status: false, error })
+
+            })
+    } catch (error) {
+        res.json({ error, status: false })
+    }
+}
+const changeEmail = async (req, res) => {
+    try {
+        await users.findOneAndUpdate({ _id: req.session.user._id }, { $set: { email: req.body.email } })
+            .then(() => {
+                req.session.user.email = req.body.email
+                res.json({ status: true })
+            })
+    } catch (error) {
+        res.json({ error, status: false })
+    }
 }
 
 const addToCart = (userID, productID, quantity) => {
@@ -347,27 +525,7 @@ const changeCartProductCount = (userID, data) => {
     })
 }
 
-const addAddress = async (req, res) => {
-    let userid = req.session.user._id
-    let newaddressDetails = {
-        name: req.body.name,
-        phone: req.body.phone,
-        street: req.body.address,
-        city: req.body.city,
-        state: req.body.state,
-        pin_code: req.body.pin,
-    }
-    try {
-        await users.updateOne({ _id: userid }, { $push: { addressDetails: newaddressDetails } }, { new: true }).then(() => {
-            res.json({ status: true })
-
-        })
-    } catch (err) {
-        throw err
-    }
-}
-
-const viewAddress = async (req, res) => {
+const viewCheckout = async (req, res) => {
     try {
         let userid = req.session.user._id
         let userAddress;
@@ -382,11 +540,12 @@ const viewAddress = async (req, res) => {
 }
 
 const cartPlaceOrder = async (req, res) => {
+    console.log("req.body", req.body);
     try {
         let addressId = req.body.address
         let userid = req.session.user._id
         let ID = new mongoose.Types.ObjectId(userid)
-        const Address = await users.findOne({ _id: userid }, { addressDetails: { $elemMatch: { _id: addressId } } })
+        const Address = await users.findOne({ _id: userid }, { addressDetails: { $elemMatch: { _id: addressId } } }).lean()
         let items = await cart.aggregate([
             {
                 $match: { userId: ID }
@@ -426,31 +585,47 @@ const cartPlaceOrder = async (req, res) => {
         ])
         const OrderItems = items.map((items) => {
             return {
-                product_Id: items.productId,
+                product: items.productId,
                 price: items.amount,
                 quantity: items.quantity
             }
         });
+        let Status = req.body.paymentMethod === "cash_on_delivery" ? 'Confirmed' : 'Pending'
+        let newStatus = { status: Status, timestamp: IndianTime.toLocaleString('IND', options) }
+
         let TotalAmount = items.reduce((acc, crr) => acc + crr.amount, 0)
         const newOrder = new orders({
-            user_Id: userid,
+            user: userid,
             address: Address.addressDetails[0],
             paymentMethod: req.body.paymentMethod,
-            totalAmount: TotalAmount,
+            timeline: [],
+            currentStatus: newStatus,
             orderItems: OrderItems,
-
-
-
+            totalAmount: TotalAmount,
         })
-        await newOrder.save().then(async () => {
-            await cart.findOneAndDelete({ userId: ID }).then(() => {
-                res.json({ status: true })
+        newOrder.timeline.push({ status: Status, timestamp: IndianTime.toLocaleString('IND', options) })
+        if (req.body.paymentMethod === "cash_on_delivery") {
+            await newOrder.save().then(async () => {
+                await cart.findOneAndDelete({ userId: ID }).then(() => {
+                    res.json({ status: true })
+                })
             })
-        })
+        } else {
 
+        }
 
     } catch (err) {
         throw err
+    }
+}
+
+const cancelOrder = async (req, res) => {
+    try {
+        let userid = req.session.user._id
+        let newStatus = { status: "cancelled", timestamp: IndianTime.toLocaleString('IND', options) }
+        await orders.findOneAndUpdate({ _id: userid }, { $set: { currentStatus: newStatus } })
+    } catch (error) {
+        throw error
     }
 }
 
@@ -467,6 +642,20 @@ module.exports = {
     userSignup,
     otpValidator,
     dologin,
+    viewProfile,
+    manageAddress,
+    changePassword,
+    cancelOrder,
+    changeName,
+    changeEmail,
+    otpPage,
+    addressTobeEdited,
+    otpGeneration,
+    otpVerification,
+    manageProfile,
+    editAddress,
+    deleteAddress,
+    orderManage,
     addToCart,
     getCartItems,
     getCartCount,
@@ -474,7 +663,7 @@ module.exports = {
     deleteCartProduct,
     changeCartProductCount,
     addAddress,
-    viewAddress,
+    viewCheckout,
     cartPlaceOrder,
     logout
 }

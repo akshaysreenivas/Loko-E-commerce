@@ -1,3 +1,10 @@
+<script type="text/javascript">
+window.history.forward();
+function noBack(){
+    window.history.forward();
+}
+</script>
+
 
 {{>userNavbar}}
 
@@ -10,7 +17,7 @@
 
             <div class="card">
                 <div class="text-left logo p-2 px-5">
-                    <img src="" width="50">
+                 <span id="orderdone" class="material-icons-sharp"></span>
                 </div>
                 <div class="invoice p-5">
                     <h5>Your order Confirmed!</h5>
@@ -23,3 +30,15 @@
     </div>
 
 </div>
+
+
+
+<script>
+    const mytimeout=setTimeout(displayText,1000)
+    function displayText(){
+        document.getElementById("orderdone").innerHTML="done_outline"
+    }
+    setTimeout(()=>{
+        location.href='/orders'
+    },4000)
+</script>

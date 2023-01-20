@@ -11,21 +11,22 @@ const productSchema = new mongoose.Schema({
         type: Number,
         require: true
     },
+    selling_price:{
+        type: Number,
+        require: true
+    },
     size: {
         type: String,
         require:true
     },
-    images: [{
-        data: {
-            type: String,
-            required: true
-        },
-        contentType: {
-            type: String,
-            required: true
-        }
-    }],
+    images:[{
+        type:Object
+    }] ,
     category: {
+        type: String,
+        require: true
+    },
+    categoryId:{
         type: String,
         require: true
     },
