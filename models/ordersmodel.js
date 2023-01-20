@@ -26,7 +26,10 @@ const orderSchema = new schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'products'
       },
-      price: {
+      unit_amount:{
+        type: Number
+      },
+      total_amount: {
         type: Number
       },
       quantity: {

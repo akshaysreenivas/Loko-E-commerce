@@ -17,7 +17,7 @@ function noBack(){
       <div class="">
         {{#each userAddress}}
         <div class="card d-flex gap-2 align-items-start flex-row  m-3 box-shadow p-3">
-          <input class="m-1" type="radio" name="address" value="{{_id}}" id="" required>
+          <input class="m-1" type="radio" name="address" value="{{_id}}" id="" required checked>
           <div>
             <div>
               <p class="m-0 px-1 pb-1">{{ name }} </p>
@@ -84,18 +84,23 @@ function noBack(){
             <h5 class="">Payment</h5>
             <div class="custom-control custom-radio">
               <input id="credit" name="paymentMethod" type="radio" value="cash_on_delivery" class="custom-control-input"
-                checked required>
+                 required>
               <label class="custom-control-label" for="credit">COD</label>
             </div>
             <div class="custom-control custom-radio">
-              <input id="credit" name="paymentMethod" type="radio" value="online_payment" class="custom-control-input" >
+              <input id="credit" name="paymentMethod" type="radio" value="online_payment" class="custom-control-input" checked>
               <label class="custom-control-label" for="credit">Online Payment</label>
             </div>
            
           </div>
         </li>
+                        
         <div class="card mt-1 p-2">
-          <button class="btn btn-dark"  type="submit">Place Order</button>
+          <button class="btn btn-dark d-flex justify-content-center"  type="submit"><span id="btn_submit" >Place Order</span>
+<span class="spinner-border text-white" id="spinner_checkout"style="display:none"  role="status">
+                        </span>
+
+          </button>
         </div>
       </ul>
 </form>

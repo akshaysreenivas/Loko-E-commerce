@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
 const productController = require("../controllers/productController");
-const verifylogin = require('../middleware/loginverify')
+const verifylogin = require('../middleware/loginverify');
+
 
 // --------------- user signup ----------------
 
@@ -89,6 +90,22 @@ router.get("/", async (req, res) => {
     res.render("users/home", { productsData, totalItems, user: req.session.user });
   });
 });
+
+// router.get("/",(req,res)=>{
+//   res.render('users/onlinePayment')
+// })
+router.get("/success",(req,res)=>{
+  res.render('users/invoice')
+})
+router.get("/cancel",(req,res)=>{
+  res.json({failed:"failed"})
+})
+
+
+
+
+
+
 
 
 
@@ -205,7 +222,7 @@ router.post('/addAddress', verifylogin.verifyLogin, userController.addAddress)
 
 // ------ place order -------
 
-router.post('/placeOrder', verifylogin.verifyLogin, userController.cartPlaceOrder)
+router.post('/create-checkout-session', verifylogin.verifyLogin, userController.cartPlaceOrder)
 
 
 // confirm order  

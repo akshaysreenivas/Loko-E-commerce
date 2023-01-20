@@ -7,6 +7,9 @@ mongoose.Promise = global.Promise;
 const bcrypt = require("bcrypt");
 const IndianTime = new Date();
 const options = { timeZone: 'Asia/Kolkata' };
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+
 
 
 
@@ -215,7 +218,7 @@ const changeName = async (req, res) => {
 
 const otpGeneration = async (req, res) => {
     try {
-        nodemailer.otpGenerator(req.body.email)
+        nodemailer.otpGenerator(req.session.user.email)
             .then((response) => {
                 if (response.status) {
                     req.session.otp = response.otp
@@ -540,7 +543,6 @@ const viewCheckout = async (req, res) => {
 }
 
 const cartPlaceOrder = async (req, res) => {
-    console.log("req.body", req.body);
     try {
         let addressId = req.body.address
         let userid = req.session.user._id
@@ -570,30 +572,33 @@ const cartPlaceOrder = async (req, res) => {
                 $project: {
                     productId: 1, quantity: 1, totalQty: 1, product: { $arrayElemAt: ['$product', 0] }
                 }
-            }, {
+            }
+            , {
                 $project: {
 
-                    productId: 1, quantity: 1, totalQty: 1, product: 1, amount: { $sum: { $multiply: ['$quantity', '$product.price'] } }
+                    productId: 1, quantity: 1, totalQty: 1, product: 1,product_name:'$product.name', unit_amount:'$product.price', total_amount: { $sum: { $multiply: ['$quantity', '$product.price'] } }
                 }
 
-            }, {
+            }
+            , {
                 $project: {
 
-                    productId: 1, quantity: 1, totalQty: 1, amount: 1
+                    productId: 1, quantity: 1, totalQty: 1, total_amount: 1,unit_amount:1,product_name:1
                 }
             }
         ])
         const OrderItems = items.map((items) => {
             return {
                 product: items.productId,
-                price: items.amount,
+                unit_amount:items.unit_amount,
+                total_amount: items.total_amount,
                 quantity: items.quantity
             }
         });
-        let Status = req.body.paymentMethod === "cash_on_delivery" ? 'Confirmed' : 'Pending'
+        let Status = 'Confirmed'
         let newStatus = { status: Status, timestamp: IndianTime.toLocaleString('IND', options) }
 
-        let TotalAmount = items.reduce((acc, crr) => acc + crr.amount, 0)
+        let TotalAmount = items.reduce((acc, crr) => acc + crr.total_amount, 0)
         const newOrder = new orders({
             user: userid,
             address: Address.addressDetails[0],
@@ -611,11 +616,34 @@ const cartPlaceOrder = async (req, res) => {
                 })
             })
         } else {
-
+              const storeItem=items.map(item => {
+              return{
+                price_data:{
+                  currency:'inr',
+                  product_data:{
+                    name:item.product_name
+                  },
+                  unit_amount:item.unit_amount*100
+                },
+                quantity:item.quantity
+              }
+            })
+            console.log(storeItem);
+            console.log(storeItem[0].price_data.product_data);
+            const session=await stripe.checkout.sessions.create({
+              payment_method_types:['card'],
+              mode:"payment",
+              line_items:storeItem,
+              success_url:`${process.env.SERVER_URL}/placeOrder`,
+              cancel_url:`${process.env.SERVER_URL}/checkout`
+            })
+            console.log(session.url);
+            res.json({status:true,url:session.url})
         }
 
     } catch (err) {
-        throw err
+        console.error(err);
+        res.status(500).json({ error: err.message })
     }
 }
 

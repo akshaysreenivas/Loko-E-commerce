@@ -9,6 +9,8 @@ const adminRouter = require('./routes/admin');
 const usersRouter = require('./routes/users');
 const session = require('express-session')
 const app = express();
+require('dotenv').config();
+
 dbConnect.dbConnect()
 
 const _=require('lodash')

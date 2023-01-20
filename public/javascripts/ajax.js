@@ -247,7 +247,7 @@ $("#editAddress").submit(function (e) {
         success: function (response) {
             if (response.status) {
                 swal("Done!", "Address Edited Successfully!", "success");
-            }else{
+            } else {
                 swal("Failed!", error, "error");
 
             }
@@ -262,20 +262,20 @@ $("#editAddress").submit(function (e) {
 
 const nameSubmitButton = document.getElementById("nameSubmitButton");
 const myInputname = document.getElementById("myInputname");
-const toggleButton=document.getElementById("toggleButton")
+const toggleButton = document.getElementById("toggleButton")
 // toggle the submit button and the text of the button when the input field is toggled
-if(toggleButton){
-toggleButton.addEventListener("click", function() {
-    if (myInputname.hasAttribute("readonly")) {
-        myInputname.removeAttribute("readonly");
-        nameSubmitButton.style.display = "block";
-        toggleButton.innerText = "cancel";
-    } else {
-        myInputname.setAttribute("readonly", true);
-        toggleButton.innerText = "Edit";
-        nameSubmitButton.style.display = "none";
-    }
-});
+if (toggleButton) {
+    toggleButton.addEventListener("click", function () {
+        if (myInputname.hasAttribute("readonly")) {
+            myInputname.removeAttribute("readonly");
+            nameSubmitButton.style.display = "block";
+            toggleButton.innerText = "cancel";
+        } else {
+            myInputname.setAttribute("readonly", true);
+            toggleButton.innerText = "Edit";
+            nameSubmitButton.style.display = "none";
+        }
+    });
 }
 
 $("#changeName").submit(function (e) {
@@ -296,7 +296,7 @@ $("#changeName").submit(function (e) {
                     .then(() => {
                         location.reload()
                     });
-            }else{
+            } else {
                 swal("Failed!", error, "error");
 
             }
@@ -309,10 +309,10 @@ $("#changeName").submit(function (e) {
 
 const emailSubmitButton = document.getElementById("emailSubmitButton");
 const inputEmail = document.getElementById("myInputemail");
-const toggleBtn=document.getElementById("toggleBtn")
+const toggleBtn = document.getElementById("toggleBtn")
 // toggle the submit button and the text of the button when the input field is toggled
-if(toggleBtn){
-    toggleBtn.addEventListener("click", function() {
+if (toggleBtn) {
+    toggleBtn.addEventListener("click", function () {
         if (inputEmail.hasAttribute("readonly")) {
             inputEmail.removeAttribute("readonly");
             emailSubmitButton.style.display = "block";
@@ -327,7 +327,7 @@ if(toggleBtn){
 
 
 
-   
+
 $("#changeEmail").submit(function (e) {
     e.preventDefault();
     $.ajax({
@@ -346,7 +346,7 @@ $("#changeEmail").submit(function (e) {
                     .then(() => {
                         location.reload()
                     });
-            }else{
+            } else {
                 swal("Failed!", error, "error");
 
             }
@@ -357,10 +357,10 @@ $("#changeEmail").submit(function (e) {
 
 
 $("#changePassword").submit(function (e) {
-    let spinner=document.getElementById("spinner_password")
-    let btn=document.getElementById("btn_submit")
+    let spinner = document.getElementById("spinner_password")
+    let btn = document.getElementById("btn_submit")
     spinner.style.display = "block";
-    btn.style.display="none";
+    btn.style.display = "none";
     e.preventDefault();
     $.ajax({
         url: "/generate_otp_changeuserdetails",
@@ -371,7 +371,7 @@ $("#changePassword").submit(function (e) {
             if (response.status) {
                 location.href = '/changeuserdetailsOtp';
 
-            }else{
+            } else {
                 swal("Failed!", error, "error");
 
             }
@@ -383,16 +383,27 @@ $("#changePassword").submit(function (e) {
 // --------placeOrder Form---------
 
 $("#placeOrderForm").submit(function (e) {
-    alert("hg")
+    e.preventDefault();
+
+    $(':input[type="submit"]').prop('disabled', true);
+    let spinner = document.getElementById("spinner_checkout")
+    let submit = document.getElementById("btn_submit")
+    if(spinner)
+    spinner.style.display = "block";
+    if(submit)
+    submit.style.display = "none";
     e.preventDefault();
     $.ajax({
-        url: "/placeOrder",
+        url: "/create-checkout-session",
         method: "POST",
         dataType: "json",
         data: $(this).serialize(),
         success: function (response) {
             if (response.status) {
-                location.href = '/placeOrder';
+                if (response.url)
+                    location.href = response.url;
+                else
+                    location.href = '/placeOrder';
             }
         }
     })
