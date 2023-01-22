@@ -4,6 +4,7 @@
 
 
 
+
 $(document).ready(function () {
     $("#addCategoryForm").submit(function (event) {
         event.preventDefault();
@@ -403,7 +404,7 @@ $("#placeOrderForm").submit(function (e) {
                 if (response.url)
                     location.href = response.url;
                 else
-                    location.href = '/placeOrder';
+                    location.href = '/confirmOrder';
             }
         }
     })
@@ -413,7 +414,12 @@ $("#placeOrderForm").submit(function (e) {
 
 
 
+
+
 // profile management ------
+
+
+
 
 function deleteaddress(id) {
     swal({
@@ -443,11 +449,12 @@ function deleteaddress(id) {
 }
 
 
+// ---------cancel order from user-------
 
-function deleteaddress(id) {
+function cancelOrder(Id) {
     swal({
         title: "Are you sure?",
-        text: "Delete this address",
+        text: "Cancel the order",
         icon: "warning",
         buttons: true,
         dangerMode: true,
@@ -455,18 +462,23 @@ function deleteaddress(id) {
         .then((willDelete) => {
             if (willDelete) {
                 $.ajax({
-                    url: '/deleteAddress',
-                    method: 'post',
-                    data: {
-                        Id: id
-                    },
+                    url: '/cancelOrder/' + Id,
+                    method: "post",
                     success: (response) => {
-                        if (response.status) {
-                            location.reload()
-                        }
+                        location.reload()
                     }
                 })
             }
         });
+}
 
+
+function changeOrderStatus(){
+    $.ajax({
+        url: '/changeOrderStatus',
+        method: "post",
+        success: (response) => {
+            location.reload()
+        }
+    })
 }

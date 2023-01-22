@@ -8,51 +8,73 @@
                 <div class="d-flex flex-column">
                     <div class="text-uppercase">My Orders</div>
                     {{#if allOrders }}
+                    <div class="allorders" data-orders-all="{{allOrders}}"></div>
                     {{#each allOrders}}
-                    <div class="order my-3 bg-light">
-                        <div class="row">
+                    <div class="order my-3 bg-light " data-order-id={{this._id}}>
+                        <div class="row mb-5">
                             <div class="col-lg-4">
                                 <div class="d-flex flex-column justify-content-between order-summary">
-                                    <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center mb-3">
                                         <div class="text-uppercase">Order ID : #{{truncate this._id 8}}</div>
                                         <div class="blue-label ms-auto text-uppercase">{{paymentStatus}}</div>
                                     </div>
-                                    <div class="fs-8">Products #03</div>
-                                    <div class="fs-8">{{orderOn}}</div>
-                                    <div class="rating d-flex align-items-center pt-1">
-                                        <span class="material-icons-sharp">thumb_up</span>
-                                        <span class="px-2">Rating:</span>
-                                    </div>
+                                    <div class="mb-3">Ordered on : {{orderOn}}</div>
+                                    <div class="mb-3"><strong>Total Amount : ₹ {{totalAmount}}</strong></div>
+
                                 </div>
 
                             </div>
                             <div class="col-lg-8">
+                                {{#if cancelled}}
+                                <div class="text-danger px-5 py-5">
+                                    <h5>Cancelled on {{currentStatus.timestamp}} </h5>
+                                </div>
+                                {{else}}
                                 <div class="d-sm-flex align-items-sm-start justify-content-sm-between">
                                     <div class="status">Status : {{currentStatus.status}}</div>
-                                    <div class="btn btn-primary text-uppercase">order info</div>
+
+                                    <button onclick="cancelOrder('{{this._id}}')"
+                                        class="btn btn-outline-warning text-uppercase">cancel order</button>
                                 </div>
                                 <div class="progressbar-track">
-                                    <ul class="progressbar">
-                                        <li id="step-1" class="text-muted green">
-                                            <span class="material-icons-sharp">redeem</span>
-                                        </li>
-                                        <li id="step-2" class="text-muted green">
-                                            <span class="material-icons-sharp">check</span>
-                                        </li>
-                                        <li id="step-3" class="text-muted green">
-                                            <span class="material-icons-sharp">inventory_2</span>
-                                        </li>
-                                        <li id="step-4" class="text-muted green">
-                                            <span class="material-icons-sharp">local_shipping</span>
-                                        </li>
-                                        <li id="step-5" class="text-muted green">
-                                            <span class="material-icons-sharp">all_inbox</span>
-                                        </li>
-                                    </ul>
+                                    <div class="progressbar">
+                                        {{#each timeline}}
+                                        <div class="text-muted green">
+                                            <span class="material-icons-sharp">radio_button_checked</span>
+                                            <div>
+                                                <span class="black">{{status}}</span>
+                                            </div>
+                                        </div>
+
+                                        {{/each}}
+
+
+
+                                    </div>
                                     <div id="tracker"></div>
                                 </div>
+
+
+
+                                {{/if }}
+                            </div>
+
+                        </div>
+                        <h4 class="mb-2">Products x ({{orderItems.length}})</h4>
+                        {{#each orderItems}}
+                        <div class="row mb-3 border p-2 rounded">
+                            <div class="col-lg-4">
+                                <img src="/images/{{image.filename}}" class=" img-fluid rounded"
+                                    style=" max-height:6rem;" />
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="mb-2"><strong>{{product.name}}</strong></div>
+                                <div class="mb-2">Quantity x {{quantity}}</div>
+                                <div class="mb-2"> <strong>Amount : ₹ {{total_amount}}</strong></div>
                             </div>
                         </div>
+                        {{/each }}
+
                     </div>
                     {{/each }}
                     {{else}}

@@ -61,6 +61,10 @@ const orderSchema = new schema({
     type: String,
     default: "Not Paid",
   },
+  cancelled:{
+    type:Boolean,
+    default:false
+  },
   orderOn: {
     type: String,
     default: IndianTime.toLocaleString('IND', options),

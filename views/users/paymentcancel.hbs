@@ -1,0 +1,26 @@
+<script type="text/javascript">
+window.history.forward();
+function noBack(){
+    window.history.forward();
+}
+</script>
+<section class="container vh-100 vw-100 d-flex align-items-center justify-content-center">
+            <div>
+              <img src="/images/wallet.png"  width="200" height="200"  alt="payment cancelled">
+
+              <div class="content text-danger">
+                <div class="header">
+                  Oops! Something went wrong.
+                </div>
+                <p>While trying to reserve money from your account</p>
+              </div>
+           </div>
+  </section>
+
+
+  <script>
+    const mytimeout=setTimeout(1000)
+    setTimeout(()=>{
+        location.href='/checkout'
+    },3000)
+</script>

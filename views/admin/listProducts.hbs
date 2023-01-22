@@ -30,13 +30,13 @@
                                 <td class="p-2 ">{{this.name}}</td>
                                 <td class="p-2 ">₹ {{this.price}}</td>
                                 <td class="p-2 ">{{this.size}}</td>
-                                <td class="p-2 ">{{this.category}}</td>
+                                <td class="p-2 ">{{this.category.title}}</td>
                                 <td class="p-2 ">{{this.stock}}</td>
                                 <td class="p-2 ">{{this.product_description}}</td>
                                 <td class="p-2 ">
                                     {{#each images}}
                                     <img class="m-1" style="max-width:40px; max-height:40px"
-                                        src="/images/{{data}}" alt="">
+                                        src="/images/{{filename}}" alt="">
                                     {{/each}}
                                     
                                         </td>

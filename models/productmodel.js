@@ -23,8 +23,8 @@ const productSchema = new mongoose.Schema({
         type:Object
     }] ,
     category: {
-        type: String,
-        require: true
+        type: mongoose.Schema.Types.ObjectId,
+         ref: 'categorys'
     },
     categoryId:{
         type: String,

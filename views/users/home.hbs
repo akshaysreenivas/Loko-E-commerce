@@ -27,7 +27,7 @@
 </div> --}}
 <section class="contents py-5 ">
 
-  {{!-- <div class="">
+  <div class=" px-5">
 
     <div class="d-flex justify-content-center align-items-center mt-5"> <button class="btn btn-dark">OUR
         CATEGORIES</button> </div>
@@ -35,48 +35,19 @@
         Your
         Fingertips</span> </div>
     <div class="row mt-2 g-4 ">
+      {{#each Categorys}}
       <div class="col-md-3 ">
-        <a class="card p-1 box-shadow text-decoration-none text-dark" href="/categories/Shirts">
+        <a class="card p-1 box-shadow text-decoration-none text-dark" href="/categories/{{_id}}">
           <div class="d-flex justify-content-between align-items-center p-2">
-            <div class="flex-column lh-1 imagename"> <span>Shirts</span></div>
-            <div> <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6dRkl_xrntGJhuazAfp0Fs3wpqBvp8qWnuNTZMrMCFbQwg4aY19YZ&usqp=CAE&s"
-                height="100" width="100" /> </div>
+            <div class="flex-column lh-1 imagename"> <span>{{title}}</span></div>
+            <div> <img src="/images/{{image}}" height="100" width="100" /> </div>
           </div>
         </a>
       </div>
-      <div class="col-md-3">
-        <a class="card p-2 box-shadow text-decoration-none text-dark" href="/categories/Pants">
-          <div class="d-flex justify-content-between align-items-center p-2">
-            <div class="flex-column lh-1 imagename"> <span>Pants</span></div>
-            <div> <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUQPMfT2RMcTYNcAdpst12JIt2vIJ-4lNVtXPtjtrZPMZxMOwmdcwNxH_hfQ5s5D0lxfU&usqp=CAU"
-                height="100" width="100" /> </div>
-          </div>
-        </a>
-      </div>
-      <div class="col-md-3">
-        <a class="card p-2 box-shadow text-decoration-none text-dark" href="/categories/Kurta">
-          <div class="d-flex justify-content-between align-items-center p-2">
-            <div class="flex-column lh-1 imagename"> <span>Kurtas</span></div>
-            <div> <img src="https://m.media-amazon.com/images/I/61TrmpaafpL._UX679_.jpg" height="100" width="100" />
-            </div>
-          </div>
-        </a>
-      </div>
-      <div class="col-md-3 ">
-        <a class="card p-2 box-shadow text-decoration-none text-dark" href="/categories/Jeans">
-          <div class="d-flex justify-content-between align-items-center p-2">
-            <div class="flex-column lh-1 imagename"> <span>Jeans</span></div>
-            <div> <img
-                src="https://imageio.forbes.com/specials-images/imageserve/605b71255b7e628858c667dd/AGOLDE-Criss-Cross-Upsized-Jean/960x0.jpg?height=640&width=640&fit=bounds"
-                height="100" width="100" /> </div>
-          </div>
-        </a>
-      </div>
+      {{/each}}
 
     </div>
-  </div> --}}
+  </div>
 
   <div class="container mt-4">
     <h1>New Arrivals</h1>
@@ -110,4 +81,5 @@
 
 
     </div>
+  </div>
 </section>

@@ -6,7 +6,7 @@
     <div class="container p-4 px-lg-5  border rounded">
         <div class="row gx-4 gx-lg-5 align-items-center">
             <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0 img-fluid"
-                    src="/images/{{productimage}}" alt="Product image" style="width: 400px; " /></div>
+                    src="/images/{{image}}" alt="Product image" style="width: 400px; " /></div>
             <div class="col-md-6">
                 <div class="small mb-1">Product Id : {{product._id}}</div>
                 <h1 class="display-5 fw-bolder">{{product.name}}</h1>
@@ -14,7 +14,7 @@
                     <span><b>₹</b> {{product.price}}</span>
                 </div>
                 <div>
-                    <h5>Category : {{product.category}} </h5>
+                    <h5>Category : {{product.category.title}} </h5>
                 </div>
                 <div>
                     <h5>Size : {{product.size}} </h5>

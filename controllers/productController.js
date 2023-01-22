@@ -3,6 +3,7 @@ const categorys = require('../models/categorymodel');
 const fs = require('fs');
 const { findOne } = require("../models/ordersmodel");
 const path = require("path");
+const { default: mongoose } = require("mongoose");
 
 
 const addCategory = async (req, res) => {
@@ -123,7 +124,7 @@ const addProduct = async (req, res) => {
       size: data.size,
       images: req.files,
       selling_price: data.sellingPrice,
-      category: data.category,
+      category:mongoose.Types.ObjectId( data.category),
       stock: data.quantity,
       product_description: data.description
     })
@@ -180,20 +181,22 @@ const editproduct = async (req, res) => {
 
 const viewproductsbycategory = async (req, res) => {
   try {
-    let category = req.params.category
-    await products.find({ category: category }).lean().then((data) => {
-      const productsdata = data.map((data) => {
+    let Category =new mongoose.Types.ObjectId( req.params.category)
+    let category=null
+   let productsByCategory= await products.find({ category: Category }).populate({path:"category"}).lean()
+      const productsdata = productsByCategory.map((data) => {
         return {
           _id: data._id,
           name: data.name,
           price: data.price,
-          image: data.images[0].data
+          image: data.images[0].filename
         };
       });
+      if(!productsByCategory.length==0){
+        category=productsByCategory[0].category.title
+      }
       res.render('users/productByCategory', { productsdata, category, user: req.session.user, totalItems: req.session.cartItemscount })
-    }).catch((error) => {
-      throw error;
-    })
+    
   } catch (error) {
     throw error;
   }
@@ -203,7 +206,7 @@ const viewproductsbycategory = async (req, res) => {
 const viewproducts = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      await products.find({}).lean().then((data) => {
+      await products.find({}).populate({ path: "category" }).lean().then((data) => {
         resolve({ status: true, data })
       }).catch((error) => {
         throw error;
@@ -215,21 +218,21 @@ const viewproducts = (data) => {
   })
 }
 
-const getproduct = (id) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      await products.findOne({ _id: id }).lean().then((data) => {
-        resolve({ status: true, data })
-      }).catch((error) => {
-        throw error;
-      })
-    } catch (error) {
-      throw error;
+const getSingleproduct = async(req,res) => { 
+   try{
+    let image;
+    let product =  await products.findOne({ _id:req.params.productID  }).populate({ path: "category" }).lean()
+    if (product) {
+      image = product.images[0].filename
     }
-  })
+    res.render("users/product", { user: req.session.user, product, image });
+   }catch(error){
+    res.render("error",{error})
+   }
 }
 
 const deleteProduct = (data) => {
+  console.log("hii");
   return new Promise(async (resolve, reject) => {
     try {
       const deletedproduct = await products.findOneAndDelete({ _id: data.Id }, { rawResult: true })
@@ -263,6 +266,6 @@ module.exports = {
   editproduct,
   viewproductsbycategory,
   viewproducts,
-  getproduct,
+  getSingleproduct,
   deleteProduct
 }

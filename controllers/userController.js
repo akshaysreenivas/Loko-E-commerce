@@ -62,16 +62,20 @@ const userSignup = (req, res) => {
 }
 
 const otpValidator = async (req, res) => {
-    let originalotp = parseInt(req.session.otp)
-    let enteredotp = parseInt(req.body.otp)
+    try {
+        let originalotp = parseInt(req.session.otp)
+        let enteredotp = parseInt(req.body.otp)
 
-    if (enteredotp === originalotp) {
-        await users.findOneAndUpdate({ email: req.session.tempuseremail }, { $set: { verified: true } })
-        res.redirect('/login')
-        req.session.otp = null;
-    } else {
-        req.session.invalidOtp = "Invalid OTP"
-        res.redirect('/otp-validation')
+        if (enteredotp === originalotp) {
+            await users.findOneAndUpdate({ email: req.session.tempuseremail }, { $set: { verified: true } })
+            res.redirect('/login')
+            req.session.otp = null;
+        } else {
+            req.session.invalidOtp = "Invalid OTP"
+            res.redirect('/otp-validation')
+        }
+    } catch (error) {
+        res.send("error", { error: error })
     }
 }
 
@@ -122,10 +126,12 @@ const viewProfile = async (req, res) => {
     let user = await userdetails(req.session.user._id)
     res.render("users/profile", { user: user });
 }
+
 const manageProfile = async (req, res) => {
 
     res.render('users/profileManage', { user: req.session.user })
 }
+
 const addAddress = async (req, res) => {
     let userid = req.session.user._id
     let newaddressDetails = {
@@ -154,22 +160,38 @@ const manageAddress = async (req, res) => {
     }
     res.render('users/addressBook', { userAddress, user: req.session.user, })
 }
+
 const orderManage = async (req, res) => {
-    let allOrders = await orders.find({ user: req.session.user._id }).populate({ path: "orderItems.product" }).lean()
-    console.log("allOrders", allOrders);
-    res.render('users/orders', { allOrders, user: req.session.user })
+    try {
+        let allorders = await orders.find({ user: req.session.user._id }).populate({ path: "orderItems.product" }).lean()
+       
+        const allOrders = allorders.map(order => {
+            order.orderItems = order.orderItems.map(item => {
+              item.image = item.product.images[0];
+              return item;
+            });
+            return order;
+          });
+         console.log(allOrders);
+        res.render('users/orders', { allOrders, user: req.session.user })
+    } catch (error) {
+        res.render("error", { error })
+    }
 }
 
 const addressTobeEdited = async (req, res) => {
-    let useraddress;
-    let address = await users.findOne({ _id: req.session.user._id, "addressDetails._id": req.params.addressid }, { "addressDetails.$": 1 }).lean()
-    if (address) {
-        useraddress = address.addressDetails[0]
+    try {
+        let useraddress;
+        let address = await users.findOne({ _id: req.session.user._id, "addressDetails._id": req.params.addressid }, { "addressDetails.$": 1 }).lean()
+        if (address) {
+            useraddress = address.addressDetails[0]
+        }
+        res.render("users/editaddress", { user: req.session.user, useraddress })
+    } catch (error) {
+        res.render("error", { error })
     }
-    res.render("users/editaddress", { user: req.session.user, useraddress })
+
 }
-
-
 
 const editAddress = async (req, res) => {
     try {
@@ -203,7 +225,6 @@ const deleteAddress = async (req, res) => {
     }
 }
 
-
 const changeName = async (req, res) => {
     try {
         await users.findOneAndUpdate({ _id: req.session.user._id }, { $set: { name: req.body.name } })
@@ -233,15 +254,17 @@ const otpGeneration = async (req, res) => {
 
     }
 }
+
 const otpPage = (req, res) => {
     res.render('users/otpsubmit', { invalidOtp: req.session.invalidOtp })
     req.session.invalidOtp = null
 }
-const otpVerification = async (req, res) => {
-    let originalotp = parseInt(req.session.otp)
-    let enteredotp = parseInt(req.body.otp)
 
+const otpVerification = async (req, res) => {
+    
     try {
+        let originalotp = parseInt(req.session.otp)
+        let enteredotp = parseInt(req.body.otp)
         if (originalotp === enteredotp) {
             res.render("users/changePassword")
             req.session.otp = null
@@ -255,8 +278,6 @@ const otpVerification = async (req, res) => {
     }
 
 }
-
-
 
 const changePassword = async (req, res) => {
     try {
@@ -384,6 +405,18 @@ const getCartItems = (userID) => {
                         $project: {
 
                             productId: 1, quantity: 1, totalQty: 1, product: 1, amount: 1, image: { $arrayElemAt: ['$product.images', 0] }
+                        }
+                    }, {
+                        $lookup: {
+                            from: "categorys",
+                            localField: "product.category",
+                            foreignField: "_id",
+                            as: "category"
+                        }
+                    }, {
+                        $project: {
+
+                            productId: 1, quantity: 1, totalQty: 1, product: 1, amount: 1, image: 1, category: { $arrayElemAt: ["$category.title", 0] }
                         }
                     }
                 ])
@@ -530,13 +563,23 @@ const changeCartProductCount = (userID, data) => {
 
 const viewCheckout = async (req, res) => {
     try {
-        let userid = req.session.user._id
+        let userid = new mongoose.Types.ObjectId(req.session.user._id)
         let userAddress;
         let address = await users.findOne({ _id: userid }, 'addressDetails').lean()
         if (address) {
             userAddress = address.addressDetails
         }
-        res.render('users/checkout', { userAddress, user: req.session.user, })
+        let orderdetails = await getCartItems(req.session.user._id)
+        let orderDetails = orderdetails.cartItems
+        let totalcost = await getCartTotalamount(req.session.user._id)
+        let totalCost
+        if (totalcost.status) {
+            totalCost = totalcost.totalAmount[0].totalCost
+        }
+        if (orderdetails.status)
+            res.render('users/checkout', { userAddress, totalCost, orderDetails, user: req.session.user, })
+        else
+            res.redirect("/")
     } catch (err) {
         throw err
     }
@@ -576,28 +619,27 @@ const cartPlaceOrder = async (req, res) => {
             , {
                 $project: {
 
-                    productId: 1, quantity: 1, totalQty: 1, product: 1,product_name:'$product.name', unit_amount:'$product.price', total_amount: { $sum: { $multiply: ['$quantity', '$product.price'] } }
+                    productId: 1, quantity: 1, totalQty: 1, product: 1, product_name: '$product.name', unit_amount: '$product.price', total_amount: { $sum: { $multiply: ['$quantity', '$product.price'] } }
                 }
 
             }
             , {
                 $project: {
 
-                    productId: 1, quantity: 1, totalQty: 1, total_amount: 1,unit_amount:1,product_name:1
+                    productId: 1, quantity: 1, totalQty: 1, total_amount: 1, unit_amount: 1, product_name: 1
                 }
             }
         ])
         const OrderItems = items.map((items) => {
             return {
                 product: items.productId,
-                unit_amount:items.unit_amount,
+                unit_amount: items.unit_amount,
                 total_amount: items.total_amount,
                 quantity: items.quantity
             }
         });
-        let Status = 'Confirmed'
+        let Status = "Placed"
         let newStatus = { status: Status, timestamp: IndianTime.toLocaleString('IND', options) }
-
         let TotalAmount = items.reduce((acc, crr) => acc + crr.total_amount, 0)
         const newOrder = new orders({
             user: userid,
@@ -610,50 +652,93 @@ const cartPlaceOrder = async (req, res) => {
         })
         newOrder.timeline.push({ status: Status, timestamp: IndianTime.toLocaleString('IND', options) })
         if (req.body.paymentMethod === "cash_on_delivery") {
-            await newOrder.save().then(async () => {
-                await cart.findOneAndDelete({ userId: ID }).then(() => {
-                    res.json({ status: true })
-                })
+            await newOrder.save().then(async (order) => {
+                req.session.newOrderId = order._id
+                res.json({ status: true })
             })
         } else {
-              const storeItem=items.map(item => {
-              return{
-                price_data:{
-                  currency:'inr',
-                  product_data:{
-                    name:item.product_name
-                  },
-                  unit_amount:item.unit_amount*100
-                },
-                quantity:item.quantity
-              }
+            const storeItem = items.map(item => {
+                return {
+                    price_data: {
+                        currency: 'inr',
+                        product_data: {
+                            name: item.product_name
+                        },
+                        unit_amount: item.unit_amount * 100
+                    },
+                    quantity: item.quantity
+                }
             })
-            console.log(storeItem);
-            console.log(storeItem[0].price_data.product_data);
-            const session=await stripe.checkout.sessions.create({
-              payment_method_types:['card'],
-              mode:"payment",
-              line_items:storeItem,
-              success_url:`${process.env.SERVER_URL}/placeOrder`,
-              cancel_url:`${process.env.SERVER_URL}/checkout`
+            const coupon = await stripe.coupons.create({ name: "my-coupon", percent_off: 20, duration: 'once' });
+
+            const session = await stripe.checkout.sessions.create({
+                payment_method_types: ['card'],
+                mode: "payment",
+                line_items: storeItem,
+                success_url: `${process.env.SERVER_URL}/confirmOrder`,
+                cancel_url: `${process.env.SERVER_URL}/paymentfailed`,
+                discounts: [{
+                    coupon: coupon.id,
+                }],
             })
-            console.log(session.url);
-            res.json({status:true,url:session.url})
+            session.paymentStatus
+
+            await newOrder.save().then(async (order) => {
+                req.session.newOrderId = order._id
+                res.json({ status: true, url: session.url })
+            })
         }
 
     } catch (err) {
-        console.error(err);
         res.status(500).json({ error: err.message })
+    }
+}
+
+const orderConfirm = async (req, res) => {
+    const order = await orders.findOne({ _id: req.session.newOrderId });
+    if (order) {
+        if (order.paymentMethod === 'online_payment') {
+            order.paymentStatus = 'Paid';
+        } else {
+            order.paymentStatus = 'Not Paid';
+        }
+        order.currentStatus = { status: "Confirmed", timestamp: IndianTime.toLocaleString('IND', options) }
+        order.timeline.push({ status: "Confirmed", timestamp: IndianTime.toLocaleString('IND', options) });
+        await order.save().then(async () => {
+            await cart.findOneAndDelete({ userId: req.session.user._id }).then(() => {
+                res.render('users/orderConfirm', { user: req.session.user })
+            })
+        });
+    } else {
+        res.redirect("/")
+    }
+    req.session.newOrderId = null;
+}
+
+const paymentCancel = async (req, res) => {
+    try {
+        await orders.findOneAndDelete({ _id: req.session.newOrderId, paymentMethod: "online_payment", paymentStatus: "Not Paid" })
+            .then(() => {
+                res.render("users/paymentcancel", { user: req.session.user })
+            });
+    } catch (error) {
+        res.render('error', { error })
     }
 }
 
 const cancelOrder = async (req, res) => {
     try {
-        let userid = req.session.user._id
+        let ID = new mongoose.Types.ObjectId(req.params.orderID)
         let newStatus = { status: "cancelled", timestamp: IndianTime.toLocaleString('IND', options) }
-        await orders.findOneAndUpdate({ _id: userid }, { $set: { currentStatus: newStatus } })
+        let order = await orders.find({ _id: ID })
+        await orders.findOneAndUpdate({ _id: ID }, { $set: { currentStatus: newStatus ,cancelled:true }, $push: { timeline: newStatus } })
+            .then(() => {
+                res.json({ status: true })
+            }).catch(() => {
+                res.json({ status: true })
+            })
     } catch (error) {
-        throw error
+        res.render("error", { error: error })
     }
 }
 
@@ -693,5 +778,7 @@ module.exports = {
     addAddress,
     viewCheckout,
     cartPlaceOrder,
+    orderConfirm,
+    paymentCancel,
     logout
 }

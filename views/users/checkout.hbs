@@ -16,14 +16,14 @@ function noBack(){
       <h3>Select Delivery Address</h3>
       <div class="">
         {{#each userAddress}}
-        <div class="card d-flex gap-2 align-items-start flex-row  m-3 box-shadow p-3">
-          <input class="m-1" type="radio" name="address" value="{{_id}}" id="" required checked>
-          <div>
-            <div>
+        <div class="card   d-flex gap-2 align-items-start flex-row  m-3 box-shadow p-3">
+          <input class="m-1" type="radio"   name="address" value="{{_id}}" id="addresscheckbox" required>
+          <div class=" ">
+            <div class=" ">
               <p class="m-0 px-1 pb-1">{{ name }} </p>
               <p class="m-0 px-1 "> {{ phone}}</p>
             </div>
-            <div class="d-flex">
+            <div class="d-flex  ">
               <p class="p-1 m-0"> {{street}} , {{city}} , {{state}} , {{pin_code}} </p>
             </div>
           </div>
@@ -49,7 +49,7 @@ function noBack(){
             <div class="input-group">
               <input type="text" class="form-control" placeholder="Promo code">
               <div class="input-group-append">
-                <button type="submit" class="btn btn-outline-danger">Redeem</button>
+                <button type="button" class="btn btn-outline-danger">Redeem</button>
               </div>
             </div>
           </div>
@@ -60,20 +60,22 @@ function noBack(){
               <h6 class="my-0">Promo code</h6>
               <small>Couponcode</small>
             </div>
-            <span class="text-danger">₹ {{totalCost}}</span>
+            <span class="text-danger">₹ </span>
           </div>
         </li>
+        {{#each orderDetails}}
         <li class="list-group-item d-flex justify-content-between">
-          <span>Product Name x 2(Qty)</span>
-          <strong>₹ {{totalCost}}</strong>
+          <span>{{truncate product.name 15}} x {{quantity}}(Qty)</span>
+          <strong>₹ {{amount}} </strong>
         </li>
+        {{/each}}
         <li class="list-group-item d-flex justify-content-between">
           <span>Total </span>
           <strong>₹ {{totalCost}}</strong>
         </li>
         <li class="list-group-item d-flex justify-content-between">
           <span>shipping </span>
-          <strong>₹ {{totalCost}}</strong>
+          <span>₹ <span class="text-decoration-line-through text-muted text-light">45</span>Free</span> 
         </li>
         <li class="list-group-item  d-flex justify-content-between">
           <span>Amount Payable </span>
@@ -82,14 +84,14 @@ function noBack(){
         <li>
           <div class="list-group-item card justify-content-between mt-1 p-3">
             <h5 class="">Payment</h5>
-            <div class="custom-control custom-radio">
-              <input id="credit" name="paymentMethod" type="radio" value="cash_on_delivery" class="custom-control-input"
+            <div class="custom-control d-flex custom-radio  p-2 mb-1 border gap-2 rounded">
+              <input id="cod" name="paymentMethod" type="radio" value="cash_on_delivery" class="custom-control-input"
                  required>
-              <label class="custom-control-label" for="credit">COD</label>
+              <label class="custom-control-label" for="cod">COD</label>
             </div>
-            <div class="custom-control custom-radio">
-              <input id="credit" name="paymentMethod" type="radio" value="online_payment" class="custom-control-input" checked>
-              <label class="custom-control-label" for="credit">Online Payment</label>
+            <div class="custom-control d-flex custom-radio  p-2 border gap-2 rounded">
+              <input id="online" name="paymentMethod" type="radio" value="online_payment" class="custom-control-input">
+              <label class="custom-control-label " for="online">Online Payment</label>
             </div>
            
           </div>
@@ -115,3 +117,9 @@ function noBack(){
     </ul>
   </footer>
 </section>
+
+
+
+
+
+

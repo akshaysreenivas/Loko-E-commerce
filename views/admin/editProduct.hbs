@@ -87,11 +87,11 @@
 
                 <div class="form-group mb-4 m-3 px-3 p-2">
                     <label class="col-md-4 control-label mb-3" for="image">IMAGE</label>
-                    {{#each tobeupdate.images}}
                     <div class="m-3 d-flex gap-2">
-                        <img style="width:50px;height:70px;" src="/{{filename}}" alt="" id="newImg{{_id}}">
-                    </div>
+                    {{#each tobeupdate.images}}
+                        <img style="height:200px;" src="/images/{{filename}}" alt="" id="newImg{{_id}}">
                     {{/each}}
+                    </div>
                     <input type="text" id="filename" value="{{filename}}" hidden>
                     <input class="form-control form-control-lg p-2" value="" type="file" name="photos{{filename}}"
                         id="" />

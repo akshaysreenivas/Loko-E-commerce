@@ -18,22 +18,19 @@
                         <div class="row card-body border rounded" id="single-cart-item{{productId}}">
                             <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
                                 <!-- Image -->
-                                <div class="bg-image hover-overlay hover-zoom ripple rounded "
-                                    data-mdb-ripple-color="light">
-                                    <img src="/images/{{image.data}}" class="w-100 img-fluid"
+                                <a class="bg-image " href="/product/{{productId}}">
+                                    <img src="/images/{{image.filename}}" class=" img-fluid rounded"
                                         style="max-width: 10rem; max-height:12rem;" />
-                                    <a href="#!">
-                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
-                                    </a>
-                                </div>
-                                <!-- Image -->
+                                    
+                                </a>
+                              
                             </div>
 
 
                             <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
                                 <!-- Data -->
                                 <p><strong>{{product.name}}</strong></p>
-                                <p> <small> {{product.category}} </small> </p>
+                                <p> <small> {{category}} </small> </p>
                                 <p class="text-start ">
                                     <strong>₹ <span id="price{{product._id}}">{{amount}}</span> </strong>
                                 </p>

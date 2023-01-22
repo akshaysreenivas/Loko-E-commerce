@@ -335,7 +335,7 @@ aside {
 }
 
 #step-3::after {
-  content: "Packed";
+  content: "Shipped";
 }
 
 #step-4::after {
@@ -628,3 +628,65 @@ a{
 }
 
 
+.confirmbody {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  flex-direction: column;
+}
+.confirmtitle {
+  font-family: Helvetica;
+  font-size: 36px;
+  margin-top: 40px;
+  color: #333;
+  opacity: 0;
+}
+
+
+
+.circle {
+  stroke-dasharray: 1194;
+  stroke-dashoffset: 1194;
+  animation: circle 1s ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+
+
+.tick {
+  stroke-dasharray: 350;
+  stroke-dashoffset: 350;
+   animation: tick .8s ease-out;
+  animation-fill-mode: forwards;
+  animation-delay: .95s;
+}
+
+
+
+@keyframes circle {
+  from {
+    stroke-dashoffset: 1194;
+  }
+  to {
+    stroke-dashoffset: 2388;
+  }
+}
+
+@keyframes tick {
+  from {
+    stroke-dashoffset: 350;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes title {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

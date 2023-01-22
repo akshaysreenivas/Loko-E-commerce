@@ -74,6 +74,11 @@ router.post("/login", (req, res) => {
 
 router.get("/", async (req, res) => {
   let totalItems = null;
+  let Categorys = null;
+  let categorys=  await productController.viewCategory()
+  if(categorys){
+     Categorys= await categorys.Categorys
+  }
   if (req.session.user) {
     totalItems = await userController.getCartCount(req.session.user._id);
   }
@@ -84,37 +89,16 @@ router.get("/", async (req, res) => {
         _id: productsDatas._id,
         name: productsDatas.name,
         price: productsDatas.price,
-        image: productsDatas.images[0].data
+        image: productsDatas.images[0].filename,
       };
-    });
-    res.render("users/home", { productsData, totalItems, user: req.session.user });
+    });  
+    res.render("users/home", { productsData,Categorys, totalItems, user: req.session.user });
   });
 });
-
-// router.get("/",(req,res)=>{
-//   res.render('users/onlinePayment')
-// })
-router.get("/success",(req,res)=>{
-  res.render('users/invoice')
-})
-router.get("/cancel",(req,res)=>{
-  res.json({failed:"failed"})
-})
-
-
-
-
-
-
-
-
 
 // -------    viewproductsbycategory    ------
 
 router.get('/categories/:category', productController.viewproductsbycategory)
-
-
-
 
 // -----profile UI--------
 
@@ -138,14 +122,8 @@ router.post('/changeName',verifylogin.verifyLogin,userController.changeName)
 
 // product view ------
 
-router.get("/product/:productID", async (req, res) => {
-  let productimage;
-  let product = await productController.getproduct(req.params.productID);
-  if (product) {
-    productimage = product.data.images[0].data
-  }
-  res.render("users/product", { user: req.session.user, product: product.data, productimage });
-});
+router.get("/product/:productID",productController.getSingleproduct)
+
 
 // cart --------
 
@@ -227,14 +205,13 @@ router.post('/create-checkout-session', verifylogin.verifyLogin, userController.
 
 // confirm order  
 
-router.get('/placeOrder', verifylogin.verifyLogin, (req, res) => {
-  res.render('users/orderConfirm', { user: req.session.user })
-})
+router.get('/confirmOrder', verifylogin.verifyLogin,userController.orderConfirm)
 
+router.get("/paymentfailed",verifylogin.verifyLogin,userController.paymentCancel)
 
+router.post("/cancelOrder/:orderID",verifylogin.verifyLogin,userController.cancelOrder)
 
-
-// =======logout=====
+// ======logout====
 
 router.get("/logout", userController.logout);
 
