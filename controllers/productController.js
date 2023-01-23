@@ -7,7 +7,7 @@ const { default: mongoose } = require("mongoose");
 
 
 const addCategory = async (req, res) => {
-  let filePath = `${req.file.path}`;
+  const filePath = `${req.file.path}`;
   try {
     const category = await categorys.findOne({ title: req.body.category })
     if (category) {
@@ -48,11 +48,12 @@ const loadcategory = async (req, res) => {
 
 const loadEditCategory = async (req, res) => {
   try {
-    let category = await categorys.find({ _id: req.params.categoryId }).lean();
+    const category = await categorys.find({ _id: req.params.categoryId }).lean();
+    let Category;
     if (category) {
-      let Category = category[0]
-      res.render("admin/editcategory", { Category })
+     Category = category[0]
     }
+    res.render("admin/editcategory", { Category })
   } catch (error) {
     throw error
   }
@@ -60,8 +61,8 @@ const loadEditCategory = async (req, res) => {
 
 const editCategory = async (req, res) => {
   try {
-    let Category = await categorys.findOne({ _id: req.body.categoryid });
-    let filePath = Category.path
+    const Category = await categorys.findOne({ _id: req.body.categoryid });
+    const filePath = Category.path
     let img;
     let imgpath;
     if (req.file != null) {
@@ -88,7 +89,7 @@ const editCategory = async (req, res) => {
 }
 
 const deleteCategory = async (req, res) => {
-  filePath = `public/images/${req.params.imgpath}`
+  const filePath = `public/images/${req.params.imgpath}`
   try {
     fs.unlinkSync(filePath);
     await categorys.deleteOne({ _id: req.params.categoryId }).then(() => {
@@ -104,7 +105,7 @@ const deleteCategory = async (req, res) => {
 
 const viewCategory = () => new Promise(async (resolve, reject) => {
   try {
-    let Categorys = await categorys.find({}).lean();
+    const Categorys = await categorys.find({}).lean();
     if (Categorys) {
       resolve({ Categorys, status: true })
     } else {
@@ -116,7 +117,7 @@ const viewCategory = () => new Promise(async (resolve, reject) => {
 })
 
 const addProduct = async (req, res) => {
-  let data = req.body
+  const data = req.body
   try {
     const newProduct = new products({
       name: data.name,
@@ -143,9 +144,9 @@ const addProduct = async (req, res) => {
 }
 
 const editproduct = async (req, res) => {
-  let data = req.body
+  const data = req.body
   let images;
-  let product = await products.findOne({ _id: req.body.productId })
+  const product = await products.findOne({ _id: req.body.productId })
 
   product.images.map(item => fs.unlinkSync(item.path))
   if (req.files != null) {
@@ -180,9 +181,9 @@ const editproduct = async (req, res) => {
 
 const viewproductsbycategory = async (req, res) => {
   try {
-    let Category = new mongoose.Types.ObjectId(req.params.category)
+    const Category = new mongoose.Types.ObjectId(req.params.category)
     let category = null
-    let productsByCategory = await products.find({ category: Category }).populate({ path: "category" }).lean()
+    const productsByCategory = await products.find({ category: Category }).populate({ path: "category" }).lean()
     const productsdata = productsByCategory.map((data) => {
       return {
         _id: data._id,
@@ -220,7 +221,7 @@ const viewproducts = (data) => {
 const getSingleproduct = async (req, res) => {
   try {
     let image;
-    let product = await products.findOne({ _id: req.params.productID }).populate({ path: "category" }).lean()
+    const product = await products.findOne({ _id: req.params.productID }).populate({ path: "category" }).lean()
     if (product) {
       image = product.images[0].filename
     }

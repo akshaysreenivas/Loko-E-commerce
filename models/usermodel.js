@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const { date } = require("random-js");
 const saltRounds = 10;
-const IndianTime = new Date();
+const indianTime = new Date();
 const options = { timeZone: 'Asia/Kolkata' };
 
 
@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     },
     created: {
         type: date,
-        default: IndianTime.toLocaleString('en-US', options),
+        default: indianTime.toLocaleString('en-US', options),
     },
     password: {
         type: String,

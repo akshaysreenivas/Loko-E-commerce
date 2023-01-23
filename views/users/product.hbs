@@ -5,7 +5,7 @@
 <section class="py-5 contents px-5">
     <div class="container p-4 px-lg-5  border rounded">
         <div class="row gx-4 gx-lg-5 align-items-center">
-            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0 img-fluid"
+            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0 img-fluid" id="product-img"
                     src="/images/{{image}}" alt="Product image" style="width: 400px; " /></div>
             <div class="col-md-6">
                 <div class="small mb-1">Product Id : {{product._id}}</div>
@@ -55,3 +55,12 @@
 
 </div>
 </section>
+
+      <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+
+<script>
+
+    $("#product-img").elevateZoom();
+
+</script>

@@ -5,7 +5,7 @@ const adminslist = require('../models/adminmodel')
 const userslist = require('../models/usermodel');
 const orders = require("../models/ordersmodel");
 
-const IndianTime = new Date();
+const indianTime = new Date();
 const options = { timeZone: 'Asia/Kolkata' };
 
 const adminLogin = (data) => {
@@ -84,7 +84,7 @@ const unBlockUser = (data) => {
 
 const listOrders = async (req, res) => {
     try {
-        let ordersData = await orders.find({}).populate({ path: "user", model: 'users' })
+        const ordersData = await orders.find({}).populate({ path: "user", model: 'users' })
             .lean()
 
         res.render("admin/listOrders", { ordersData })
@@ -94,11 +94,12 @@ const listOrders = async (req, res) => {
 }
 const viewOrder = async (req, res) => {
     try {
-        let orderdata = await orders.find({ _id: req.params.orderId }).populate({ path: "orderItems.product" }).populate({ path: "user", model: 'users' })
+        const orderdata = await orders.find({ _id: req.params.orderId }).populate({ path: "orderItems.product" }).populate({ path: "user", model: 'users' })
             .lean()
 
         const orderData = orderdata.map(order => {
             order.orderItems = order.orderItems.map(item => {
+                if( item.product)
                 item.image = item.product.images[0];
                 return item;
             });
@@ -114,9 +115,9 @@ const viewOrder = async (req, res) => {
 
 const changeorderStatus = async (req, res) => {
     try {
-        let Status = req.body.Status
-        let ID = new mongoose.Types.ObjectId(req.body.id)
-        let newStatus = { status: Status, timestamp: IndianTime.toLocaleString('IND', options) }
+        const Status = req.body.Status
+        const ID = new mongoose.Types.ObjectId(req.body.id)
+        const newStatus = { status: Status, timestamp: indianTime.toLocaleString('IND', options) }
         await orders.findOneAndUpdate({ _id: ID }, { $set: { currentStatus: newStatus }, $push: { timeline: newStatus } })
             .then(() => {
                 res.json({ status: true })

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const { date } = require('random-js')
 const schema = mongoose.Schema
-const IndianTime = new Date();
+const indianTime = new Date();
 const options = { timeZone: 'Asia/Kolkata' };
 
 
@@ -67,7 +67,7 @@ const orderSchema = new schema({
   },
   orderOn: {
     type: String,
-    default: IndianTime.toLocaleString('IND', options),
+    default: indianTime.toLocaleString('IND', options),
   },
   deliveryDate: {
     type: String,
