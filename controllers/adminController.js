@@ -129,6 +129,10 @@ const changeorderStatus = async (req, res) => {
     }
 }
 
+const addcoupon=(req,res)=>{
+ console.log(req.body);
+}
+
 
 const logout = (req, res) => {
     req.session.adminloggedIn = false;
@@ -147,5 +151,6 @@ module.exports = {
     listOrders,
     viewOrder,
     changeorderStatus,
+    addcoupon,
     logout
 }

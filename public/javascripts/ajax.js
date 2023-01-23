@@ -8,28 +8,8 @@
 $(document).ready(function () {
     $("#addCategoryForm").submit(function (event) {
         event.preventDefault();
-        let formData = new FormData();
-        let image = $("#image")[0].files[0];
-        formData.append("categoryimage", image);
-        formData.append("category", $("#category").val());
-        $.ajax({
-            url: "/admin/addCategory",
-            method: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                if (response.status) {
-                    location.reload()
-                }
-                if (response.exists) {
-                    swal("Category already exists");
-                }
-            },
-            error: function (error) {
-                swal("Failed!", error, "error");
-            }
-        });
+    alert("kjkbj")
+        
     });
 });
 

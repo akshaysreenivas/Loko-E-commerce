@@ -1,14 +1,20 @@
 const products = require("../models/productmodel");
 const categorys = require('../models/categorymodel');
 const fs = require('fs');
-const { findOne } = require("../models/ordersmodel");
 const path = require("path");
 const { default: mongoose } = require("mongoose");
 
 
 const addCategory = async (req, res) => {
-  const filePath = `${req.file.path}`;
+ 
+  console.log("hbhj")
   try {
+    let filePath;
+    let fileName;
+    if(req.file){
+      fileName=req.file.filename
+       filePath = `${req.file.path}`;
+    }
     const category = await categorys.findOne({ title: req.body.category })
     if (category) {
       fs.unlinkSync(filePath);
