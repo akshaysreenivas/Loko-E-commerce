@@ -5,18 +5,119 @@
         <div class=" container-fluid p-3 mt-2 mb-5 box-shadow">
             <div class="container  border-primary">
                 <h2 class="my-4 text-center">Order Details</h2>
-                {{#each orderData}}
-                
-                {{/each }}
-                <div class="table-responsive ">
-                   
+
+
+                <div class="d-flex flex-column">
+                    {{#if orderData }}
+                    {{#each orderData}}
+                    <div class="allorders" data-orders-all="{{orderData}}"></div>
+                    <div class="order my-3 bg-light " data-order-id={{this._id}}>
+                        <div class="row mb-5">
+                            <div class="col-lg-5">
+                                <div class="d-flex flex-column justify-content-between order-summary">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="text-uppercase">Order ID : #{{_id }}</div>
+                                        <div class="blue-label ms-auto text-uppercase">{{paymentStatus}}</div>
+                                    </div>
+                                    <div class="mb-3"><strong>Customer Name : {{user.name}}</strong></div>
+                                    <div class="mb-3 text-success">Ordered on : {{orderOn}}</div>
+                                    <div class="mb-3"><strong>Payment Method: : {{paymentMethod}}</strong></div>
+                                    <div class="mb-3"><strong>Total Amount : ₹ {{totalAmount}}</strong></div>
+
+                                </div>
+
+                            </div>
+                            <div class="col-lg-7">
+                                {{#if cancelled}}
+                                <div class="text-danger px-5 py-5">
+                                    <h5>Cancelled on {{currentStatus.timestamp}} </h5>
+                                </div>
+                                {{/if }}
+                                <div class="d-sm-flex align-items-sm-start justify-content-sm-between">
+                                    <div class="status">Current Status : {{currentStatus.status}}</div>
+
+                                </div>
+                                <div class="progressbar-track">
+                                    <div class="progressbar">
+                                        {{#each timeline}}
+                                        {{#if ../cancelled}}
+                                        <div class="text-muted">
+                                            <span class="material-icons-sharp">radio_button_checked</span>
+                                            <div>
+                                                <span class="black">{{status}}</span>
+                                            </div>
+                                        </div>
+
+                                        {{else}}
+                                        <div class="text-muted green">
+                                            <span class="material-icons-sharp">radio_button_checked</span>
+                                            <div>
+                                                <span class="black">{{status}}</span>
+                                            </div>
+                                        </div>
+
+                                        {{/if}}
+                                        {{/each}}
+                                    </div>
+                                    <div id="tracker"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <h4 class="mb-2">Products x ({{orderItems.length}})</h4>
+                        {{#each orderItems}}
+                        <div class="row mb-3 border p-2 rounded">
+                            <div class="col-lg-4">
+                                <img src="/images/{{image.filename}}" class=" img-fluid rounded"
+                                    style=" max-height:6rem;" />
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="mb-2"><strong>{{product.name}}</strong></div>
+                                <div class="mb-2">Quantity x {{quantity}}</div>
+                                <div class="mb-2"> <strong>Amount : ₹ {{total_amount}}</strong></div>
+                            </div>
+                        </div>
+                        {{/each }}
+
+                    </div>
+                    <div>
+                        <h3>Manage order</h3>
+
+                        <div class="d-sm-flex align-items-center gap-5 justify-content-center">
+                            {{#if cancelled}}
+                            <div class="text-danger ">
+                                <h5>Cancelled on {{currentStatus.timestamp}} </h5>
+                            </div>
+
+                            {{else}}
+                            <button onclick="changeOrderStatus('{{_id}}','Shipped')"
+                                class="btn btn-outline-success text-uppercase">Shipped</button>
+
+                            <button onclick="changeOrderStatus('{{_id}}','Out for Delivery')"
+                                class="btn btn-outline-success text-uppercase">Out for Delivery</button>
+
+                            <button onclick="changeOrderStatus('{{_id}}', 'Delivered')"
+                                class="btn btn-outline-success text-uppercase">Delivered</button>
+
+                            <button onclick="changeOrderStatus('{{_id}}','Cancelled')"
+                                class="btn btn-outline-danger text-uppercase">Cancel Order</button>
+                           
+                            {{/if}}
+                        </div>
+                    </div>
                 </div>
 
-
+                {{/each}}
+                {{else}}
+                <div class="text-secondary">
+                    No Order
+                </div>
+                {{/if}}
             </div>
-     
 
         </div>
+
+    </div>
     </div>
 
 

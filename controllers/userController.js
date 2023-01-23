@@ -164,15 +164,14 @@ const manageAddress = async (req, res) => {
 const orderManage = async (req, res) => {
     try {
         let allorders = await orders.find({ user: req.session.user._id }).populate({ path: "orderItems.product" }).lean()
-       
+
         const allOrders = allorders.map(order => {
             order.orderItems = order.orderItems.map(item => {
-              item.image = item.product.images[0];
-              return item;
+                item.image = item.product.images[0];
+                return item;
             });
             return order;
-          });
-         console.log(allOrders);
+        });
         res.render('users/orders', { allOrders, user: req.session.user })
     } catch (error) {
         res.render("error", { error })
@@ -261,7 +260,7 @@ const otpPage = (req, res) => {
 }
 
 const otpVerification = async (req, res) => {
-    
+
     try {
         let originalotp = parseInt(req.session.otp)
         let enteredotp = parseInt(req.body.otp)
@@ -731,7 +730,7 @@ const cancelOrder = async (req, res) => {
         let ID = new mongoose.Types.ObjectId(req.params.orderID)
         let newStatus = { status: "cancelled", timestamp: IndianTime.toLocaleString('IND', options) }
         let order = await orders.find({ _id: ID })
-        await orders.findOneAndUpdate({ _id: ID }, { $set: { currentStatus: newStatus ,cancelled:true }, $push: { timeline: newStatus } })
+        await orders.findOneAndUpdate({ _id: ID }, { $set: { currentStatus: newStatus, cancelled: true }, $push: { timeline: newStatus } })
             .then(() => {
                 res.json({ status: true })
             }).catch(() => {

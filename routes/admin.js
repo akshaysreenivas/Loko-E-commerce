@@ -130,8 +130,8 @@ router.get(
 // --- order manage ----
 
 router.get('/orders', verifylogin.verifyadminlogin,adminController.listOrders)
-router.post('/changeOrderStatus', verifylogin.verifyadminlogin,adminController.changeorderStatus)
 router.get('/orderdeatails/:orderId', verifylogin.verifyadminlogin,adminController.viewOrder)
+router.post('/changeOrderStatus/', verifylogin.verifyadminlogin,adminController.changeorderStatus)
 
 // =========block users=====
 

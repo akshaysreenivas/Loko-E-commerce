@@ -42,7 +42,6 @@ $(document).ready(function () {
         event.preventDefault();
         let formData = new FormData();
         let id = $("#filename").val()
-        console.log(id)
         let image = $("#image" + id)[0].files[0];
         formData.append("categoryimage", image);
         formData.append("category", $("#category").val());
@@ -472,11 +471,17 @@ function cancelOrder(Id) {
         });
 }
 
+// ---------change order status from user-------
 
-function changeOrderStatus(){
+
+function changeOrderStatus(Id,status){
     $.ajax({
-        url: '/changeOrderStatus',
+        url: '/admin/changeOrderStatus/',
         method: "post",
+        data: {
+            id: Id,
+            Status:status
+        },
         success: (response) => {
             location.reload()
         }
