@@ -21,7 +21,7 @@ body {
   font-size: 14px;
   font-family: "Poppins", sans-serif;
   user-select: none;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
 }
 .nav-bg {
   background-color: rgb(242 242 242);

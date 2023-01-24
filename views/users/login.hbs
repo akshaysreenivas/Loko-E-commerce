@@ -1,37 +1,73 @@
-<section class="vh-100 d-flex align-items-center justify-content-center " style="background-color: #dbdbdb;">
-    <div class="col-md-6 col-lg-7 d-flex align-items-center rounded" style="max-width:600px;">
-        <div class="card-body col-md-6 col-lg-7 p-4 p-lg-5 text-black rounded" style="background-color: #ffffff;">
-            <form action="/login" method="post" id="loginForm">
-                <div class="d-flex justify-content-center" style="width: 100%;">
-                    <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign in to your account </h3>
+<link rel="stylesheet" href="/stylesheets/userLogin.css" />
 
-                </div>
-                <div class="form-outline mb-2">
-                    <h5 class="text-danger">{{message}}</h5>
-                </div>
-                <div class="mb-2 m-3 p-2">
-                    <label class="p-2" for="email"> Enter Email ID</label>
-                    <input type="email" onblur="javascript:value=value.replace(/\s/g,'');" id="userEmail" name="email"
-                        class="form-control px-3 py-2 " style="width: 100%;border-radius:25px" />
-                    <small id="emailerr" class="text-danger px-3"></small>
-                </div>
-                <div class=" mb-4 m-3 p-2">
-                    <label class="p-2" for="password">Password</label>
-                    <input type="password" id="userPassword" class="form-control px-3 py-2" name="password"
-                        style="width: 100%;border-radius:25px " />
-                    <small id="passwordErr" class="text-danger px-3"></small>
-                </div>
 
-                <div class=" mb-4 my-3 mx-auto p-2 d-flex justify-content-center" style="width: 100%;">
-                    <button class=" user-login-btn p-1" type="submit"
-                        style="width: 30%;border-radius:25px;font-size: 20px;">Login</button>
-                </div>
 
-                <p class="text-center text-muted mt-3 mb-0">Don't have  an account? <a href="/signup"
-                        class="fw-bold text-body"><u class="text-primary"> Create account</u></a></p>
+<div class="card-body  text-black rounded p-5" style="background-color: #ffffff;">
+    <form action="/login" method="post" class="" id="loginForm">
+        <h2 class="fw-normal mb-3  p-3" style="letter-spacing: 1px;">Sign in </h2>
 
-            </form>
-
+        <div class="form-outline mb-2">
+            <h5 class="text-danger">{{message}}</h5>
         </div>
-    </div>
-</section>
+        <div class=" m-1 p-2">
+            <label class="p-2" for="email"> Enter Email ID</label>
+            <div class="position-relative"> <input type="email" onblur="javascript:value=value.replace(/\s/g,'');"
+                    id="userEmail" name="email" class="form-control ps-5 py-2 input"
+                    style="width: 100%;border-radius:25px" />
+                <span class="material-icons-sharp icon p-3">
+                    email
+                </span>
+            </div>
+            <small id="emailerr" class="text-danger px-3"></small>
+        </div>
+        <div class="  m-1 p-2">
+            <label class="p-2" for="password">Password</label>
+            <div class="d-flex position-relative" style="flex-direction:column;">
+                <input type="password" id="userPassword" class="form-control ps-5 py-2 input" name="password"
+                    style="width: 100%;border-radius:25px " onclick="showeye()" />
+                <span class="material-icons-sharp icon p-3" id="key">
+                    key
+                </span>
+                <span class="material-icons-sharp align-self-end  toggle-password p-3" id="eye"
+                    onclick="togglePassword()">
+
+                </span>
+            </div>
+            <small id="passwordErr" class="text-danger px-3"></small>
+        </div>
+
+        <div class=" mb-4  mx-auto p-2 d-flex justify-content-center" style="width: 100%;">
+            <button class="btn btn-dark btn-lg px-5 " style="width: 75%;border-radius:25px " type="submit"
+                >Login</button>
+        </div>
+
+        <p class="text-center text-muted mt-3 mb-0">Don't have an account? <a href="/signup"
+                class="fw-bold text-body"><u class="text-primary"> Create&nbspaccount</u></a></p>
+
+    </form>
+
+</div>
+<script>
+
+
+
+    let password = document.getElementById("userPassword");
+    let eye = document.getElementById("eye");
+    function showeye() {
+        eye.innerHTML = "visibility_off"
+    }
+
+    function togglePassword() {
+        if (password.type === "password") {
+            password.type = "text";
+            eye.innerHTML = "visibility"
+
+        } else {
+            eye.innerHTML = "visibility_off"
+            password.type = "password";
+        }
+    }
+</script>
+</body>
+
+</html>

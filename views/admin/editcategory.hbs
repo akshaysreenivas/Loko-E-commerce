@@ -21,7 +21,7 @@
 
                     <label for="exampleInputEmail1" class="form-label">Category Image</label>
                     <div class="drag-image m-auto col-md-4">
-                        <img src="/images/{{Category.image}}" alt="">
+                        <img src="/images/{{Category.image}}" class="img-fluid" alt="">
                     </div>
 
                     <!---------------- new image    ------------ -->
@@ -31,7 +31,7 @@
                     <!--- image preview --->
                     <div class="drag-image m-auto col-md-4 ">
                         <span id="uploadIcon" class="material-icons-sharp">cloud_upload</span>
-                        <img id="addedImg" src="" alt="">
+                        <img id="addedImg" class="img-fluid" src="" alt="">
                     </div>
                     <div class="d-block text-center p-3">
                         <input onchange="viewImg(event)" value="" type="file" id="newimage" name="categoryimage">

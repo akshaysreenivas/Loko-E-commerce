@@ -35,10 +35,10 @@
                     </div>
                     <div class="drag-image m-auto">
                         <span id="uploadIcon" class="material-icons-sharp">cloud_upload</span>
-                        <img id="addedImg" src="" alt="">
+                        <img id="addedImg" class="img-fluid" src="" alt="">
                     </div>
                     <div class="d-block text-center p-3">
-                        <input onchange="viewImg(event)" type="file" id="image" name="categoryimage">
+                        <input onchange="viewImg(event)" class="img-fluid" type="file" id="image" name="categoryimage">
                     </div>
                     <div class="d-flex justify-content-center my-2">
                         <button type="submit" id="submit-button" class="btn btn-outline-dark ">
@@ -66,7 +66,7 @@
                         <tr>
                             <th scope="row">{{_id}}</th>
                             <td>{{title}}</td>
-                            <td><img class="m-1" style="max-width:50px; max-height:50px" src="/images/{{image}}" alt="">
+                            <td><img  style="max-width:50px; max-height:50px" class="img-fluid m-1" src="/images/{{image}}" alt="">
                             </td>
                             <td>
                                 <a id="category_edit" href="/admin/editCategory/{{_id}}" class="btn"><span
@@ -156,3 +156,4 @@
     });
 
 </script>
+href="/categories/{{_id}}"

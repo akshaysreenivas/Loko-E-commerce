@@ -89,7 +89,7 @@
                     <label class="col-md-4 control-label mb-3" for="image">IMAGE</label>
                     <div class="m-3 d-flex gap-2">
                     {{#each tobeupdate.images}}
-                        <img style="height:200px;" src="/images/{{filename}}" alt="" id="newImg{{_id}}">
+                        <img style="height:200px;" class="img-fluid" src="/images/{{filename}}" alt="" id="newImg{{_id}}">
                     {{/each}}
                     </div>
                     <input type="text" id="filename" value="{{filename}}" hidden>

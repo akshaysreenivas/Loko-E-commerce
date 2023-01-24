@@ -11,21 +11,21 @@
                 <div class="d-flex my-4 flex-wrap">
                     <a class="box me-4 my-1 bg-light text-decoration-none cursor-pointer" title="orders"
                         data-toggle="tooltip" href="/orders">
-                        <img src="/images/cardboard-box.png" alt="">
+                        <img src="/images/cardboard-box.png" class="img-fluid" alt="">
                         <div class="d-flex align-items-center mt-2">
                             <div class="tag">Orders placed</div>
                         </div>
                     </a>
                     <a class="box me-4 my-1 bg-light text-decoration-none cursor-pointer" title="cart"
                         data-toggle="tooltip" href="/cart">
-                        <img src="/images/shopping-cart.png" alt="">
+                        <img src="/images/shopping-cart.png" class="img-fluid" alt="">
                         <div class="d-flex align-items-center mt-2">
                             <div class="tag">Items in Cart</div>
                         </div>
                     </a>
                     <a class="box me-4 my-1 bg-light text-decoration-none cursor-pointer" title="wishlist"
                         data-toggle="tooltip" href="/wishlist">
-                        <img src="/images/wishlist.png" alt="">
+                        <img src="/images/wishlist.png" class="img-fluid" alt="">
                         <div class="d-flex align-items-center mt-2">
                             <div class="tag">Wishlist</div>
                         </div>
@@ -42,7 +42,7 @@
                         <div class="d-flex align-items-center gap-3 mb-2 col-lg-6">
 
                             <input type="text" id="myInputname" value="{{user.name}}" name="name"
-                                class=" form-control rounded p-2" placeholder="{{user.name}}" readonly required/>
+                                class=" form-control rounded p-2" placeholder="{{user.name}}" readonly required />
                             <button id="nameSubmitButton" class="btn btn-outline-dark"
                                 style="display:none">Save</button>
                         </div>
@@ -59,7 +59,7 @@
                         <div class="d-flex align-items-center gap-3 mb-2 col-lg-6">
 
                             <input type="text" id="myInputemail" value="{{user.email}}" name="email"
-                                class="form-control rounded p-2" placeholder="" readonly  required/>
+                                class="form-control rounded p-2" placeholder="" readonly required />
                             <button id="emailSubmitButton" class="btn btn-outline-dark"
                                 style="display:none">Save</button>
                         </div>
@@ -70,15 +70,17 @@
                 <!------Change Password---->
                 <div class="mb-3 row">
                     <form id="changePassword">
-                        <button type="submit" id="btn_submit" class="text-primary h6 border-0">Change Password ?</button>
-                        <div class="spinner-border text-primary" id="spinner_password" style="display:none" role="status">
+                        <button type="submit" id="btn_submit" class="text-primary h6 border-0">Change Password
+                            ?</button>
+                        <div class="spinner-border text-primary" id="spinner_password" style="display:none"
+                            role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
                     </form>
                 </div>
 
 
-                
+
             </div>
         </div>
     </div>
