@@ -1,0 +1,40 @@
+.form-div {
+    width: 500px;
+    padding: 20px;
+    background-color: #e1e1e1;
+    border: 1px solid #e5e5e5;
+    box-shadow: 0px 0px 20px #ccc;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: fit-content;
+}
+input {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 1px solid rgb(21, 20, 20);
+    border-radius: 4px;
+}
+
+
+  .icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .key{
+     position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  @media (max-width: 600px) {
+    .form-div {
+        width:96%;
+        margin: 0 auto;
+        padding: 10px;
+    }
+}

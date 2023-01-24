@@ -9,10 +9,7 @@ const verifylogin = require('../middleware/loginverify');
 
 // ------get method------
 
-router.get("/signup", (req, res) => {
-  if (req.session.loggedIn) res.redirect("/");
-  else res.render("users/signup");
-});
+router.get("/signup",userController.signupPage)
 
 // ------post method------
 

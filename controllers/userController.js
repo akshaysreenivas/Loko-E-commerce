@@ -11,16 +11,24 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 
 
+const signupPage= (req,res)=>{
+    let message= req.session.signuperror
+        if (req.session.loggedIn)
+         res.redirect("/");
+        else
+         res.render("users/signup",{message});
+         req.session.signuperror=""
+}
 
-
-const userSignup = (req, res) => {
+const userSignup = async(req, res) => {
     const userdata = req.body
-    new Promise(async (resolve, reject) => {
+   
         try {
             const user = await users.findOne({ email: userdata.email })
             if (user) {
                 if (user.verified) {
-                    res.redirect("/signup", { message: "Looks like already have an account with this email! , login instead? " });
+                    req.session.signuperror= "Looks like already have an account with this email! , login instead? " 
+                    res.redirect("/signup", );
                 } else {
                     nodemailer.otpGenerator(userdata.email)
                         .then((response) => {
@@ -57,8 +65,6 @@ const userSignup = (req, res) => {
         catch (error) {
             throw error
         }
-    })
-
 }
 
 const otpValidator = async (req, res) => {
@@ -751,6 +757,7 @@ const logout = (req, res) => {
 
 
 module.exports = {
+    signupPage,
     userSignup,
     otpValidator,
     dologin,
