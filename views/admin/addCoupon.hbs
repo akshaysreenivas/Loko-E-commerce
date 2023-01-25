@@ -1,0 +1,161 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+{{>adminNavbar}}
+<section class=" admin-section d-flex gap-5">
+    {{>adminSideBar}}
+    <div class="vw-100 main px-5 pt-5 content-admin ">
+
+        {{#if couponAdded}}
+        <div class="p-3 my-2 text-success alert alert-success alert-dismissible fade show d-flex align-items-center"
+            role="alert">
+            <span class="material-icons-sharp">
+                check_circle
+            </span> <strong> Success!!,</strong> Coupon Added
+            <button type="button" class="btn-close p-4" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {{/if}}
+        {{#if couponEdited}}
+        <div class="p-3 my-2 text-success alert alert-success alert-dismissible fade show d-flex align-items-center"
+            role="alert">
+            <span class="material-icons-sharp">
+                check_circle
+            </span> <strong> Success!!,</strong> Coupon Successfully Edited
+            <button type="button" class="btn-close p-4" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {{/if}}
+
+        <h2 class="">Manage Coupons</h2>
+        <div class="row container mb-5">
+            <div class="col-md-7 col-12 p-3 m-auto" style="background-color: #ddddddc9;">
+                <form id="add-coupon-form"  class="bg-light p-5">
+                    <h2 class="text-center mb-3">Add Coupon</h2>
+
+                    <div class="form-group mb-3">
+                        <label for="code">Coupon Code:</label>
+                        <input type="text" id="code" name="code" class="form-control" onblur="javascript:value=value.replace(/\s/g,'');" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="discount">Discount:</label>
+                        <input type="number" id="discount" name="discount" class="form-control" onblur="javascript:value=value.replace(/\s/g,'');" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="expiration-date">Expiration Date:</label>
+                        <input type="date" id="expiration-date" name="expirationDate" class="form-control" onblur="javascript:value=value.replace(/\s/g,'');" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="max-amount">Max amount:</label>
+                        <input type="number" id="max-amount" name="maxAmount" class="form-control" onblur="javascript:value=value.replace(/\s/g,'');" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="min-amount">Min amount:</label>
+                        <input type="number" id="min-amount" name="minAmount" class="form-control" onblur="javascript:value=value.replace(/\s/g,'');" required>
+                    </div>
+
+                    <div class="form-group text-center mt-4">
+                        <button type="submit" class="btn btn-outline-dark b-radius">Add Coupon</button>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+        <div class="row container my-5">
+            <div class="col-md-10 col-12 m-auto">
+                <h2 class="mb-3">Coupons</h2>
+                <table class="py-4 mb-3 table table-bordered table-hover" id="categoriesTable">
+                    <thead>
+                        <tr class="bg-dark text-white">
+                            <th scope="col">Coupon Code</th>
+                            <th scope="col">Discount (%)</th>
+                            <th scope="col">Expiritation Date</th>
+                            <th scope="col">Minimum Amount</th>
+                            <th scope="col">Maximum Amount</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-light">
+                        {{#each coupons }}
+                        <tr>
+                            <th scope="">{{code}}</th>
+                            <th scope="row">{{discount}}</th>
+                            <th scope="row">{{expirationDate}}</th>
+                            <th scope="row">{{min_amount}}</th>
+                            <th scope="row">{{max_amount}}</th>
+
+                            <td>
+                                <a id="category_edit" href="/admin/editCoupon/{{_id}}" type="button" class="btn"><span
+                                        data-bs-tooltip="Edit" class="material-icons-sharp">edit</span></a>
+                                <button onclick="deleteCoupon('{{_id}}')" type="button" class="btn"><span
+                                        class="material-icons-sharp">delete</span></button>
+                            </td>
+                        </tr>
+                        {{/each}}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+</section>
+
+<script>
+
+
+$("#add-coupon-form").submit(function (e) {
+    e.preventDefault();
+    alert($(this).serialize())
+        $.ajax({
+            url: "/admin/saveCoupon",
+            method: "POST",
+            data: $(this).serialize(),
+            success: function (response) {
+                if (response.status) {
+                    location.reload()
+                }
+                else if (response.CouponExists) {
+                    swal("Category already exists");
+                }
+                else{
+                swal("Failed!","error");
+                }
+            },
+           
+        });
+   
+})
+ 
+function deleteCoupon(id) {
+    swal({
+        title: "Are you sure?",
+        text: "Delete this coupon",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+        .then((willDelete) => {
+            if (willDelete) {
+                $.ajax({
+                    url: '/admin/deleteCoupon',
+                    method: 'post',
+                    data: {
+                        couponid: id
+                    },
+                    success: (response) => {
+                        if (response.status) {
+                            location.reload()
+                        }
+                    }
+                })
+            }
+        });
+
+}
+
+
+</script>

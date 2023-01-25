@@ -45,17 +45,10 @@
                                                 <span class="black">{{status}}</span>
                                             </div>
                                         </div>
-
                                         {{/each}}
-
-
-
                                     </div>
                                     <div id="tracker"></div>
                                 </div>
-
-
-
                                 {{/if }}
                             </div>
 
@@ -63,10 +56,14 @@
                         <h4 class="mb-2">Products x ({{orderItems.length}})</h4>
                         {{#each orderItems}}
                         <div class="row mb-3 border p-2 rounded">
+                            {{#each product.images}}
+                            {{#if @first}}
                             <div class="col-lg-4">
-                                <img src="/images/{{image.filename}}" class=" img-fluid rounded"
+                                <img src="/images/{{filename}}" class=" img-fluid rounded"
                                     style=" max-height:6rem;" />
                             </div>
+                            {{/if}}
+                        {{/each }}
                             <div class="col-lg-8">
                                 <div class="mb-2"><strong>{{product.name}}</strong></div>
                                 <div class="mb-2">Quantity x {{quantity}}</div>

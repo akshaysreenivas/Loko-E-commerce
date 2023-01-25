@@ -55,7 +55,12 @@ router.post("/login", (req, res) => {
         res.redirect("/login");
       } else {
         if (response.result) {
-          req.session.user = response.userdoc;
+          let user={
+            name:response.userdoc.name,
+            email:response.userdoc.email,
+            _id:response.userdoc._id
+          }
+          req.session.user = user;
           req.session.loggedIn = true;
           res.redirect("/");
         } else {
@@ -138,6 +143,7 @@ router.get("/cart", verifylogin.verifyLogin, async (req, res) => {
       totalItems = response.cartItems[0].totalQty;
       cartProducts = response.cartItems;
     }
+    console.log("cartProducts",cartProducts);
     res.render("users/cart", { cartProducts, totalCost, totalItems, user: req.session.user });
   });
 });
@@ -189,7 +195,7 @@ router.get('/checkout', verifylogin.verifyLogin, userController.viewCheckout)
 // ------add new address------
 
 router.get('/addAddress', verifylogin.verifyLogin, (req, res) => {
-  res.render('users/addaddress', { user: req.session.user })
+  res.render('users/addaddress', { user: req.session.user})
 })
 
 router.post('/addAddress', verifylogin.verifyLogin, userController.addAddress)

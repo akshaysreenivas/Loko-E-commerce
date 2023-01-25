@@ -1,14 +1,10 @@
 {{>userNavbar}}
-<script type="text/javascript">
-window.history.forward();
-function noBack(){
-    window.history.forward();
-}
-</script>
+
 
 <section class="contents py-3 px-5">
 
   <div class="container   row justify-content-between ">  
+{{#if orderDetails}}
 <div class=" col-lg-8">
     <form  id="placeOrderForm">
 
@@ -108,6 +104,9 @@ function noBack(){
 </form>
     </div>
   </div>
+  {{else}}
+  <div class="text-secondary"><h2>NO orders</h2></div>
+  {{/if}}
    <footer class="my-5 pt-5 text-muted text-center text-small">
     <p class="mb-1">&copy; 2023-2024 loko</p>
     <ul class="list-inline">

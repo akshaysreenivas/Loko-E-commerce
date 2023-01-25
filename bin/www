@@ -1,4 +1,6 @@
-require('dotenv').config()
+/* eslint-disable no-console */
+/* eslint-disable no-undef */
+require('dotenv').config();
 
 
 
@@ -16,8 +18,8 @@ const http = require('http');
  * Get port from environment and store in Express.
  */
 
-const port = normalizePort(process.env.PORT);
-app.set('port', port);
+const Port = normalizePort(process.env.PORT);
+app.set('port', Port);
 
 /**
  * Create HTTP server.
@@ -29,7 +31,7 @@ const server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port, () => console.log("Serrver started on port ", port));
+server.listen(Port, () => console.log('Serrver started on port ', Port));
 server.on('error', onError);
 server.on('listening', onListening);
 

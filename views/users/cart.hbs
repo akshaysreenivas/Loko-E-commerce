@@ -12,21 +12,27 @@
                         <h5 class="mb-0 ">Cart - {{totalItems}} items</h5>
 
                     </div>
+                    {{user.name}}
+                    {{user.email}}
+                    {{user.password}}
                     <!-- Single item -->
                     {{#each cartProducts }}
                     <div class="card-body p-5">
                         <div class="row card-body border rounded" id="single-cart-item{{productId}}">
                             <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
                                 <!-- Image -->
+                                {{#if image}}
                                 <a class="bg-image " href="/product/{{productId}}">
                                     <img src="/images/{{image.filename}}" class=" img-fluid rounded"
                                         style="max-width: 10rem; max-height:12rem;" />
-                                    
+
                                 </a>
-                              
+                                {{else}}
+                                <div class="text-danger">
+                                    <h3>Currently Not available</h3>
+                                </div>
+                                {{/if}}
                             </div>
-
-
                             <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
                                 <!-- Data -->
                                 <p><strong>{{product.name}}</strong></p>
@@ -114,9 +120,9 @@
                             </li>
                         </ul>
 
-                        <a 
-                            class="btn btn-dark  py-1 d-flex gap-3 align-items-center justify-content-center" href="/checkout">
-                            <span class="material-icons-sharp" >shopping_cart_checkout</span>
+                        <a class="btn btn-dark  py-1 d-flex gap-3 align-items-center justify-content-center"
+                            href="/checkout">
+                            <span class="material-icons-sharp">shopping_cart_checkout</span>
                             Proceed to checkout
                         </a>
 

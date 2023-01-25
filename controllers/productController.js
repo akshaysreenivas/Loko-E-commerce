@@ -1,19 +1,18 @@
 const products = require("../models/productmodel");
 const categorys = require('../models/categorymodel');
 const fs = require('fs');
-const path = require("path");
 const { default: mongoose } = require("mongoose");
 
 
 const addCategory = async (req, res) => {
- 
+
   console.log("hbhj")
   try {
     let filePath;
     let fileName;
-    if(req.file){
-      fileName=req.file.filename
-       filePath = `${req.file.path}`;
+    if (req.file) {
+      fileName = req.file.filename
+      filePath = `${req.file.path}`;
     }
     const category = await categorys.findOne({ title: req.body.category })
     if (category) {
@@ -57,7 +56,7 @@ const loadEditCategory = async (req, res) => {
     const category = await categorys.find({ _id: req.params.categoryId }).lean();
     let Category;
     if (category) {
-     Category = category[0]
+      Category = category[0]
     }
     res.render("admin/editcategory", { Category })
   } catch (error) {

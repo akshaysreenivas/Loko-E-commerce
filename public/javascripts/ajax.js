@@ -125,9 +125,6 @@ function deleteCartProduct(Id) {
 
 }
 
-
-
-
 // change single item quantity 
 
 function addCount(Id, Count) {
