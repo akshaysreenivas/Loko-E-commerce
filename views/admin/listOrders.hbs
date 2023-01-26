@@ -3,7 +3,6 @@
     {{>adminSideBar}}
     <div class="vw-100 main px-5 pt-5 content-admin justify-content-center">
         <div class=" container-fluid p-3 mt-2 mb-5 box-shadow">
-           <h1>Hello 😀, <span id="time"></span> </h1> 
             <div class="container  border-primary">
                 <h2 class="my-4 text-center">Orders </h2>
                 <div class="table-responsive ">
@@ -36,7 +35,7 @@
                                 <td class="p-2 ">{{paymentStatus}}</td>
                                 <td class="p-2 ">₹ {{totalAmount}}</td>
                                 <td class="p-2 ">{{currentStatus.status}}</td>
-                                <td class="p-2 text-center"><a href="/admin//orderdeatails/{{_id}}" class="view" title="View Details" data-toggle="tooltip"><span class="material-icons-sharp">arrow_circle_right</span>
+                                <td class="p-2 text-center"><a href="/admin/orderdetails/{{_id}}" class="view" title="View Details" data-toggle="tooltip"><span class="material-icons-sharp">arrow_circle_right</span>
                             </tr>
                             {{/each}}
                         </tbody>
@@ -54,19 +53,6 @@
 
 </section>
 <script>
-    dateTime = function(){
-		let now = new Date();
-		let hours = now.getHours();
-		let greet;
-	
-		if (hours < 12) {
-			greet = "Good Morning,";
-		} else if (hours < 16) {
-			greet = "Good Afternoon,";
-		} else {
-			greet = "Good Evening,";
-		}
-	document.getElementById("time").innerHTML=greet
-};
+    
 </script>
 <!-- Modal -->

@@ -37,7 +37,7 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="discount">Discount:</label>
+                        <label for="discount">Discount (%) :</label>
                         <input type="number" id="discount" name="discount" class="form-control" onblur="javascript:value=value.replace(/\s/g,'');" required>
                     </div>
 
@@ -47,12 +47,12 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="max-amount">Max amount:</label>
-                        <input type="number" id="max-amount" name="maxAmount" class="form-control" onblur="javascript:value=value.replace(/\s/g,'');" required>
+                        <label for="max-amount">Max Discount Amount:</label>
+                        <input type="number" id="max-amount" name="maxDiscount" class="form-control" onblur="javascript:value=value.replace(/\s/g,'');" required>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="min-amount">Min amount:</label>
+                        <label for="min-amount">Min Order Amount:</label>
                         <input type="number" id="min-amount" name="minAmount" class="form-control" onblur="javascript:value=value.replace(/\s/g,'');" required>
                     </div>
 
@@ -73,8 +73,8 @@
                             <th scope="col">Coupon Code</th>
                             <th scope="col">Discount (%)</th>
                             <th scope="col">Expiritation Date</th>
-                            <th scope="col">Minimum Amount</th>
-                            <th scope="col">Maximum Amount</th>
+                            <th scope="col">Minimum Order Amount</th>
+                            <th scope="col">Maximum Discount Amount</th>
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
@@ -85,13 +85,13 @@
                             <th scope="row">{{discount}}</th>
                             <th scope="row">{{expirationDate}}</th>
                             <th scope="row">{{min_amount}}</th>
-                            <th scope="row">{{max_amount}}</th>
+                            <th scope="row">{{max_discount}}</th>
 
                             <td>
                                 <a id="category_edit" href="/admin/editCoupon/{{_id}}" type="button" class="btn"><span
-                                        data-bs-tooltip="Edit" class="material-icons-sharp">edit</span></a>
+                                        class="material-icons-sharp" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit">edit</span></a>
                                 <button onclick="deleteCoupon('{{_id}}')" type="button" class="btn"><span
-                                        class="material-icons-sharp">delete</span></button>
+                                        class="material-icons-sharp"  data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete">delete</span></button>
                             </td>
                         </tr>
                         {{/each}}
@@ -109,7 +109,6 @@
 
 $("#add-coupon-form").submit(function (e) {
     e.preventDefault();
-    alert($(this).serialize())
         $.ajax({
             url: "/admin/saveCoupon",
             method: "POST",

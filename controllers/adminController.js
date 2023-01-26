@@ -94,21 +94,12 @@ const listOrders = async (req, res) => {
     } catch (error) {
         throw error;
     }
+
 };
 const viewOrder = async (req, res) => {
     try {
-        const orderdata = await orders.find({ _id: req.params.orderId }).populate({ path: 'orderItems.product' }).populate({ path: 'user', model: 'users' })
+        const orderData = await orders.find({ _id: req.params.orderId }).populate({ path: 'orderItems.product' }).populate({ path: 'user', model: 'users' })
             .lean();
-
-        const orderData = orderdata.map(order => {
-            order.orderItems = order.orderItems.map(item => {
-                if (item.product.images.length > 0) { item.image = item.product.images[0]; }
-                return item;
-            });
-            return order;
-        });
-
-
         res.render('admin/viewOrders', { orderData });
     } catch (error) {
         throw error;
@@ -122,10 +113,25 @@ const changeorderStatus = async (req, res) => {
         const newStatus = { status: Status, timestamp: indianTime.toLocaleString('IND', options) };
         await orders.findOneAndUpdate({ _id: ID }, { $set: { currentStatus: newStatus }, $push: { timeline: newStatus } })
             .then(() => {
-                res.json({ status: true });
+                res.json({ status: true }); 
             }).catch(() => {
-                res.json({ status: true });
-            });
+                res.json({ status: false });
+            }); 
+    } catch (error) {
+        res.render('error', { error: error });
+    }
+};
+const cancelOrder = async (req, res) => {
+    try {
+        const Status = "Cancelled";
+        const ID = new mongoose.Types.ObjectId(req.body.id);
+        const newStatus = { status: Status, timestamp: indianTime.toLocaleString('IND', options) };
+        await orders.findOneAndUpdate({ _id: ID }, { $set: { currentStatus: newStatus ,cancelled:true}, $push: { timeline: newStatus } })
+            .then(() => {
+                res.json({ status: true }); 
+            }).catch(() => {
+                res.json({ status: false });
+            }); 
     } catch (error) {
         res.render('error', { error: error });
     }
@@ -153,7 +159,7 @@ const saveCoupon = async (req, res) => {
                 code: req.body.code,
                 discount: req.body.discount,
                 expirationDate: req.body.expirationDate,
-                max_amount: req.body.maxAmount,
+                max_discount: req.body.maxDiscount,
                 min_amount: req.body.minAmount
             })
 
@@ -168,21 +174,21 @@ const saveCoupon = async (req, res) => {
 
 }
 const editCoupon = async (req, res) => {
-    const Coupon=await coupon.findOne({_id:req.params.productId}).lean()
+    const Coupon = await coupon.findOne({ _id: req.params.productId }).lean()
     const dateString = Coupon.expirationDate
     const date = moment(dateString);
-    const Date=date.format("YYYY-MM-DD")
-        res.render("admin/editCoupon",{Coupon,Date})
+    const Date = date.format("YYYY-MM-DD")
+    res.render("admin/editCoupon", { Coupon, Date })
 }
 const saveEditedCoupon = async (req, res) => {
     try {
         console.log(req.body)
         await coupon.findOneAndUpdate({ _id: req.body.couponid }, {
-            $set:{
+            $set: {
                 code: req.body.code,
                 discount: req.body.discount,
                 expirationDate: req.body.expirationDate,
-                max_amount: req.body.maxAmount,
+                max_discount: req.body.maxDiscount,
                 min_amount: req.body.minAmount
             }
         }).then(() => {
@@ -197,9 +203,9 @@ const saveEditedCoupon = async (req, res) => {
 
 }
 const deleteCoupon = async (req, res) => {
-    console.log(">>",req.body.couponid);
+    console.log(">>", req.body.couponid);
     try {
-        await coupon.findOneAndUpdate({ _id: req.body.couponid },{ $set:{ active: false }})
+        await coupon.findOneAndUpdate({ _id: req.body.couponid }, { $set: { active: false } })
             .then(() => {
                 res.json({ status: true })
             })
@@ -222,6 +228,7 @@ module.exports = {
     adminLogin,
     getusersData,
     blockUser,
+    cancelOrder,
     unBlockUser,
     listOrders,
     viewOrder,

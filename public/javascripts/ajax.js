@@ -359,34 +359,7 @@ $("#changePassword").submit(function (e) {
 
 // --------placeOrder Form---------
 
-$("#placeOrderForm").submit(function (e) {
-    e.preventDefault();
 
-    $(':input[type="submit"]').prop('disabled', true);
-    let spinner = document.getElementById("spinner_checkout")
-    let submit = document.getElementById("btn_submit")
-    if(spinner)
-    spinner.style.display = "block";
-    if(submit)
-    submit.style.display = "none";
-    e.preventDefault();
-    $.ajax({
-        url: "/create-checkout-session",
-        method: "POST",
-        dataType: "json",
-        data: $(this).serialize(),
-        success: function (response) {
-            if (response.status) {
-                if (response.url)
-                    location.href = response.url;
-                else
-                    location.href = '/confirmOrder';
-            }
-        }
-    })
-
-
-})
 
 
 
@@ -425,7 +398,6 @@ function deleteaddress(id) {
 }
 
 
-// ---------cancel order from user-------
 
 function cancelOrder(Id) {
     swal({
@@ -448,19 +420,6 @@ function cancelOrder(Id) {
         });
 }
 
-// ---------change order status from user-------
+// --------- change order status -------
 
 
-function changeOrderStatus(Id,status){
-    $.ajax({
-        url: '/admin/changeOrderStatus/',
-        method: "post",
-        data: {
-            id: Id,
-            Status:status
-        },
-        success: (response) => {
-            location.reload()
-        }
-    })
-}

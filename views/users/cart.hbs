@@ -12,26 +12,22 @@
                         <h5 class="mb-0 ">Cart - {{totalItems}} items</h5>
 
                     </div>
-                    {{user.name}}
-                    {{user.email}}
-                    {{user.password}}
+
                     <!-- Single item -->
                     {{#each cartProducts }}
-                    <div class="card-body p-5">
+                    {{#if product.active}}
+                    <div class="card-body px-5">
                         <div class="row card-body border rounded" id="single-cart-item{{productId}}">
-                            <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
+                            <div class="col-lg-3 d-flex  align-items-center   col-md-12 mb-4  mb-lg-0">
                                 <!-- Image -->
-                                {{#if image}}
-                                <a class="bg-image " href="/product/{{productId}}">
-                                    <img src="/images/{{image.filename}}" class=" img-fluid rounded"
-                                        style="max-width: 10rem; max-height:12rem;" />
-
+                                <a class="bg-image col-lg-3 col-md-12   mb-lg-0 " href="/product/{{productId}}">
+                                    {{#each product.images}}
+                                    {{#if @first}}
+                                    <img src="/images/{{filename}}" class="  img-fluid rounded"
+                                        style="max-width:10rem; max-height:12rem; " />
                                 </a>
-                                {{else}}
-                                <div class="text-danger">
-                                    <h3>Currently Not available</h3>
-                                </div>
                                 {{/if}}
+                                {{/each}}
                             </div>
                             <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
                                 <!-- Data -->
@@ -49,11 +45,11 @@
                                         </span> Move to Wishlist </button>
 
                                 </div>
+
                             </div>
-
-
                             <div class="col-lg-4 col-md-6 mb-4 mb-lg-0 d-flex mb-4  justify-content-center  ">
                                 <!-- Quantity -->
+
 
                                 <div class="d-flex mb-4 align-items-center justify-content-center "
                                     style="max-width: 300px ">
@@ -73,26 +69,68 @@
                                     </button>
 
                                 </div>
+
                                 <button onclick="deleteCartProduct('{{product._id}}')" class="btn align-self-start p-0">
                                     <span class="material-icons-sharp text-secondary">
                                         delete
                                     </span>
                                 </button>
+
                             </div>
+
                         </div>
-
-
                     </div>
+                    {{/if}}
                     {{/each}}
                 </div>
-                {{!-- <div class="card mb-4">
-                    <div class="card-body">
-                        <p><strong>Expected shipping delivery</strong></p>
-                        <p class="mb-0">5.1.2023 - 7.1.2023</p>
+
+                <!-----inactive products------>
+
+                {{#each cartProducts }}
+                {{#unless product.active}}
+                <div class="card-body p-5 border">
+                    <div class="row card-body border  p-2 rounded" id="single-cart-item{{productId}}">
+                        <div class="col-lg-4 d-flex  align-items-center   col-md-12 mb-4  mb-lg-0">
+                            <!-- Image -->
+                            <div class="bg-image col-lg-3 col-md-12   mb-lg-0 ">
+                                {{#each product.images}}
+                                {{#if @first}}
+                                <img src="/images/{{filename}}" class="  img-fluid rounded"
+                                    style="max-width:10rem; max-height:12rem; " />
+                            </div>
+                            {{/if}}
+                            {{/each}}
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                            <!-- Data -->
+                            <p><strong>{{product.name}}</strong></p>
+                            <p> <small> {{category}} </small> </p>
+                            <p class="text-start ">
+                                <strong>₹ <span id="price{{product._id}}">{{product.price}}</span> </strong>
+                            </p>
+                            <p>Size: {{product.size}}</p>
+                        </div>
+                        <div
+                            class="col-lg-5 col-md-6 mb-4 mb-lg-0 text-danger d-flex mb-4 align-items-center justify-content-center  ">
+                            <!-- Quantity -->
+                            <h3>Currently not available</h3>
+
+                            <button onclick="deleteCartProduct('{{product._id}}')" class="btn align-self-start p-0">
+                                <span class="material-icons-sharp text-secondary">
+                                    delete
+                                </span>
+                            </button>
+
+                        </div>
+
                     </div>
-                </div> --}}
+                </div>
+                {{/unless}}
+                {{/each}}
             </div>
+
             <div class="col-md-4 position-sticky top-5">
+                {{#if validItems}}
                 <div class="card mb-4">
                     <div class="card-header py-3">
                         <h5 class="mb-0">Summary</h5>
@@ -102,7 +140,9 @@
                             <li
                                 class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                                 Products
+                                {{#each totalCost}}
                                 <span> ₹ <span class="totalcost">{{totalCost}}</span></span>
+                                {{/each}}
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                                 Shipping
@@ -116,7 +156,11 @@
                                         <p class="mb-0">(including GST)</p>
                                     </strong>
                                 </div>
-                                <strong> ₹ <span class="totalcost"> {{totalCost}}</span></strong>
+                                <strong>
+                                    {{#each totalCost}}
+                                    ₹ <span class="totalcost"> {{totalCost}}</span>
+                                    {{/each}}
+                                </strong>
                             </li>
                         </ul>
 
@@ -129,6 +173,7 @@
 
                     </div>
                 </div>
+                {{/if}}
             </div>
         </div>
     </div>

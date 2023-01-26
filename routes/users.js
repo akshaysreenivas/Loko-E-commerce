@@ -129,24 +129,8 @@ router.get("/product/:productID",productController.getSingleproduct)
 
 // cart --------
 
-router.get("/cart", verifylogin.verifyLogin, async (req, res) => {
-  let totalCost = 0;
-  await userController.getCartTotalamount(req.session.user._id).then((response) => {
-    if (response.status) {
-      totalCost = response.totalAmount[0].totalCost
-    }
-  })
-  await userController.getCartItems(req.session.user._id).then((response) => {
-    let totalItems = 0;
-    let cartProducts = null;
-    if (response.status) {
-      totalItems = response.cartItems[0].totalQty;
-      cartProducts = response.cartItems;
-    }
-    console.log("cartProducts",cartProducts);
-    res.render("users/cart", { cartProducts, totalCost, totalItems, user: req.session.user });
-  });
-});
+router.get("/cart", verifylogin.verifyLogin,userController.getCart)
+
 
 // post 
 
@@ -205,7 +189,7 @@ router.post('/addAddress', verifylogin.verifyLogin, userController.addAddress)
 
 router.post('/create-checkout-session', verifylogin.verifyLogin, userController.cartPlaceOrder)
 
-
+router.post('/applyCoupon', verifylogin.verifyLogin, userController.applyCoupon)
 // confirm order  
 
 router.get('/confirmOrder', verifylogin.verifyLogin,userController.orderConfirm)

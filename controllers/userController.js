@@ -5,6 +5,7 @@ const orders = require('../models/ordersmodel');
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const bcrypt = require('bcrypt');
+const coupon = require("../models/couponmodel");
 const indianTime = new Date();
 const options = { timeZone: 'Asia/Kolkata' };
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
@@ -128,9 +129,9 @@ const userdetails = async (user_Id) => {
 
 const viewProfile = async (req, res) => {
     const User = await userdetails(req.session.user._id);
-    let user={
-        name:User.name,
-        email:User.email
+    let user = {
+        name: User.name,
+        email: User.email
     }
     res.render('users/profile', { user: user });
 };
@@ -366,75 +367,92 @@ const addToCart = (userID, productID, quantity) => {
     });
 };
 
-const getCartItems = (userID) => {
-    const ID = new mongoose.Types.ObjectId(userID);
-    return new Promise(async (resolve, reject) => {
-        try {
-            const Cart = await cart.findOne({ userId: ID }).lean();
-            if (Cart) {
-                const cartItems = await cart.aggregate([
-                    {
-                        $match: { userId: ID }
-                    }, {
-                        $unwind: '$products'
-                    }, {
-                        $project: {
-                            productId: '$products.productId',
-                            quantity: '$products.quantity',
-                            totalQty: '$totalQty',
-                            totalCost: '$totalCost'
-                        }
-                    }, {
-                        $lookup: {
-                            from: 'products',
-                            localField: 'productId',
-                            foreignField: '_id',
-                            as: 'product'
-                        }
-                    }, {
-                        $project: {
-                            productId: 1, quantity: 1, totalQty: 1, product: { $arrayElemAt: ['$product', 0] }
-                        }
-                    }, {
-                        $project: {
+const getCartItems = async (userid) => {
+    try {
+        const ID = new mongoose.Types.ObjectId(userid);
 
-                            productId: 1, quantity: 1, totalQty: 1, product: 1, amount: { $sum: { $multiply: ['$quantity', '$product.price'] } }
-                        }
-
-                    }, {
-                        $project: {
-
-                            productId: 1, quantity: 1, totalQty: 1, product: 1, amount: 1, image: { $arrayElemAt: ['$product.images', 0] }
-                        }
-                    }, {
-                        $lookup: {
-                            from: 'categorys',
-                            localField: 'product.category',
-                            foreignField: '_id',
-                            as: 'category'
-                        }
-                    }, {
-                        $project: {
-
-                            productId: 1, quantity: 1, totalQty: 1, product: 1, amount: 1, image: 1, category: { $arrayElemAt: ['$category.title', 0] }
-                        }
+        const Cart = await cart.findOne({ userId: ID }).lean();
+        if (Cart) {
+            const products = await cart.aggregate([
+                {
+                    $match: { userId: ID }
+                }, {
+                    $unwind: '$products'
+                }, {
+                    $project: {
+                        productId: '$products.productId',
+                        quantity: '$products.quantity',
+                        totalQty: '$totalQty',
+                        totalCost: '$totalCost'
                     }
-                ]);
-                if (cartItems.length !== 0) {
-                    resolve({ status: true, cartItems });
-                }
-                else {
-                    resolve({ status: false });
-                }
-            }
-            else {
-                resolve({ status: false });
-            }
+                }, {
+                    $lookup: {
+                        from: 'products',
+                        localField: 'productId',
+                        foreignField: '_id',
+                        as: 'product'
+                    }
 
-        } catch (error) {
-            throw error;
+
+
+                }, {
+                    $project: {
+                        productId: 1, quantity: 1, totalQty: 1, product: { $arrayElemAt: ['$product', 0] }
+                    }
+                }, {
+                    $project: {
+
+                        productId: 1, quantity: 1, totalQty: 1, product: 1, amount: { $sum: { $multiply: ['$quantity', '$product.price'] } }
+                    }
+
+
+                }, {
+                    $lookup: {
+                        from: 'categorys',
+                        localField: 'product.category',
+                        foreignField: '_id',
+                        as: 'category'
+                    }
+                }, {
+                    $project: {
+
+                        productId: 1, quantity: 1, totalQty: 1, product: 1, amount: 1, image: 1, category: { $arrayElemAt: ['$category.title', 0] }
+                    }
+                }
+            ]);
+            return products
+        } else {
+            return null
         }
-    });
+
+    } catch (error) {
+        throw error;
+    }
+};
+const getCart = async (req, res) => {
+    try {
+        const ID = new mongoose.Types.ObjectId(req.session.user._id);
+        const total_cost = await getCartTotalamount(ID)
+        const totalItems = await getCartCount(ID)
+        const cartProducts = await getCartItems(ID)
+        console.log("cartItems", cartProducts);
+        let validItems;
+        if (cartProducts){
+        const items = cartProducts.filter(item => item.product.active == true)
+        if (items.length > 0) {
+            console.log("sambhavam irukk");
+            validItems = true
+        } else {
+            validItems = false
+        }
+    }
+        res.render("users/cart", { cartProducts, validItems, totalCost: total_cost.totalAmount, totalItems, user: req.session.user });
+
+
+    } catch (error) {
+        console.log(error)
+        // throw new Error(error);
+    }
 };
 
 const getCartCount = (ID) => {
@@ -442,7 +460,7 @@ const getCartCount = (ID) => {
     return new Promise(async (resolve, reject) => {
 
         try {
-            await cart.findOne({ userId: ID }, { totalQty: 1 }).then((data) => {
+            await cart.findOne({ userId: ID, active: true }, { totalQty: 1 }).then((data) => {
                 if (data) {
                     resolve(data.totalQty);
                 } else {
@@ -483,6 +501,10 @@ const getCartTotalamount = (userID) => {
                         }
                     }, {
                         $project: {
+                            productId: 1, quantity: 1, totalQty: 1, product: { $filter: { input: "$product", as: "product", cond: { $eq: ["$$product.active", true] } } }
+                        }
+                    }, {
+                        $project: {
                             productId: 1, quantity: 1, totalQty: 1, product: { $arrayElemAt: ['$product', 0] }
                         }
                     }, {
@@ -492,6 +514,9 @@ const getCartTotalamount = (userID) => {
                         }
                     }
                 ]);
+
+
+
                 if (totalAmount.length !== 0) {
                     resolve({ status: true, totalAmount });
                 }
@@ -563,21 +588,18 @@ const changeCartProductCount = (userID, data) => {
 
 const viewCheckout = async (req, res) => {
     try {
+        await orders.findOneAndDelete({ _id: req.session.newOrderId, paymentMethod: 'online_payment', paymentStatus: 'Not Paid' })
         const userid = new mongoose.Types.ObjectId(req.session.user._id);
         let userAddress;
         const address = await users.findOne({ _id: userid }, 'addressDetails').lean();
         if (address) {
             userAddress = address.addressDetails;
         }
-        const orderdetails = await getCartItems(req.session.user._id);
-        const orderDetails = orderdetails.cartItems;
-        const totalcost = await getCartTotalamount(req.session.user._id);
-        let totalCost;
-        if (totalcost.status) {
-            totalCost = totalcost.totalAmount[0].totalCost;
-        }
-        if (orderdetails.status) {
-
+        const orderDetails = await getCartItems(userid);
+        console.log(orderDetails);
+        
+        if (orderDetails) {
+            const totalCost = await getCartTotalamount(userid)
             { res.render('users/checkout', { userAddress, totalCost, orderDetails, user: req.session.user, }) };
         }
         else {
@@ -589,13 +611,32 @@ const viewCheckout = async (req, res) => {
     }
 };
 
+
+
+const applyCoupon = async (req, res) => {
+    console.log(req.body)
+    const currentDate = new Date();
+    let Coupon = await coupon.findOne({ code: req.body.code, expirationDate: { $gt: currentDate }, active: true }).lean()
+    console.log(Coupon);
+    if (Coupon) {
+        res.json({ status: true, Coupon })
+    } else {
+        res.json({ status: false })
+
+    }
+}
+
 const cartPlaceOrder = async (req, res) => {
     try {
         const addressId = req.body.address;
+        if (!addressId) {
+            res.json({ addresserr: true });
+            return
+        }
         const userid = req.session.user._id;
         const ID = new mongoose.Types.ObjectId(userid);
         const Address = await users.findOne({ _id: userid }, { addressDetails: { $elemMatch: { _id: addressId } } }).lean();
-        const items = await cart.aggregate([
+        const Items = await cart.aggregate([
             {
                 $match: { userId: ID }
             }
@@ -617,6 +658,10 @@ const cartPlaceOrder = async (req, res) => {
                 }
             }, {
                 $project: {
+                    productId: 1, quantity: 1, totalQty: 1, product: { $filter: { input: "$product", as: "product", cond: { $eq: ["$$product.active", true] } } }
+                }
+            }, {
+                $project: {
                     productId: 1, quantity: 1, totalQty: 1, product: { $arrayElemAt: ['$product', 0] }
                 }
             }
@@ -634,6 +679,10 @@ const cartPlaceOrder = async (req, res) => {
                 }
             }
         ]);
+
+        console.log("items", Items);
+        const items = Items.filter(item => item.total_amount > 0)
+        console.log("items>>>>>>>", items);
         const OrderItems = items.map((items) => {
             return {
                 product: items.productId,
@@ -642,6 +691,7 @@ const cartPlaceOrder = async (req, res) => {
                 quantity: items.quantity
             };
         });
+        console.log("OrderItems", OrderItems);
         const Status = 'Placed';
         const newStatus = { status: Status, timestamp: indianTime.toLocaleString('IND', options) };
         const TotalAmount = items.reduce((acc, crr) => acc + crr.total_amount, 0);
@@ -680,7 +730,7 @@ const cartPlaceOrder = async (req, res) => {
             //     percent_off: 20, // 20% discount
             //     duration: 'once', // The coupon can be used only once
             // });
-const coupon=[]
+            const coupon = []
 
             const session = await stripe.checkout.sessions.create({
                 payment_method_types: ['card'],
@@ -693,7 +743,7 @@ const coupon=[]
                 }],
             });
 
-         
+
 
 
             session.paymentStatus;
@@ -785,8 +835,10 @@ module.exports = {
     editAddress,
     deleteAddress,
     orderManage,
+    applyCoupon,
     addToCart,
     getCartItems,
+    getCart,
     getCartCount,
     getCartTotalamount,
     deleteCartProduct,

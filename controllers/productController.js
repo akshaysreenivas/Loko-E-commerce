@@ -5,8 +5,6 @@ const { default: mongoose } = require("mongoose");
 
 
 const addCategory = async (req, res) => {
-
-  console.log("hbhj")
   try {
     let filePath;
     let fileName;
@@ -188,17 +186,10 @@ const viewproductsbycategory = async (req, res) => {
   try {
     const Category = new mongoose.Types.ObjectId(req.params.category)
     let category = null
-    const productsByCategory = await products.find({ category: Category }).populate({ path: "category" }).lean()
-    const productsdata = productsByCategory.map((data) => {
-      return {
-        _id: data._id,
-        name: data.name,
-        price: data.price,
-        image: data.images[0].filename
-      };
-    });
-    if (!productsByCategory.length == 0) {
-      category = productsByCategory[0].category.title
+    const productsdata = await products.find({ category: Category ,active:true}).populate({ path: "category" }).lean()
+    
+    if (!productsdata.length == 0) {
+      category = productsdata[0].category.title
     }
     res.render('users/productByCategory', { productsdata, category, user: req.session.user, totalItems: req.session.cartItemscount })
 
@@ -211,7 +202,7 @@ const viewproductsbycategory = async (req, res) => {
 const viewproducts = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      await products.find({}).populate({ path: "category" }).lean().then((data) => {
+      await products.find({active:true}).populate({ path: "category" }).lean().then((data) => {
         resolve({ status: true, data })
       }).catch((error) => {
         throw error;
@@ -239,13 +230,14 @@ const getSingleproduct = async (req, res) => {
 const deleteProduct = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const deletedproduct = await products.findOneAndDelete({ _id: data.Id }, { rawResult: true })
-      if (deletedproduct) {
-
-        deletedproduct.value.images.map(item => fs.unlinkSync(item.path))
+      let p=await products.find({ _id: data.Id })
+      console.log(">>>>>>>",p);
+      await products.findOneAndUpdate({ _id: data.Id },{$set:{active:false}})
+      .then(()=>{
         resolve({ status: true })
-      }
+      })
 
+      
     } catch (error) {
       throw (error)
     }

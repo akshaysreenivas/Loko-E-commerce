@@ -1,40 +1,43 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
 {{>userNavbar}}
 
 
 <section class="contents py-3 px-5">
 
-  <div class="container   row justify-content-between ">  
-{{#if orderDetails}}
-<div class=" col-lg-8">
-    <form  id="placeOrderForm">
+  <div class="container   row justify-content-between ">
+    {{#if orderDetails}}
+    <div class=" col-lg-8">
+      <form id="placeOrderForm">
 
-      {{#if userAddress}}
-      <h3>Select Delivery Address</h3>
-      <div class="">
-        {{#each userAddress}}
-        <div class="card   d-flex gap-2 align-items-start flex-row  m-3 box-shadow p-3">
-          <input class="m-1" type="radio"   name="address" value="{{_id}}" id="addresscheckbox" required>
-          <div class=" ">
+        {{#if userAddress}}
+        <h3>Select Delivery Address</h3>
+        <div class="">
+          {{#each userAddress}}
+          <div class="card   d-flex gap-2 align-items-start flex-row  m-3 box-shadow p-3">
+            <input class="m-1" type="radio" name="address" value="{{_id}}" id="addresscheckbox" required>
             <div class=" ">
-              <p class="m-0 px-1 pb-1">{{ name }} </p>
-              <p class="m-0 px-1 "> {{ phone}}</p>
-            </div>
-            <div class="d-flex  ">
-              <p class="p-1 m-0"> {{street}} , {{city}} , {{state}} , {{pin_code}} </p>
+              <div class=" ">
+                <p class="m-0 px-1 pb-1">{{ name }} </p>
+                <p class="m-0 px-1 "> {{ phone}}</p>
+              </div>
+              <div class="d-flex  ">
+                <p class="p-1 m-0"> {{street}} , {{city}} , {{state}} , {{pin_code}} </p>
+              </div>
             </div>
           </div>
+          {{/each}}
         </div>
-        {{/each}}
-      </div>
-      {{/if}}
-      <div class="container mx-0 my-4  p-2 border border-secondary box-shadow rounded ">
-        <a class="btn btn-outline-dark d-flex p-3" href="/addAddress" role="button"><span
-            class="material-icons-sharp">add</span> Add New address</a>
+        {{/if}}
+        <div class="container mx-0 my-4  p-2 border border-secondary box-shadow rounded ">
+          <a class="btn btn-outline-dark d-flex p-3" href="/addAddress" role="button"><span
+              class="material-icons-sharp">add</span> Add New address</a>
 
-      </div>
-  </div>
- 
-  <div class="col-lg-4">
+        </div>
+    </div>
+
+    <div class="col-lg-4">
       <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span class="text-muted">Your order</span>
         <span class="badge badge-secondary badge-pill"></span>
@@ -43,9 +46,15 @@
         <li>
           <div class="card p-2 mb-1">
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="Promo code">
+              <input type="text" class="form-control" id="promo_code" onblur="javascript:value=value.replace(/\s/g,'');"
+                placeholder="Promo code">
               <div class="input-group-append">
-                <button type="button" class="btn btn-outline-danger">Redeem</button>
+                <button type="button" onclick="applyCoupon()" id="coupon_btn" class="btn btn-outline-danger">
+                  <span id="coupon_submit">Redeem</span>
+                  <span class="spinner-border text-dark p-2 spinner-border-sm" id="spinner_redeem" style="display:none;"
+                    role="status">
+
+                </button>
               </div>
             </div>
           </div>
@@ -60,54 +69,68 @@
           </div>
         </li>
         {{#each orderDetails}}
+        {{#if product.active}}
         <li class="list-group-item d-flex justify-content-between">
           <span>{{truncate product.name 15}} x {{quantity}}(Qty)</span>
           <strong>₹ {{amount}} </strong>
         </li>
+        {{/if}}
         {{/each}}
         <li class="list-group-item d-flex justify-content-between">
           <span>Total </span>
+          {{#each totalCost.totalAmount}}
+
           <strong>₹ {{totalCost}}</strong>
+          {{/each}}
         </li>
         <li class="list-group-item d-flex justify-content-between">
           <span>shipping </span>
-          <span>₹ <span class="text-decoration-line-through text-muted text-light">45</span>Free</span> 
+          <span>₹ <span class="text-decoration-line-through text-muted text-light">45</span>Free</span>
+        </li>
+        <li class="list-group-item  d-flex justify-content-between">
+          {{!-- <span>Amount Payable </span> --}}
+          <strong></strong>
         </li>
         <li class="list-group-item  d-flex justify-content-between">
           <span>Amount Payable </span>
+          {{#each totalCost.totalAmount}}
           <strong>₹ {{totalCost}}</strong>
+          {{/each}}
         </li>
         <li>
           <div class="list-group-item card justify-content-between mt-1 p-3">
             <h5 class="">Payment</h5>
             <div class="custom-control d-flex custom-radio  p-2 mb-1 border gap-2 rounded">
               <input id="cod" name="paymentMethod" type="radio" value="cash_on_delivery" class="custom-control-input"
-                 required>
+                required>
               <label class="custom-control-label" for="cod">COD</label>
             </div>
             <div class="custom-control d-flex custom-radio  p-2 border gap-2 rounded">
               <input id="online" name="paymentMethod" type="radio" value="online_payment" class="custom-control-input">
               <label class="custom-control-label " for="online">Online Payment</label>
             </div>
-           
+
           </div>
         </li>
-                        
+
         <div class="card mt-1 p-2">
-          <button class="btn btn-dark d-flex justify-content-center"  type="submit"><span id="btn_submit" >Place Order</span>
-<span class="spinner-border text-white" id="spinner_checkout"style="display:none"  role="status">
-                        </span>
+          <button class="btn btn-dark d-flex justify-content-center" type="submit"><span id="btn_submit">Place
+              Order</span>
+            <span class="spinner-border text-white" id="spinner_checkout" style="display:none" role="status">
+            </span>
 
           </button>
         </div>
       </ul>
-</form>
+      </form>
     </div>
   </div>
   {{else}}
-  <div class="text-secondary"><h2>NO orders</h2></div>
+  <div class="text-secondary">
+    <h2>NO orders</h2>
+  </div>
   {{/if}}
-   <footer class="my-5 pt-5 text-muted text-center text-small">
+  <footer class="my-5 pt-5 text-muted text-center text-small">
     <p class="mb-1">&copy; 2023-2024 loko</p>
     <ul class="list-inline">
       <li class="list-inline-item"><a href="#">Privacy</a></li>
@@ -118,7 +141,83 @@
 </section>
 
 
+<script>
+  function applyCoupon() {
+    let Code = document.getElementById("promo_code")
+    if (Code.value === "") {
+      swal("!!Enter a Valid Coupon Code");
+
+      return false;
+    }
+    console.log(Code.value)
+    document.getElementById("coupon_btn").disabled = true;
+    document.getElementById("spinner_redeem").style.display = "block";
+    document.getElementById("coupon_submit").style.display = "none";
+    $.ajax({
+      url: "/applyCoupon",
+      method: "POST",
+      data: {
+        code: Code.value
+      },
+      success: function (response) {
+        if (response) {
+          document.getElementById("coupon_btn").disabled = false;
+          document.getElementById("spinner_redeem").style.display = "none";
+          document.getElementById("coupon_submit").style.display = "block";
+        }
+        if (response.status) {
+          swal("Success!", "Coupon applied Succesfully ", "success");
+        }
+        else {
+          swal("Invalid Coupon");
+        }
+      },
+
+    });
+  }
 
 
 
+  $("#placeOrderForm").submit(function (e) {
+    e.preventDefault();
 
+
+    $(':input[type="submit"]').prop('disabled', true);
+    let spinner = document.getElementById("spinner_checkout")
+    let submit = document.getElementById("btn_submit")
+    if (spinner)
+      spinner.style.display = "block";
+    if (submit)
+      submit.style.display = "none";
+    e.preventDefault();
+    $.ajax({
+      url: "/create-checkout-session",
+      method: "POST",
+      dataType: "json",
+      data: $(this).serialize(),
+      success: function (response) {
+        if (response) {
+          if (response.addresserr) {
+            spinner.style.display = "none";
+            submit.style.display = "block";
+    $(':input[type="submit"]').prop('disabled', false);
+
+            swal("Select an address");
+          } else {
+            if (response.status) {
+
+              if (response.url)
+                location.href = response.url;
+              else
+                location.href = '/confirmOrder';
+            }
+          }
+
+        }
+      }
+    })
+  })
+
+
+
+</script>

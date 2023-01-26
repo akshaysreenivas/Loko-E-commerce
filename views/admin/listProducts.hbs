@@ -44,7 +44,7 @@
                                 <!---=============== Edit product ==============--->
 
                                 <td class="p-2 "><a class=" d-flex justify-content-center"
-                                        href="/admin/editProduct/{{this._id}}">
+                                        href="/admin/editProduct/{{this._id}}"  data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit">
                                         <span class="material-icons-sharp">edit</span></a>
                                 </td>
 
@@ -52,7 +52,7 @@
 
                                 <td class="p-2 ">
                                     <a role="button" onclick="deleteProduct('{{_id}}')" data-bs-toggle="modal"
-                                        id="opendatamodal" data-productId="hoi" data-bs-target="#delete-product">
+                                        id="opendatamodal" data-productId="hoi" data-bs-target="#delete-product"  data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete">
                                         <span class="material-icons-sharp text-danger">delete</span>
                                     </a>
                                 </td>

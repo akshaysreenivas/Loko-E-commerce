@@ -1,3 +1,6 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
 {{>adminNavbar}}
 <section class=" admin-section d-flex gap-5">
     {{>adminSideBar}}
@@ -66,8 +69,12 @@
                         {{#each orderItems}}
                         <div class="row mb-3 border p-2 rounded">
                             <div class="col-lg-4">
-                                <img src="/images/{{image.filename}}" class=" img-fluid rounded"
-                                    style=" max-height:6rem;" />
+                                {{#each product.images}}
+                                {{#if @first}}
+
+                                <img src="/images/{{ filename}}" class=" img-fluid rounded" style=" max-height:6rem;" />
+                                {{/if}}
+                                {{/each }}
                             </div>
                             <div class="col-lg-8">
                                 <div class="mb-2"><strong>{{product.name}}</strong></div>
@@ -99,7 +106,7 @@
 
                             <button onclick="changeOrderStatus('{{_id}}','Cancelled')"
                                 class="btn btn-outline-danger text-uppercase">Cancel Order</button>
-                           
+
                             {{/if}}
                         </div>
                     </div>
@@ -117,9 +124,57 @@
 
     </div>
     </div>
-
-
-
 </section>
 
-<!-- Modal -->
+<script>
+    function changeOrderStatus(Id, status) {
+
+        if (status == "Cancelled") {
+            swal({
+                title: "Are you sure?",
+                text: `Cancel The Order`,
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            url: '/admin/cancelOrder',
+                            method: "post",
+                            data: {
+                                id: Id,
+                                Status: status
+                            },
+                            success: (response) => {
+                                location.reload()
+                            }
+                        })
+                    }
+                });
+        } else {
+            swal({
+                title: "Are you sure?",
+                text: `Change order Status to ${status}`,
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            url: '/admin/changeOrderStatus/',
+                            method: "post",
+                            data: {
+                                id: Id,
+                                Status: status
+                            },
+                            success: (response) => {
+                                location.reload()
+                            }
+                        })
+                    }
+                });
+        }
+    }
+</script>

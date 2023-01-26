@@ -137,8 +137,9 @@ router.get(
 // --- order manage ----
 
 router.get('/orders', verifylogin.verifyadminlogin,adminController.listOrders);
-router.get('/orderdeatails/:orderId', verifylogin.verifyadminlogin,adminController.viewOrder);
+router.get('/orderdetails/:orderId', verifylogin.verifyadminlogin,adminController.viewOrder);
 router.post('/changeOrderStatus/', verifylogin.verifyadminlogin,adminController.changeorderStatus);
+router.post('/cancelOrder', verifylogin.verifyadminlogin,adminController.cancelOrder);
 
 // =========block users=====
 
