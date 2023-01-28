@@ -106,8 +106,8 @@ router.get('/categories/:category', productController.viewproductsbycategory)
 
 router.get("/profile", verifylogin.verifyLogin,userController.viewProfile)
 router.get("/orders",verifylogin.verifyLogin,userController.orderManage)
-router.get("/profile_manage",verifylogin.verifyLogin,userController.manageProfile)
 router.get("/address_book",verifylogin.verifyLogin,userController.manageAddress)
+router.get('/coupons', verifylogin.verifyLogin, userController.viewCoupons)
 router.get('/profile/editaddress/:addressid', verifylogin.verifyLogin, userController.addressTobeEdited)
 router.get('/changeuserdetailsOtp', verifylogin.verifyLogin, userController.otpPage)
 

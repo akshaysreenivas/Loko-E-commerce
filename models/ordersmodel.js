@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const { date } = require('random-js')
 const schema = mongoose.Schema
 const indianTime = new Date();
 const options = { timeZone: 'Asia/Kolkata' };
@@ -26,7 +25,7 @@ const orderSchema = new schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'products'
       },
-      unit_amount:{
+      unit_amount: {
         type: Number
       },
       total_amount: {
@@ -55,15 +54,18 @@ const orderSchema = new schema({
   ],
   currentStatus: {
     type: Object,
-    required:true
+    required: true
   },
   paymentStatus: {
     type: String,
     default: "Not Paid",
   },
-  cancelled:{
-    type:Boolean,
-    default:false
+  coupon_used: {
+    type: Object,
+  },
+  cancelled: {
+    type: Boolean,
+    default: false
   },
   orderOn: {
     type: String,

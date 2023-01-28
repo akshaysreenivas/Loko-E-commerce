@@ -21,7 +21,6 @@ const signupPage = (req, res) => {
 
 const userSignup = async (req, res) => {
     const userdata = req.body;
-
     try {
         const user = await users.findOne({ email: userdata.email });
         if (user) {
@@ -121,25 +120,35 @@ const dologin = (data) => {
 const userdetails = async (user_Id) => {
     try {
         return await users.findOne({ _id: user_Id }).lean();
-
     } catch (error) {
         throw error;
     }
 };
 
 const viewProfile = async (req, res) => {
-    const User = await userdetails(req.session.user._id);
-    let user = {
-        name: User.name,
-        email: User.email
+    try {
+        const User = await userdetails(req.session.user._id);
+        let user = {
+            name: User.name,
+            email: User.email
+        }
+        res.render('users/profile', { user: user });
+    } catch (error) {
+        throw new Error(error)
     }
-    res.render('users/profile', { user: user });
 };
 
-const manageProfile = async (req, res) => {
 
-    res.render('users/profileManage', { user: req.session.user });
-};
+
+const viewCoupons = async (req, res) => {
+    const currentDate = new Date()
+    try {
+        const coupons = await coupon.find({ active: true, expirationDate: { $gt: currentDate }, active: true }).lean()
+        res.render("users/coupons", { coupons, user: req.session.user })
+    } catch (error) {
+        throw new Error(error)
+    }
+}
 
 const addAddress = async (req, res) => {
     try {
@@ -370,7 +379,6 @@ const addToCart = (userID, productID, quantity) => {
 const getCartItems = async (userid) => {
     try {
         const ID = new mongoose.Types.ObjectId(userid);
-
         const Cart = await cart.findOne({ userId: ID }).lean();
         if (Cart) {
             const products = await cart.aggregate([
@@ -435,23 +443,20 @@ const getCart = async (req, res) => {
         const total_cost = await getCartTotalamount(ID)
         const totalItems = await getCartCount(ID)
         const cartProducts = await getCartItems(ID)
-        console.log("cartItems", cartProducts);
         let validItems;
-        if (cartProducts){
-        const items = cartProducts.filter(item => item.product.active == true)
-        if (items.length > 0) {
-            console.log("sambhavam irukk");
-            validItems = true
-        } else {
-            validItems = false
+        if (cartProducts) {
+            const items = cartProducts.filter(item => item.product.active == true)
+            if (items.length > 0) {
+                validItems = true
+            } else {
+                validItems = false
+            }
         }
-    }
         res.render("users/cart", { cartProducts, validItems, totalCost: total_cost.totalAmount, totalItems, user: req.session.user });
 
 
     } catch (error) {
-        console.log(error)
-        // throw new Error(error);
+        throw new Error(error);
     }
 };
 
@@ -596,8 +601,6 @@ const viewCheckout = async (req, res) => {
             userAddress = address.addressDetails;
         }
         const orderDetails = await getCartItems(userid);
-        console.log(orderDetails);
-        
         if (orderDetails) {
             const totalCost = await getCartTotalamount(userid)
             { res.render('users/checkout', { userAddress, totalCost, orderDetails, user: req.session.user, }) };
@@ -613,21 +616,38 @@ const viewCheckout = async (req, res) => {
 
 
 
-const applyCoupon = async (req, res) => {
-    console.log(req.body)
-    const currentDate = new Date();
-    let Coupon = await coupon.findOne({ code: req.body.code, expirationDate: { $gt: currentDate }, active: true }).lean()
-    console.log(Coupon);
-    if (Coupon) {
-        res.json({ status: true, Coupon })
-    } else {
-        res.json({ status: false })
 
+const applyCoupon = async (req, res) => {
+    try {
+        const currentDate = new Date();
+        let Coupon = await coupon.findOne({ code: req.body.code, expirationDate: { $gt: currentDate }, active: true }).lean()
+        if (Coupon) {
+            if (req.body.total_amount > Coupon.min_amount) {
+                let discount = req.body.total_amount % Coupon.discount;
+                let total_discount;
+                if (Coupon.max_discount > discount) {
+                    total_discount = discount
+                } else {
+                    total_discount = Coupon.max_discount
+                }
+
+                res.json({ status: true, Coupon, min_total: true, total_discount })
+            } else {
+                res.json({ status: true, min_total: false, Coupon })
+            }
+        } else {
+            res.json({ status: false })
+
+        }
+    } catch (error) {
+        throw new Error(error)
     }
 }
 
 const cartPlaceOrder = async (req, res) => {
     try {
+
+
         const addressId = req.body.address;
         if (!addressId) {
             res.json({ addresserr: true });
@@ -679,10 +699,7 @@ const cartPlaceOrder = async (req, res) => {
                 }
             }
         ]);
-
-        console.log("items", Items);
         const items = Items.filter(item => item.total_amount > 0)
-        console.log("items>>>>>>>", items);
         const OrderItems = items.map((items) => {
             return {
                 product: items.productId,
@@ -691,10 +708,30 @@ const cartPlaceOrder = async (req, res) => {
                 quantity: items.quantity
             };
         });
-        console.log("OrderItems", OrderItems);
         const Status = 'Placed';
         const newStatus = { status: Status, timestamp: indianTime.toLocaleString('IND', options) };
         const TotalAmount = items.reduce((acc, crr) => acc + crr.total_amount, 0);
+
+        let total_discount;
+        let used_coupon;
+        const currentDate = new Date();
+        let Coupon = await coupon.findOne({ code: req.body.coupon, expirationDate: { $gt: currentDate }, active: true }).lean()
+        if (Coupon) {
+            let discount = TotalAmount % Coupon.discount;
+            if (TotalAmount > Coupon.min_amount) {
+                if (Coupon.max_discount > discount) {
+                    total_discount = discount
+                } else {
+                    total_discount = Coupon.max_discount
+                }
+
+            }
+            used_coupon = {
+                coupon_code: Coupon.code,
+                discount: total_discount
+            }
+        }
+
         const newOrder = new orders({
             user: userid,
             address: Address.addressDetails[0],
@@ -702,8 +739,12 @@ const cartPlaceOrder = async (req, res) => {
             timeline: [],
             currentStatus: newStatus,
             orderItems: OrderItems,
-            totalAmount: TotalAmount
+            totalAmount: TotalAmount - total_discount,
+            coupon_used: used_coupon
+
         });
+
+
         newOrder.timeline.push({ status: Status, timestamp: indianTime.toLocaleString('IND', options) });
         if (req.body.paymentMethod === 'cash_on_delivery') {
             await newOrder.save().then(async (order) => {
@@ -723,14 +764,18 @@ const cartPlaceOrder = async (req, res) => {
                     quantity: item.quantity
                 };
             });
+            let coupon = []
+
+            if (Coupon) {
+                coupon = await stripe.coupons.create({
+                    name: Coupon.code,
+                    amount_off: total_discount * 100,
+                    currency: 'inr',
+                    duration: 'once',
+                });
+            }
 
 
-            // const coupon = await stripe.coupons.create({
-            //     name: "my-coupon",
-            //     percent_off: 20, // 20% discount
-            //     duration: 'once', // The coupon can be used only once
-            // });
-            const coupon = []
 
             const session = await stripe.checkout.sessions.create({
                 payment_method_types: ['card'],
@@ -754,9 +799,9 @@ const cartPlaceOrder = async (req, res) => {
             });
         }
 
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: err.message });
+    }
+    catch (error) {
+        throw new Error(error)
     }
 };
 
@@ -831,7 +876,6 @@ module.exports = {
     addressTobeEdited,
     otpGeneration,
     otpVerification,
-    manageProfile,
     editAddress,
     deleteAddress,
     orderManage,
@@ -845,6 +889,7 @@ module.exports = {
     changeCartProductCount,
     addAddress,
     viewCheckout,
+    viewCoupons,
     cartPlaceOrder,
     orderConfirm,
     paymentCancel,

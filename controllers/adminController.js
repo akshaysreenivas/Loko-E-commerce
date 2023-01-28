@@ -149,8 +149,6 @@ const addCoupon = async (req, res) => {
 }
 const saveCoupon = async (req, res) => {
     try {
-        console.log(req.body)
-
         const Coupon = await coupon.findOne({ code: req.body.code })
         if (Coupon) {
             res.json({ status: false, CouponExists: true })
@@ -182,7 +180,6 @@ const editCoupon = async (req, res) => {
 }
 const saveEditedCoupon = async (req, res) => {
     try {
-        console.log(req.body)
         await coupon.findOneAndUpdate({ _id: req.body.couponid }, {
             $set: {
                 code: req.body.code,
@@ -203,7 +200,6 @@ const saveEditedCoupon = async (req, res) => {
 
 }
 const deleteCoupon = async (req, res) => {
-    console.log(">>", req.body.couponid);
     try {
         await coupon.findOneAndUpdate({ _id: req.body.couponid }, { $set: { active: false } })
             .then(() => {

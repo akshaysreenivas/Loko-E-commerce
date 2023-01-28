@@ -231,7 +231,6 @@ const deleteProduct = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       let p=await products.find({ _id: data.Id })
-      console.log(">>>>>>>",p);
       await products.findOneAndUpdate({ _id: data.Id },{$set:{active:false}})
       .then(()=>{
         resolve({ status: true })

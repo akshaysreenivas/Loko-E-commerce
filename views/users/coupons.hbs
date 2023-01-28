@@ -1,0 +1,79 @@
+<style>
+    .couponCode {
+        background-color: red;
+        display: inline-block;
+        width: 100%;
+    }
+
+    .coupon {
+        border: white;
+        border-style: dotted;
+    }
+    
+</style>
+<link rel="stylesheet" href="/stylesheets/couponspage.css">
+
+{{>userNavbar}}
+<div class="container  py-4 mt-4">
+    <div class="d-md-flex d-block py-4 mt-3 d-m-0">
+        {{>userSidebar}}
+        <div class="col-lg-9 my-lg-0 my-1 ms-md-4 justify-content-center ms-sm-2">
+            <h2 class="text-center mb-2">Available Coupons</h2>
+            <div class="row  mx-auto gap-2">
+
+                {{#each coupons}}
+                <div class="card  col-md-4 col-12">
+                    <div class="text-center">
+                        <div class="d-flex flex-row text-center">
+                            <img src="https://i.imgur.com/bIgSEvT.png" class="img-fluid" width="70">
+                            <div class="d-flex flex-column ml-1">
+                                <h1 class="mb-0 percent">{{discount}}%</h1>
+                                <span class="discount">Discount</span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="line">
+                    <span class="text-white">Ultimate discount for all customers across all country on all products
+                    </span>
+                    <div
+                        class="d-flex justify-content-between align-items-center text-danger gap-0 p-2 rounded border  mt-4 coupon-div">
+                        <div class="coupon">
+                            <input type="text" value="{{code}}" name="coupon_code" class="p-2 px-3 border-0 bg-white couponCode "
+                                id="{{_id}}" readonly class="text-center" />
+                        </div>
+                        <div class="copy-coupon">
+                            <button onclick="copyCoupon('{{_id}}')" onmouseout="" id="copy_btn{{_id}}"
+                                class="copy_btn coupon btn btn-secondary">
+                                Copy
+                            </button>
+                        </div>
+                    </div>
+                    {{!-- outFunc('{{_d}}') --}}
+
+                </div>
+                {{/each}}
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function copyCoupon(id) {
+        let buttons = document.getElementsByClassName("copy_btn")
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].innerHTML = "Copy";
+        }
+        const couponCode = document.getElementById(id);
+        const code = couponCode.value
+        navigator.clipboard.writeText(code).then(function () {
+            document.getElementById("copy_btn" + id).innerHTML = "Copied!";
+
+        }, function (err) {
+            console.error('Failed to copy text: ', err);
+        });
+    }
+
+</script>

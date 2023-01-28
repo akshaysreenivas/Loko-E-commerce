@@ -46,8 +46,8 @@
         <li>
           <div class="card p-2 mb-1">
             <div class="input-group">
-              <input type="text" class="form-control" id="promo_code" onblur="javascript:value=value.replace(/\s/g,'');"
-                placeholder="Promo code">
+              <input type="text" class="form-control" name="coupon" id="promo_code"
+                onblur="javascript:value=value.replace(/\s/g,'');" placeholder="Promo code">
               <div class="input-group-append">
                 <button type="button" onclick="applyCoupon()" id="coupon_btn" class="btn btn-outline-danger">
                   <span id="coupon_submit">Redeem</span>
@@ -59,7 +59,7 @@
             </div>
           </div>
         </li>
-        <li>
+        <li class="d-none">
           <div class="list-group-item d-flex justify-content-between bg-light mb-1">
             <div class="text-Danger">
               <h6 class="my-0">Promo code</h6>
@@ -80,21 +80,27 @@
           <span>Total </span>
           {{#each totalCost.totalAmount}}
 
-          <strong>₹ {{totalCost}}</strong>
+          <strong> ₹ <span id="total">{{totalCost}}</span></strong>
           {{/each}}
+        </li>
+        <li class="list-group-item d-flex d-none  justify-content-between" id="coupon_div">
+          <div class="d-flex align-items-center gap-2">
+            <span class="material-icons-sharp">local_offer</span>
+            <span>
+              <p class="m-0 p-0"><strong>Coupon</strong></p>
+              <p class="m-0 p-0" id="my_code"></p>
+            </span>
+          </div>
+          <span>- ₹ <span id="code_amount"></span></span>
         </li>
         <li class="list-group-item d-flex justify-content-between">
           <span>shipping </span>
           <span>₹ <span class="text-decoration-line-through text-muted text-light">45</span>Free</span>
         </li>
         <li class="list-group-item  d-flex justify-content-between">
-          {{!-- <span>Amount Payable </span> --}}
-          <strong></strong>
-        </li>
-        <li class="list-group-item  d-flex justify-content-between">
           <span>Amount Payable </span>
           {{#each totalCost.totalAmount}}
-          <strong>₹ {{totalCost}}</strong>
+          <strong> ₹ <span id="total_payable">{{totalCost}}</span></strong>
           {{/each}}
         </li>
         <li>
@@ -112,7 +118,6 @@
 
           </div>
         </li>
-
         <div class="card mt-1 p-2">
           <button class="btn btn-dark d-flex justify-content-center" type="submit"><span id="btn_submit">Place
               Order</span>
@@ -146,18 +151,19 @@
     let Code = document.getElementById("promo_code")
     if (Code.value === "") {
       swal("!!Enter a Valid Coupon Code");
-
       return false;
     }
-    console.log(Code.value)
     document.getElementById("coupon_btn").disabled = true;
     document.getElementById("spinner_redeem").style.display = "block";
     document.getElementById("coupon_submit").style.display = "none";
+    const amount = document.getElementById("total")
+    const total = amount.innerHTML
     $.ajax({
       url: "/applyCoupon",
       method: "POST",
       data: {
-        code: Code.value
+        code: Code.value,
+        total_amount: total
       },
       success: function (response) {
         if (response) {
@@ -166,7 +172,20 @@
           document.getElementById("coupon_submit").style.display = "block";
         }
         if (response.status) {
-          swal("Success!", "Coupon applied Succesfully ", "success");
+          const code = response.Coupon.code
+          const percent = response.Coupon.discount
+          const minimum = response.Coupon.min_amount
+          if (response.min_total) {
+            $("#coupon_div").removeClass("d-none")
+            swal("Success!", "Coupon applied Succesfully ", "success");
+            document.getElementById("my_code").innerHTML = code
+            document.getElementById("code_amount").innerHTML = response.total_discount
+            document.getElementById("total_payable").innerHTML = total - (response.total_discount)
+          } else {
+            swal("OOPS !", `Offer is only valid on minumum amount of ${minimum}`);
+
+          }
+
         }
         else {
           swal("Invalid Coupon");
@@ -180,8 +199,6 @@
 
   $("#placeOrderForm").submit(function (e) {
     e.preventDefault();
-
-
     $(':input[type="submit"]').prop('disabled', true);
     let spinner = document.getElementById("spinner_checkout")
     let submit = document.getElementById("btn_submit")
@@ -200,7 +217,7 @@
           if (response.addresserr) {
             spinner.style.display = "none";
             submit.style.display = "block";
-    $(':input[type="submit"]').prop('disabled', false);
+            $(':input[type="submit"]').prop('disabled', false);
 
             swal("Select an address");
           } else {
