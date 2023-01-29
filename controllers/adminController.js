@@ -8,6 +8,9 @@ const userslist = require('../models/usermodel');
 const orders = require('../models/ordersmodel');
 const coupon = require("../models/couponmodel");
 const moment = require("moment");
+const categorymodel = require('../models/categorymodel');
+const productmodel = require('../models/productmodel');
+const { json } = require('express');
 const indianTime = new Date();
 const options = { timeZone: 'Asia/Kolkata' };
 
@@ -35,6 +38,46 @@ const adminLogin = async (data) => {
 
     });
 };
+
+
+
+const dashBoard=async(req,res)=>{
+    try {
+        const user_count = await userslist.countDocuments({ blocked:false });
+        const category_count = await categorymodel.countDocuments({});
+        const orders_count = await orders.countDocuments({});
+        const confirmed_count = await orders.countDocuments({"currentStatus.status":"Confirmed"});
+        const shipped_count = await orders.countDocuments({"currentStatus.status":"Shipped"});
+        const delivered_count = await orders.countDocuments({"currentStatus.status":"Delivered"});
+        const cancelled_count = await orders.countDocuments({"currentStatus.status":"cancelled"});
+        const Products_count = await productmodel.countDocuments({active:true});
+
+        const counts={
+            user_count:user_count,
+            category_count:category_count,
+            orders_count:orders_count,
+            Products_count:Products_count,
+        }
+        const piechart={
+            confirmed_count:confirmed_count,
+            shipped_count:shipped_count,
+            delivered_count:delivered_count,
+            cancelled_count:cancelled_count
+        }
+        let pie_chart = JSON.stringify(piechart);
+      
+      
+        let sales = [{date: "2022-01-01", sales: 100}, {date: "2022-01-02", sales: 200}, {date: "2022-01-03", sales: 150}];
+        let salesData=JSON.stringify(sales)
+        res.render("admin/dashboard",{counts,pie_chart,salesData})
+      } catch(error) {
+       throw new Error(error)
+      }
+      
+}
+const salesReport=async(req,res)=>{
+res.render("admin/analytics")
+}
 
 // ---manage users----
 
@@ -222,6 +265,8 @@ const logout = (req, res) => {
 
 module.exports = {
     adminLogin,
+    dashBoard,
+    salesReport,
     getusersData,
     blockUser,
     cancelOrder,

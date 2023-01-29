@@ -55,13 +55,10 @@ const userSignup = async (req, res) => {
                             }
                         });
                 })
-                .catch((err) => {
-                    throw err;
-                });
+
         }
-    }
-    catch (error) {
-        throw error;
+    } catch (error) {
+        throw new Error(error)
     }
 };
 
@@ -112,16 +109,22 @@ const dologin = (data) => {
             }
 
         } catch (error) {
-            throw error;
+            throw new Error(error)
         }
     });
 };
+
+// app.get('/search', 
+
+
+
+
 
 const userdetails = async (user_Id) => {
     try {
         return await users.findOne({ _id: user_Id }).lean();
     } catch (error) {
-        throw error;
+        throw new Error(error)
     }
 };
 
@@ -164,8 +167,8 @@ const addAddress = async (req, res) => {
         await users.updateOne({ _id: userid }, { $push: { addressDetails: newaddressDetails } }, { new: true }).then(() => {
             res.json({ status: true });
         });
-    } catch (err) {
-        throw err;
+    } catch (error) {
+        throw new Error(error)
     }
 };
 
@@ -182,6 +185,7 @@ const manageAddress = async (req, res) => {
 const orderManage = async (req, res) => {
     try {
         const allOrders = await orders.find({ user: req.session.user._id }).populate({ path: 'orderItems.product' }).lean();
+        console.log(allOrders[0].timeline)
         res.render('users/orders', { allOrders, user: req.session.user });
     } catch (error) {
         res.render('error', { error });
@@ -230,7 +234,7 @@ const deleteAddress = async (req, res) => {
                 res.json({ status: true });
             });
     } catch (error) {
-        throw error;
+        throw new Error(error)
     }
 };
 
@@ -370,7 +374,7 @@ const addToCart = (userID, productID, quantity) => {
             }
 
         } catch (error) {
-            throw error;
+            throw new Error(error)
         }
 
     });
@@ -434,7 +438,7 @@ const getCartItems = async (userid) => {
         }
 
     } catch (error) {
-        throw error;
+        throw new Error(error)
     }
 };
 const getCart = async (req, res) => {
@@ -473,7 +477,7 @@ const getCartCount = (ID) => {
                 }
             });
         } catch (error) {
-            throw error;
+            throw new Error(error)
         }
 
     });
@@ -586,7 +590,7 @@ const changeCartProductCount = (userID, data) => {
                 }
             }
         } catch (error) {
-            throw error;
+            throw new Error(error)
         }
     });
 };
@@ -609,8 +613,8 @@ const viewCheckout = async (req, res) => {
 
             { res.redirect("/") };
         }
-    } catch (err) {
-        throw err;
+    } catch (error) {
+        throw new Error(error)
     }
 };
 

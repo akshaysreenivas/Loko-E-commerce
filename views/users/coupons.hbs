@@ -1,15 +1,5 @@
 <style>
-    .couponCode {
-        background-color: red;
-        display: inline-block;
-        width: 100%;
-    }
-
-    .coupon {
-        border: white;
-        border-style: dotted;
-    }
-    
+   
 </style>
 <link rel="stylesheet" href="/stylesheets/couponspage.css">
 
@@ -20,7 +10,7 @@
         <div class="col-lg-9 my-lg-0 my-1 ms-md-4 justify-content-center ms-sm-2">
             <h2 class="text-center mb-2">Available Coupons</h2>
             <div class="row  mx-auto gap-2">
-
+                {{#if coupons}}
                 {{#each coupons}}
                 <div class="card  col-md-4 col-12">
                     <div class="text-center">
@@ -38,8 +28,9 @@
                     <div
                         class="d-flex justify-content-between align-items-center text-danger gap-0 p-2 rounded border  mt-4 coupon-div">
                         <div class="coupon">
-                            <input type="text" value="{{code}}" name="coupon_code" class="p-2 px-3 border-0 bg-white couponCode "
-                                id="{{_id}}" readonly class="text-center" />
+                            <input type="text" value="{{code}}" name="coupon_code"
+                                class="p-2 px-3 border-0 bg-white couponCode " id="{{_id}}" readonly
+                                class="text-center" />
                         </div>
                         <div class="copy-coupon">
                             <button onclick="copyCoupon('{{_id}}')" onmouseout="" id="copy_btn{{_id}}"
@@ -52,7 +43,13 @@
 
                 </div>
                 {{/each}}
+                {{else}}
+                <div class="text-center mt-4 text-secondary">
+                    <h6>Sorry ! No Coupons available for you,</h6>
+                    <h6>Check back again later</h6>
 
+                </div>
+                {{/if}}
             </div>
 
         </div>

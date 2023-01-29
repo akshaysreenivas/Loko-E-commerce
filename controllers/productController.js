@@ -182,19 +182,23 @@ const editproduct = async (req, res) => {
   }
 }
 
+
+
+
 const viewproductsbycategory = async (req, res) => {
   try {
     const Category = new mongoose.Types.ObjectId(req.params.category)
     let category = null
-    const productsdata = await products.find({ category: Category ,active:true}).populate({ path: "category" }).lean()
-    
+    const productsdata = await products.find({ category: Category, active: true }).populate({ path: "category" }).lean()
+
     if (!productsdata.length == 0) {
       category = productsdata[0].category.title
     }
+    console.log(productsdata);
     res.render('users/productByCategory', { productsdata, category, user: req.session.user, totalItems: req.session.cartItemscount })
 
   } catch (error) {
-    throw error;
+    throw new Error(error)
   }
 
 }
@@ -202,13 +206,13 @@ const viewproductsbycategory = async (req, res) => {
 const viewproducts = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      await products.find({active:true}).populate({ path: "category" }).lean().then((data) => {
+      await products.find({ active: true }).populate({ path: "category" }).lean().then((data) => {
         resolve({ status: true, data })
       }).catch((error) => {
         throw error;
       })
     } catch (error) {
-      throw error;
+      throw new Error(error)
     }
 
   })
@@ -230,13 +234,13 @@ const getSingleproduct = async (req, res) => {
 const deleteProduct = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let p=await products.find({ _id: data.Id })
-      await products.findOneAndUpdate({ _id: data.Id },{$set:{active:false}})
-      .then(()=>{
-        resolve({ status: true })
-      })
+      let p = await products.find({ _id: data.Id })
+      await products.findOneAndUpdate({ _id: data.Id }, { $set: { active: false } })
+        .then(() => {
+          resolve({ status: true })
+        })
 
-      
+
     } catch (error) {
       throw (error)
     }

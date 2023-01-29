@@ -3,6 +3,14 @@ const router = express.Router();
 const userController = require("../controllers/userController");
 const productController = require("../controllers/productController");
 const verifylogin = require('../middleware/loginverify');
+const productmodel = require("../models/productmodel");
+
+const mongoose=require("mongoose")
+
+
+
+
+
 
 
 // --------------- user signup ----------------
@@ -170,7 +178,6 @@ router.post("/changeqty", verifylogin.verifyLogin, async (req, res) => {
       })
     });
 });
-
 
 
 // checkout page -------

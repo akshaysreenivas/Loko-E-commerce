@@ -11,7 +11,7 @@ const upload = require('../middleware/image-upload');
 /* GET home page. */
 
 router.get('/', verifylogin.verifyadminlogin, function (req, res) {
-  res.redirect('admin/listProducts');
+  res.redirect('admin/dashboard');
 });
 
 // ---------admin login---------
@@ -140,6 +140,12 @@ router.get('/orders', verifylogin.verifyadminlogin,adminController.listOrders);
 router.get('/orderdetails/:orderId', verifylogin.verifyadminlogin,adminController.viewOrder);
 router.post('/changeOrderStatus/', verifylogin.verifyadminlogin,adminController.changeorderStatus);
 router.post('/cancelOrder', verifylogin.verifyadminlogin,adminController.cancelOrder);
+
+//  ------- dashboard-----
+router.get("/dashboard",verifylogin.verifyadminlogin,adminController.dashBoard)
+// --------sales report------
+router.get("/salesreport",verifylogin.verifyadminlogin,adminController.salesReport)
+
 
 // =========block users=====
 

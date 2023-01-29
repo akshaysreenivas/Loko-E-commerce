@@ -21,8 +21,15 @@ body {
   font-size: 14px;
   font-family: "Poppins", sans-serif;
   user-select: none;
-  /* overflow-x: hidden; */
+  overflow-x: hidden;
 }
+.body_dashboard{
+  background-color: #dee7fdbd;
+}
+.count_div {
+  border-left: solid  10px; 
+}
+
 .nav-bg {
   background-color: rgb(242 242 242);
 }
@@ -357,75 +364,7 @@ aside {
 }
 
 /* Media Queries */
-@media (max-width: 1199.5px) {
-  aside {
-    display: none;
-  }
-  nav ul li {
-    padding: 0 10px;
-  }
-}
 
-@media (max-width: 500px) {
-  .order .progressbar-track .progressbar li {
-    font-size: 1rem;
-  }
-
-  .order .progressbar-track .progressbar li::after {
-    font-size: 0.8rem;
-    top: 35px;
-  }
-
-  #tracker {
-    top: 20px;
-  }
-}
-
-@media (max-width: 440px) {
-  aside {
-    display: none;
-  }
-  #main-content {
-    padding: 20px;
-  }
-
-  .order {
-    padding: 20px;
-  }
-
-  #step-4::after {
-    left: -5px;
-  }
-}
-
-@media (max-width: 395px) {
-  .order .progressbar-track .progressbar li {
-    font-size: 0.8rem;
-  }
-
-  .order .progressbar-track .progressbar li::after {
-    font-size: 0.7rem;
-    top: 35px;
-  }
-
-  #tracker {
-    top: 15px;
-  }
-
-  .order .btn.btn-primary {
-    font-size: 0.85rem;
-  }
-}
-
-@media (max-width: 355px) {
-  #main-content {
-    padding: 15px;
-  }
-
-  .order {
-    padding: 10px;
-  }
-}
 
 .container {
   margin: 30px auto;
