@@ -114,7 +114,6 @@ const dologin = (data) => {
     });
 };
 
-// app.get('/search', 
 
 
 
@@ -715,8 +714,7 @@ const cartPlaceOrder = async (req, res) => {
         const Status = 'Placed';
         const newStatus = { status: Status, timestamp: indianTime.toLocaleString('IND', options) };
         const TotalAmount = items.reduce((acc, crr) => acc + crr.total_amount, 0);
-
-        let total_discount;
+        let total_discount=0;
         let used_coupon;
         const currentDate = new Date();
         let Coupon = await coupon.findOne({ code: req.body.coupon, expirationDate: { $gt: currentDate }, active: true }).lean()
@@ -747,7 +745,7 @@ const cartPlaceOrder = async (req, res) => {
             coupon_used: used_coupon
 
         });
-
+console.log("newOrder",newOrder);
 
         newOrder.timeline.push({ status: Status, timestamp: indianTime.toLocaleString('IND', options) });
         if (req.body.paymentMethod === 'cash_on_delivery') {
@@ -792,11 +790,7 @@ const cartPlaceOrder = async (req, res) => {
                 }],
             });
 
-
-
-
             session.paymentStatus;
-
             await newOrder.save().then(async (order) => {
                 req.session.newOrderId = order._id;
                 res.json({ status: true, url: session.url });

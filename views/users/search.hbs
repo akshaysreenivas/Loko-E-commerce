@@ -1,0 +1,50 @@
+
+{{>userNavbar}}
+
+
+<section class="contents py-5 px-5">
+
+    <div class="container mt-4">
+
+        <div class="row">
+            {{#if productsdata}}
+            {{#each productsdata}}
+            <div class="col-lg-3 col-sm-6 mb-4 p-3">
+                <div class=" d-flex flex-column align-items-center justify-content-center rounded product-item p-3  border"
+                    style=" box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px; background-color: #f7f3f399;">
+                    <div class="product rounded">
+                        {{#each images }}
+                        {{#if @first}}
+                        <img src="/images/{{filename}}" class="img-fluid" alt="">
+
+                        {{/if}}
+                        {{/each}}
+                        <ul class="d-flex align-items-center justify-content-center list-unstyled icons">
+                            <li class="icon "><span class="material-icons-sharp">favorite_border </span></li>
+                            <a href="/product/{{this._id}}" class="text-dark text-decoration-none">
+                                <li class="icon mx-2"> <span class="material-icons-sharp">zoom_out_map</span></li>
+                            </a>
+                            <li class="icon"><span onclick="addToCart('{{this._id}}')"
+                                    class="material-icons-sharp">shopping_bag</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="title pt-4 pb-1">{{truncate name 18}}</div>
+                    <div class="d-flex align-content-center justify-content-center">
+
+                    </div>
+                    <div class="price">₹ {{price}}</div>
+                </div>
+            </div>
+            {{/each}}
+            {{else}}
+            <div class="col-12">
+                <h4 class="text-secondary text-center">No Result for your Search</h4>
+            </div>
+            {{/if}}
+
+
+        </div>
+    </div>
+
+</section>

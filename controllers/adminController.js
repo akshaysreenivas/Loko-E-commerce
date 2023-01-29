@@ -10,7 +10,7 @@ const coupon = require("../models/couponmodel");
 const moment = require("moment");
 const categorymodel = require('../models/categorymodel');
 const productmodel = require('../models/productmodel');
-const { json } = require('express');
+const { date } = require('random-js');
 const indianTime = new Date();
 const options = { timeZone: 'Asia/Kolkata' };
 
@@ -41,42 +41,96 @@ const adminLogin = async (data) => {
 
 
 
-const dashBoard=async(req,res)=>{
+const dashBoard = async (req, res) => {
     try {
-        const user_count = await userslist.countDocuments({ blocked:false });
-        const category_count = await categorymodel.countDocuments({});
+        const user_count = await userslist.countDocuments({ blocked: false });
         const orders_count = await orders.countDocuments({});
-        const confirmed_count = await orders.countDocuments({"currentStatus.status":"Confirmed"});
-        const shipped_count = await orders.countDocuments({"currentStatus.status":"Shipped"});
-        const delivered_count = await orders.countDocuments({"currentStatus.status":"Delivered"});
-        const cancelled_count = await orders.countDocuments({"currentStatus.status":"cancelled"});
-        const Products_count = await productmodel.countDocuments({active:true});
+        const confirmed_count = await orders.countDocuments({ "currentStatus.status": "Confirmed" });
+        const shipped_count = await orders.countDocuments({ "currentStatus.status": "Shipped" });
+        const delivered_count = await orders.countDocuments({ "currentStatus.status": "Delivered" });
+        const cancelled_count = await orders.countDocuments({ "currentStatus.status": "cancelled" });
+        const Products_count = await productmodel.countDocuments({ active: true });
+        const totalRevenue = await orders.aggregate([
+            {
+                $match: { "currentStatus.status": "Delivered" }
 
-        const counts={
-            user_count:user_count,
-            category_count:category_count,
-            orders_count:orders_count,
-            Products_count:Products_count,
+            },
+            { $project: { totalRevenue: { $sum: "$totalAmount" } } }
+
+        ])
+        console.log("totalRevenue", totalRevenue);
+
+
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        const salesreport = await orders.aggregate([
+            {
+                $group: {
+                    _id: {
+                        month: { $month: "$orderOn" },
+                        year: { $year: "$orderOn" }
+                    },
+                    sales: { $sum: "$totalAmount" }
+                }
+            },
+            {
+                $project: {
+                    month: "$_id.month",
+                    year: "$_id.year",
+                    sales: 1,
+                    _id: 0
+                }
+            }
+        ])
+
+
+
+        // extract the month and sales data from the report
+        // let labels = salesreport.map(d => d.month+""+d.year);
+        let labels = salesreport.map(d => monthNames[d.month - 1] + "-" + d.year);
+
+        let data = salesreport.map(d => d.sales);
+
+        console.log("labels", labels);
+        console.log("data", data);
+
+        const counts = {
+            user_count: user_count,
+            orders_count: orders_count,
+            totalRevenue: totalRevenue,
+            Products_count: Products_count,
         }
-        const piechart={
-            confirmed_count:confirmed_count,
-            shipped_count:shipped_count,
-            delivered_count:delivered_count,
-            cancelled_count:cancelled_count
+        const piechart = {
+            confirmed_count: confirmed_count,
+            shipped_count: shipped_count,
+            delivered_count: delivered_count,
+            cancelled_count: cancelled_count
         }
+        let sales = salesreport.map(item => {
+            return {
+                date: monthNames[item.month - 1] + "-" + item.year,
+                sales: item.sales
+            }
+        })
+        // let sales = salesreport.map(item => {
+        //     return {
+        //         date: item.month,
+        //         sales: item.sales
+        //     }
+        // })
+        console.log("sales", sales);
         let pie_chart = JSON.stringify(piechart);
-      
-      
-        let sales = [{date: "2022-01-01", sales: 100}, {date: "2022-01-02", sales: 200}, {date: "2022-01-03", sales: 150}];
-        let salesData=JSON.stringify(sales)
-        res.render("admin/dashboard",{counts,pie_chart,salesData})
-      } catch(error) {
-       throw new Error(error)
-      }
-      
+        let salesData = JSON.stringify(sales)
+        let dataforlinegraph = JSON.stringify(data)
+        let labelforline = JSON.stringify(labels)
+        res.render("admin/dashboard", { counts, pie_chart, salesData ,dataforlinegraph,labelforline})
+    } catch (error) {
+        throw new Error(error)
+    }
+
 }
-const salesReport=async(req,res)=>{
-res.render("admin/analytics")
+const salesReport = async (req, res) => {
+    res.render("admin/analytics")
 }
 
 // ---manage users----
@@ -156,10 +210,10 @@ const changeorderStatus = async (req, res) => {
         const newStatus = { status: Status, timestamp: indianTime.toLocaleString('IND', options) };
         await orders.findOneAndUpdate({ _id: ID }, { $set: { currentStatus: newStatus }, $push: { timeline: newStatus } })
             .then(() => {
-                res.json({ status: true }); 
+                res.json({ status: true });
             }).catch(() => {
                 res.json({ status: false });
-            }); 
+            });
     } catch (error) {
         res.render('error', { error: error });
     }
@@ -169,12 +223,12 @@ const cancelOrder = async (req, res) => {
         const Status = "Cancelled";
         const ID = new mongoose.Types.ObjectId(req.body.id);
         const newStatus = { status: Status, timestamp: indianTime.toLocaleString('IND', options) };
-        await orders.findOneAndUpdate({ _id: ID }, { $set: { currentStatus: newStatus ,cancelled:true}, $push: { timeline: newStatus } })
+        await orders.findOneAndUpdate({ _id: ID }, { $set: { currentStatus: newStatus, cancelled: true }, $push: { timeline: newStatus } })
             .then(() => {
-                res.json({ status: true }); 
+                res.json({ status: true });
             }).catch(() => {
                 res.json({ status: false });
-            }); 
+            });
     } catch (error) {
         res.render('error', { error: error });
     }

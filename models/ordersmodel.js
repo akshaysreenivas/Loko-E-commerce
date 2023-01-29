@@ -1,7 +1,9 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const schema = mongoose.Schema
-const indianTime = new Date();
-const options = { timeZone: 'Asia/Kolkata' };
+const moment = require('moment-timezone');
+const nowDate = moment().tz("Asia/Kolkata").toDate();
+console.log(nowDate)
+
 
 
 
@@ -68,8 +70,8 @@ const orderSchema = new schema({
     default: false
   },
   orderOn: {
-    type: String,
-    default: indianTime.toLocaleString('IND', options),
+    type: Date,
+    default:nowDate,
   },
   deliveryDate: {
     type: String,

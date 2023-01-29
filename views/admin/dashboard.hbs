@@ -1,164 +1,127 @@
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 
 <body>
-{{>adminNavbar}}
-<section class="vw-100 admin-section body_dashboard d-flex gap-5">
-    {{>adminSideBar}}
-    <div class="vw-100 main px-5 pt-5  content-admin justify-content-center">
-        <h1>Dashboard</h1>
-        <div class="row  mt-2 g-4 mb-5">
-            <div class="col-md-3 ">
-                <div class="card p-3 box-shadow text-decoration-none  border-success count_div">
-                    <div class="d-md-flex justify-content-between align-items-center p-2 overflow">
-                        <div class="flex-column lh-1 ">
-                            <p class="text-success">Active Users</p>
-                            <span> {{counts.user_count}}</span>
-                        </div>
-                        <div class="flex-column lh-1 ">
-                            <span class="material-icons-sharp">
-                                group
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 ">
-                <div class="card p-3 box-shadow text-decoration-none  border-primary count_div">
-                    <div class="d-md-flex justify-content-between align-items-center p-2 overflow">
-                        <div class="flex-column lh-1  ">
-                            <p class="text-primary">Total Products</p>
-                            <span>{{counts.Products_count}}</span>
-                        </div>
-                        <div class="flex-column lh-1  ">
-                            <span class="material-icons-sharp">
-                                checkroom
-                            </span>
+    {{>adminNavbar}}
+    <section class="vw-100 admin-section body_dashboard d-flex gap-5">
+        {{>adminSideBar}}
+        <div class="vw-100 main px-5 pt-5  content-admin justify-content-center">
+            <h1>Dashboard</h1>
+            <div class="row  mt-2 g-4 mb-5">
+                <div class="col-md-3 ">
+                    <div class="card p-3 box-shadow text-decoration-none  border-success count_div">
+                        <div class="d-md-flex justify-content-between align-items-center p-2 overflow">
+                            <div class="flex-column lh-1 ">
+                                <p class="text-success">Active Users</p>
+                                <span> {{counts.user_count}}</span>
+                            </div>
+                            <div class="flex-column lh-1 ">
+                                <span class="material-icons-sharp text-secondary">
+                                    group
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3 ">
-                <div class="card p-3 box-shadow text-decoration-none  border-success count_div">
-                    <div class="d-md-flex justify-content-between align-items-center p-2 overflow">
-                        <div class="flex-column lh-1  ">
-                            <p class="text-success">Orders</p>
-                            <span> {{counts.orders_count}}</span>
-                        </div>
-                        <div class="flex-column lh-1  ">
-                            <span class="material-icons-sharp">
-                                inventory
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 ">
-                <div class="card p-3 box-shadow text-decoration-none  border-primary count_div">
-                    <div class="d-md-flex justify-content-between align-items-center p-2 overflow">
-                        <div class="flex-column lh-1 ">
-                            <p class="text-primary">Categories</p>
-                            <span> {{counts.category_count}}</span>
-                        </div>
-                        <div class="flex-column lh-1 ">
-                            <span class="material-icons-sharp">
-                                category
-                            </span>
+                <div class="col-md-3 ">
+                    <div class="card p-3 box-shadow text-decoration-none  border-primary count_div">
+                        <div class="d-md-flex justify-content-between align-items-center p-2 overflow">
+                            <div class="flex-column lh-1  ">
+                                <p class="text-primary">Total Products</p>
+                                <span>{{counts.Products_count}}</span>
+                            </div>
+                            <div class="flex-column lh-1  ">
+                                <span class="material-icons-sharp text-secondary">
+                                    checkroom
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="col-md-3 ">
+                    <div class="card p-3 box-shadow text-decoration-none  border-success count_div">
+                        <div class="d-md-flex justify-content-between align-items-center p-2 overflow">
+                            <div class="flex-column lh-1  ">
+                                <p class="text-success">Orders</p>
+                                <span> {{counts.orders_count}}</span>
+                            </div>
+                            <div class="flex-column lh-1  ">
+                                <span class="material-icons-sharp text-secondary">
+                                    inventory
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 ">
+                    <div class="card p-3 box-shadow text-decoration-none  border-primary count_div">
+                        <div class="d-md-flex justify-content-between align-items-center p-2 overflow">
+                            <div class="flex-column lh-1 ">
+                                <p class="text-primary">Total Revenue</p>
+                                {{#each counts.totalRevenue}}
+                                {{#if @first}}
+                                <span> ₹ {{totalRevenue}}</span>
+                                {{/if}}
+                                {{/each}}
+                            </div>
+                            <div class="flex-column lh-1 ">
+                                <span class="material-icons-sharp text-secondary">
+                                    savings
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
 
+            </div>
+            <div class="my-5 row">
+                <div class="order_details col-md-7 col-12">
+                    <div class="box-shadow bg-white p-4 rounded">
+                        <h3>Orders</h3>
+                        <div id="sales-chart" style="width:100%;max-width:700px"></div>
+                    </div>
+                </div>
+                <div class="orders col-md-5 col-12  ">
+                    <div class="box-shadow p-4 bg-white rounded">
+                        <h3> Order Details</h3>
+                        <div id="pieChart" style="width:100%;max-width:700px"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="my-5 row">
-            <div class="order_details col-md-7 col-12">
-                <div class="box-shadow bg-white p-4 rounded">
+    </section>
+    <script>
 
-                    <h3>Orders</h3>
-                    <canvas id="salesChart"></canvas>
-
-                    <div id="sales-chart" style="width:100%;max-width:700px"></div>
-
-                </div>
-            </div>
-            <div class="orders col-md-5 col-12  ">
-                <div class="box-shadow p-4 bg-white rounded">
-                    <h3> Order Details</h3>
-                    <div id="pieChart" style="width:100%;max-width:700px"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+        //----- pie chart  ------
+        const count = {{{ pie_chart }}}
+        const data = [
+            { label: 'Confirmed', value: count.confirmed_count },
+            { label: 'Shipped', value: count.shipped_count },
+            { label: 'Delivered', value: count.delivered_count },
+            { label: 'Cancelled', value: count.cancelled_count }
+        ];
+        let xarray = data.map(d => d.label)
+        let yarray = data.map(d => d.value)
+        const pie_chartData = [{ labels: xarray, values: yarray, hole: .5, type: "pie" }];
+        Plotly.newPlot('pieChart', pie_chartData);
 
 
-<script>
+        //-------bar chart-------
 
-//----- pie chart  ------
-    const count={{{pie_chart}}}
-    const data = [
-        { label: 'Confirmed', value: count.confirmed_count },
-        { label: 'Shipped', value: count.shipped_count },
-        { label: 'Delivered', value: count.delivered_count },
-        { label: 'Cancelled', value: count.cancelled_count }
-    ];
-    let xarray = data.map(d => d.label)
-    let yarray = data.map(d => d.value)
-    const pie_chartData = [{ labels: xarray, values: yarray, hole: .5, type: "pie" }];
-    Plotly.newPlot('pieChart', pie_chartData);
+        const xArray = {{{ labelforline }}};
+        const yArray = {{{ dataforlinegraph }}};
 
-let salesData = JSON.parse('{{{ salesData }}}');
-    let ctx = document.getElementById('salesChart').getContext('2d');
-    let chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: salesData.map(function(d) { return d.date; }),
-            datasets: [{
-                label: 'Sales',
-                data: salesData.map(function(d) { return d.sales; }),
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
+        // Define Data
+        const datas = [{
+            x: xArray,
+            y: yArray,
+            type: "bar"
+        }];
 
-var x = salesData.map(function(d) { return d.month; });
-var y = salesData.map(function(d) { return d.sales; });
-
-var datas = [{
-  x: x,
-  y: y,
-  type: 'bar'
-}];
-
-var layouts = {
-  title: 'Sales Report',
-  xaxis: {
-    title: 'Month'
-  },
-  yaxis: {
-    title: 'Sales'
-  }
-};
-
-Plotly.newPlot('sales-chart', datas, layouts);
-
-
-
-
-
-
-</script>
+        const layout = { title: "Monthly Report" };
+        Plotly.newPlot("sales-chart", datas, layout);
+    </script>
 
 </body>

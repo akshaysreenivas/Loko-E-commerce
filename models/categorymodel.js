@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { string } = require("random-js");
 const Schema = mongoose.Schema;
 
 const categorySchema = new Schema({
