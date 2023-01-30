@@ -2,10 +2,6 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema
 const moment = require('moment-timezone');
 const nowDate = moment().tz("Asia/Kolkata").toDate();
-console.log(nowDate)
-
-
-
 
 const orderSchema = new schema({
 
