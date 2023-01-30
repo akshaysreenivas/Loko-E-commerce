@@ -38,22 +38,19 @@
                                 </p>
                                 <p>Size: {{product.size}}</p>
                                 <div class="d-flex">
-                                    <button type="button" class="btn btn-danger btn-sm mb-2 d-flex gap-1"
+                                    {{!-- <button type="button" class="btn btn-danger btn-sm mb-2 d-flex gap-1"
                                         data-mdb-toggle="tooltip" title="Move to the wish list">
                                         <span class="material-icons-sharp">
                                             favorite_border
-                                        </span> Move to Wishlist </button>
+                                        </span> Move to Wishlist </button> --}}
 
                                 </div>
 
                             </div>
                             <div class="col-lg-4 col-md-6 mb-4 mb-lg-0 d-flex mb-4  justify-content-center  ">
                                 <!-- Quantity -->
-
-
                                 <div class="d-flex mb-4 align-items-center justify-content-center "
                                     style="max-width: 300px ">
-
                                     <button class="btn p-0 reduce-item-quantity{{product._id}} "
                                         onclick="decCount('{{product._id}}',-1)">
                                         <span class="material-icons-sharp">remove</span>

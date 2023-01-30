@@ -82,8 +82,8 @@ const dashBoard = async (req, res) => {
             }
         ])
 
-        let labels = salesreport.map(d => monthNames[d.month - 1] + "-" + d.year);
-        let data = salesreport.map(d => d.sales);
+        const labels = salesreport.map(d => monthNames[d.month - 1] + "-" + d.year);
+        const data = salesreport.map(d => d.sales);
         const counts = {
             user_count: user_count,
             orders_count: orders_count,
@@ -96,17 +96,16 @@ const dashBoard = async (req, res) => {
             delivered_count: delivered_count,
             cancelled_count: cancelled_count
         }
-        let sales = salesreport.map(item => {
+        const sales = salesreport.map(item => {
             return {
                 date: monthNames[item.month - 1] + "-" + item.year,
                 sales: item.sales
             }
         })
-
-        let pie_chart = JSON.stringify(piechart);
-        let salesData = JSON.stringify(sales)
-        let dataforlinegraph = JSON.stringify(data)
-        let labelforline = JSON.stringify(labels)
+        const pie_chart = JSON.stringify(piechart);
+        const salesData = JSON.stringify(sales)
+        const dataforlinegraph = JSON.stringify(data)
+        const labelforline = JSON.stringify(labels)
         res.render("admin/dashboard", { counts:counts ?? 0, pie_chart:pie_chart ?? 0, salesData : salesData??0, dataforlinegraph:dataforlinegraph ?? 0, labelforline:labelforline ??0 })
     } catch (error) {
         throw new Error(error)
