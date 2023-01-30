@@ -186,7 +186,7 @@ router.get('/checkout', verifylogin.verifyLogin, userController.viewCheckout)
 // ------add new address------
 
 router.get('/addAddress', verifylogin.verifyLogin, (req, res) => {
-  res.render('users/addaddress', { user: req.session.user})
+  res.render('users/addAddress', { user: req.session.user})
 })
 
 router.post('/addAddress', verifylogin.verifyLogin, userController.addAddress)
