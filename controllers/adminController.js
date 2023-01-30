@@ -107,7 +107,7 @@ const dashBoard = async (req, res) => {
         let salesData = JSON.stringify(sales)
         let dataforlinegraph = JSON.stringify(data)
         let labelforline = JSON.stringify(labels)
-        res.render("admin/dashboard", { counts, pie_chart, salesData, dataforlinegraph, labelforline })
+        res.render("admin/dashboard", { counts:counts ?? 0, pie_chart:pie_chart ?? 0, salesData : salesData??0, dataforlinegraph:dataforlinegraph ?? 0, labelforline:labelforline ??0 })
     } catch (error) {
         throw new Error(error)
     }
@@ -167,7 +167,7 @@ const salesReport = async (req, res) => {
         const fromDate = new Date(currentYear, 0, 1)
         const toDate = new Date(currentYear + 1, 0, 1)
         const salesReport = await sales_report(fromDate, toDate)
-        res.render("admin/analytics", { salesReport, currentYear })
+        res.render("admin/analytics", { salesReport :salesReport??0, currentYear })
     } catch (error) {
         throw new Error(error)
     }
