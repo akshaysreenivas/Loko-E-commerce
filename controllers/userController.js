@@ -624,15 +624,21 @@ const applyCoupon = async (req, res) => {
         const currentDate = new Date();
         let Coupon = await coupon.findOne({ code: req.body.code, expirationDate: { $gt: currentDate }, active: true }).lean()
         if (Coupon) {
-            if (req.body.total_amount > Coupon.min_amount) {
-                let discount = req.body.total_amount % Coupon.discount;
-                let total_discount;
+            const total= parseInt(req.body.total_amount)
+            console.log("req.body.total_amount ",total );
+            console.log("Coupon.min_amount ",Coupon.min_amount );
+            if (total > Coupon.min_amount) {
+                console.log("Coupon.discount",Coupon.discount);
+                let discount =parseInt((total * Coupon.discount)/100);
+                let total_discount=0;
+                console.log("Coupon.max_discount",Coupon.max_discount);
+                console.log("discount",discount);
                 if (Coupon.max_discount > discount) {
                     total_discount = discount
                 } else {
                     total_discount = Coupon.max_discount
                 }
-
+console.log("total_discount",total_discount);
                 res.json({ status: true, Coupon, min_total: true, total_discount })
             } else {
                 res.json({ status: true, min_total: false, Coupon })
