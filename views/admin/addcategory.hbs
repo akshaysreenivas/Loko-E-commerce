@@ -134,7 +134,6 @@
         let image = $("#image")[0].files[0];
         formData.append("categoryimage", image);
         formData.append("category", $("#category").val());
-        alert("jii")
         $.ajax({
             url: "/admin/addCategory",
             method: "POST",

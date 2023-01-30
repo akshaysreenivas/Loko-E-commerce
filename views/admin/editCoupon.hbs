@@ -57,7 +57,6 @@
 <script>
     $("#edit-coupon-form").submit(function (e) {
         e.preventDefault();
-        alert($(this).serialize())
         $.ajax({
             url: "/admin/saveEditedCoupon",
             method: "POST",

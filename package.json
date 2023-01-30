@@ -27,6 +27,7 @@
     "nodemailer": "^6.8.0",
     "otplib": "^12.0.1",
     "path": "^0.12.7",
+    "pdfkit-table": "^0.1.99",
     "random-js": "^2.1.0",
     "randomstring": "^1.2.3",
     "req-flash": "^0.0.3",

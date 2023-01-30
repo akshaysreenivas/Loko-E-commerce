@@ -8,9 +8,8 @@ const userslist = require('../models/usermodel');
 const orders = require('../models/ordersmodel');
 const coupon = require("../models/couponmodel");
 const moment = require("moment");
-const categorymodel = require('../models/categorymodel');
 const productmodel = require('../models/productmodel');
-const { date } = require('random-js');
+const getSalesReport = require('../helpers.js/salesreport');
 const indianTime = new Date();
 const options = { timeZone: 'Asia/Kolkata' };
 
@@ -58,8 +57,6 @@ const dashBoard = async (req, res) => {
             { $project: { totalRevenue: { $sum: "$totalAmount" } } }
 
         ])
-        console.log("totalRevenue", totalRevenue);
-
 
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -80,20 +77,13 @@ const dashBoard = async (req, res) => {
                     sales: 1,
                     _id: 0
                 }
+            }, {
+                $sort: { month: 1, year: 1 }
             }
         ])
 
-
-
-        // extract the month and sales data from the report
-        // let labels = salesreport.map(d => d.month+""+d.year);
         let labels = salesreport.map(d => monthNames[d.month - 1] + "-" + d.year);
-
         let data = salesreport.map(d => d.sales);
-
-        console.log("labels", labels);
-        console.log("data", data);
-
         const counts = {
             user_count: user_count,
             orders_count: orders_count,
@@ -112,26 +102,96 @@ const dashBoard = async (req, res) => {
                 sales: item.sales
             }
         })
-        // let sales = salesreport.map(item => {
-        //     return {
-        //         date: item.month,
-        //         sales: item.sales
-        //     }
-        // })
-        console.log("sales", sales);
+
         let pie_chart = JSON.stringify(piechart);
         let salesData = JSON.stringify(sales)
         let dataforlinegraph = JSON.stringify(data)
         let labelforline = JSON.stringify(labels)
-        res.render("admin/dashboard", { counts, pie_chart, salesData ,dataforlinegraph,labelforline})
+        res.render("admin/dashboard", { counts, pie_chart, salesData, dataforlinegraph, labelforline })
     } catch (error) {
         throw new Error(error)
     }
 
 }
-const salesReport = async (req, res) => {
-    res.render("admin/analytics")
+
+const sales_report = async (fromDate, toDate) => {
+    try {
+        const sales_report = await orders.aggregate([
+            {
+                $match: {
+                    "currentStatus.status": "Delivered",
+                    "orderOn": { $gte: fromDate, $lt: toDate }
+
+                }
+            },
+            {
+                $unwind: "$orderItems"
+            },
+            {
+                $group: {
+                    _id: {
+                        month: { $month: "$orderOn" },
+                        year: { $year: "$orderOn" }
+                    },
+                    sales: { $sum: "$totalAmount" },
+                    products: { $sum: "$orderItems.quantity" },
+                    orders: { $sum: 1 },
+                }
+            },
+            {
+                $project: { month: "$_id.month", year: "$_id.year", sales: 1, products: 1, orders: 1, _id: 0 }
+            }, {
+                $sort: { month: 1, year: 1 }
+            }
+        ])
+
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const salesReport = sales_report.map(item => {
+            return {
+                date: monthNames[item.month - 1],
+                totalAmount: item.sales,
+                totalOrders: item.orders,
+                TotalProductsSold: item.products
+            }
+        })
+
+
+        return salesReport
+    } catch (error) {
+        throw new Error(error)
+    }
 }
+const salesReport = async (req, res) => {
+    try {
+        const currentYear = new Date().getFullYear();
+        const fromDate = new Date(currentYear, 0, 1)
+        const toDate = new Date(currentYear + 1, 0, 1)
+        const salesReport = await sales_report(fromDate, toDate)
+        res.render("admin/analytics", { salesReport, currentYear })
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+
+
+const generateSalesReport = async (req, res) => {
+    try {
+        const fromDate = req.body.fromDate
+        const toDate = req.body.toDate
+       const salesReport= await sales_report(moment(fromDate, "YYYY-MM-DD").toDate(), moment(toDate, "YYYY-MM-DD").toDate())
+        const reportData = await getSalesReport(salesReport)
+        if(reportData){
+            res.json({ status: true })
+        }else{
+            res.json({ status: false })
+        }
+       
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
 
 // ---manage users----
 
@@ -333,5 +393,6 @@ module.exports = {
     editCoupon,
     saveEditedCoupon,
     deleteCoupon,
+    generateSalesReport,
     logout
 };

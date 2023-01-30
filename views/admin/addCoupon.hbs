@@ -65,7 +65,7 @@
             </div>
         </div>
         <div class="row container my-5">
-            <div class="col-md-10 col-12 m-auto">
+            <div class="col-md-10 col-12 m-auto table-responsive">
                 <h2 class="mb-3">Coupons</h2>
                 <table class="py-4 mb-3 table table-bordered table-hover" id="categoriesTable">
                     <thead>
@@ -114,17 +114,6 @@ $("#add-coupon-form").submit(function (e) {
             method: "POST",
             data: $(this).serialize(),
             success: function (response) {
-                if (response.status) {
-                    location.reload()
-                }
-                else if (response.CouponExists) {
-                    swal("Category already exists");
-                }
-                else{
-                swal("Failed!","error");
-                }
-            },
-           
         });
    
 })

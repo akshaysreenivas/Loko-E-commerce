@@ -1,9 +1,103 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 {{>adminNavbar}}
 <section class=" admin-section body_dashboard d-flex gap-5">
     {{>adminSideBar}}
     <div class="vw-100 main px-5 pt-5 content-admin justify-content-center d-dlex justify-contents-center  p-5 mb-5">
-    <h1>Sales Report</h1>
-       
+        <h1 class="mb-5">Sales Report</h1>
+
+
+        <div class="box-shadow p-5 rounded bg-white">
+            <h4 class="mb-4">Sales Report {{currentYear}}</h4>
+            <div class="table-responsive ">
+                <table class="py-4 mb-3 table table-hover table-bordered " id="productsTable">
+                    <thead class="bg-dark text-white">
+                        <tr>
+                            <th class="p-2" scope="col">No</th>
+                            <th class="p-2" scope="col">Month</th>
+                            <th class="p-2" scope="col">Amount (₹)</th>
+                            <th class="p-2" scope="col">Orders</th>
+                            <th class="p-2" scope="col">Products Sold</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each salesReport}}
+
+                        <tr>
+                            <td class="px-5 py-3 ">{{increment @index}}</td>
+                            <td class="px-5 py-3  ">{{date}}</td>
+                            <td class="px-5 py-3 ">₹ {{totalAmount}}</td>
+                            <td class="px-5 py-3 ">{{totalOrders}}</td>
+                            <td class="px-5 py-3 ">{{TotalProductsSold}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="box-shadow p-5 rounded bg-white mt-5">
+            <h4 class="mb-4">Generate Sales report</h4>
+            <div>
+                <form id="download_form">
+                    <div class="row align-items-bottom  bg-white">
+                        <div class="col-md-4">
+                            <label for="fromDate" class="form-label">From Date</label>
+                            <input type="date" name="fromDate" class="form-control p-2" max="" id="fromDate" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="toDate" class="form-label">To Date</label>
+                            <input type="date" name="toDate" class="form-control p-2" max="" id="toDate" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="downloadBbutton" class="form-label">Save </label>
+                            <button
+                                class="btn  btn-dark ms-auto form-control d-flex align-items-center justify-content-center gap-2 m-auto py-2"
+                                id="generateBbutton" type="submit">
+                                <span class="" id="generate_submit"> Generate Report</span>
+                                <span class="spinner-border text-white" id="spinner_generate" style="display:none"
+                                    role="status"></span>
+                            </button>
+                            <a class="btn d-none btn-dark ms-auto form-control d-flex align-items-center justify-content-center gap-2 m-auto p-1"
+                                id="downloadBbutton" type="button" href="/salesreport/report.pdf"
+                                download="report.pdf">Download <span
+                                    class="material-icons-sharp p-1">file_download</span></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
 </section>
+
+<script>
+    $("#download_form").submit(function (e) {
+        e.preventDefault();
+        document.getElementById("generateBbutton").disabled = true;
+        document.getElementById("spinner_generate").style.display = "block";
+        document.getElementById("generate_submit").style.display = "none";
+        const amount = document.getElementById("total")
+        $.ajax({
+            url: "/admin/generateSalesReport",
+            method: "POST",
+            data: $(this).serialize(),
+            success: function (response) {
+                if (response.status) {
+                    swal("Succes!", "Sales Report generated Successfully!", "success");
+                    $("#generateBbutton").addClass("d-none")
+                    $("#downloadBbutton").removeClass("d-none")
+                }
+                else {
+                    swal("Failed!", "error");
+                }
+            },
+
+        });
+    })
+
+
+
+
+</script>

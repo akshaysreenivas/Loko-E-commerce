@@ -37,6 +37,9 @@ handlebars.registerHelper('truncate', function (string, length) {
   return _.truncate(string, { 'length': length });
 });
 
+handlebars.registerHelper('increment', function(value, options) {
+  return parseInt(value) + 1;
+});
 
 
 // prevent cache last page

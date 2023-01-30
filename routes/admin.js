@@ -146,7 +146,7 @@ router.get("/dashboard",verifylogin.verifyadminlogin,adminController.dashBoard)
 // --------sales report------
 router.get("/salesreport",verifylogin.verifyadminlogin,adminController.salesReport)
 
-
+router.post("/generateSalesReport",verifylogin.verifyadminlogin,adminController.generateSalesReport)
 // =========block users=====
 
 router.post('/blockUser', verifylogin.verifyadminlogin, (req, res) => {

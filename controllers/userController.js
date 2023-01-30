@@ -184,7 +184,6 @@ const manageAddress = async (req, res) => {
 const orderManage = async (req, res) => {
     try {
         const allOrders = await orders.find({ user: req.session.user._id }).populate({ path: 'orderItems.product' }).lean();
-        console.log(allOrders[0].timeline)
         res.render('users/orders', { allOrders, user: req.session.user });
     } catch (error) {
         res.render('error', { error });
@@ -745,7 +744,6 @@ const cartPlaceOrder = async (req, res) => {
             coupon_used: used_coupon
 
         });
-console.log("newOrder",newOrder);
 
         newOrder.timeline.push({ status: Status, timestamp: indianTime.toLocaleString('IND', options) });
         if (req.body.paymentMethod === 'cash_on_delivery') {

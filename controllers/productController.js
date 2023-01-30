@@ -194,7 +194,6 @@ const viewproductsbycategory = async (req, res) => {
     if (!productsdata.length == 0) {
       category = productsdata[0].category.title
     }
-    console.log(productsdata);
     res.render('users/productByCategory', { productsdata, category, user: req.session.user, totalItems: req.session.cartItemscount })
 
   } catch (error) {
