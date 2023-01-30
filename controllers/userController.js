@@ -183,7 +183,7 @@ const manageAddress = async (req, res) => {
 
 const orderManage = async (req, res) => {
     try {
-        const allOrders = await orders.find({ user: req.session.user._id }).populate({ path: 'orderItems.product' }).lean();
+        const allOrders = await orders.find({ user: req.session.user._id }).sort({ orderOn: -1 }).populate({ path: 'orderItems.product' }).lean();
         res.render('users/orders', { allOrders, user: req.session.user });
     } catch (error) {
         res.render('error', { error });
@@ -624,21 +624,21 @@ const applyCoupon = async (req, res) => {
         const currentDate = new Date();
         let Coupon = await coupon.findOne({ code: req.body.code, expirationDate: { $gt: currentDate }, active: true }).lean()
         if (Coupon) {
-            const total= parseInt(req.body.total_amount)
-            console.log("req.body.total_amount ",total );
-            console.log("Coupon.min_amount ",Coupon.min_amount );
+            const total = parseInt(req.body.total_amount)
+            console.log("req.body.total_amount ", total);
+            console.log("Coupon.min_amount ", Coupon.min_amount);
             if (total > Coupon.min_amount) {
-                console.log("Coupon.discount",Coupon.discount);
-                let discount =parseInt((total * Coupon.discount)/100);
-                let total_discount=0;
-                console.log("Coupon.max_discount",Coupon.max_discount);
-                console.log("discount",discount);
+                console.log("Coupon.discount", Coupon.discount);
+                let discount = parseInt((total * Coupon.discount) / 100);
+                let total_discount = 0;
+                console.log("Coupon.max_discount", Coupon.max_discount);
+                console.log("discount", discount);
                 if (Coupon.max_discount > discount) {
                     total_discount = discount
                 } else {
                     total_discount = Coupon.max_discount
                 }
-console.log("total_discount",total_discount);
+                console.log("total_discount", total_discount);
                 res.json({ status: true, Coupon, min_total: true, total_discount })
             } else {
                 res.json({ status: true, min_total: false, Coupon })
@@ -719,19 +719,21 @@ const cartPlaceOrder = async (req, res) => {
         const Status = 'Placed';
         const newStatus = { status: Status, timestamp: indianTime.toLocaleString('IND', options) };
         const TotalAmount = items.reduce((acc, crr) => acc + crr.total_amount, 0);
-        let total_discount=0;
+        let total_discount = 0;
         let used_coupon;
         const currentDate = new Date();
         let Coupon = await coupon.findOne({ code: req.body.coupon, expirationDate: { $gt: currentDate }, active: true }).lean()
         if (Coupon) {
-            let discount = TotalAmount % Coupon.discount;
+            console.log("TotalAmount",TotalAmount);
+            console.log("Coupon.discount",Coupon.discount);
+            let discount =parseInt(TotalAmount * Coupon.discount)/100;
+            console.log("discount",discount);
             if (TotalAmount > Coupon.min_amount) {
                 if (Coupon.max_discount > discount) {
                     total_discount = discount
                 } else {
                     total_discount = Coupon.max_discount
                 }
-
             }
             used_coupon = {
                 coupon_code: Coupon.code,
@@ -771,7 +773,7 @@ const cartPlaceOrder = async (req, res) => {
                 };
             });
             let coupon = []
-
+            console.log("total_discount", total_discount * 100);
             if (Coupon) {
                 coupon = await stripe.coupons.create({
                     name: Coupon.code,
@@ -803,7 +805,8 @@ const cartPlaceOrder = async (req, res) => {
 
     }
     catch (error) {
-        throw new Error(error)
+        console.log(error)
+        // throw new Error(error)
     }
 };
 
