@@ -9,7 +9,7 @@ const orders = require('../models/ordersmodel');
 const coupon = require("../models/couponmodel");
 const moment = require("moment");
 const productmodel = require('../models/productmodel');
-const getSalesReport = require('../helpers.js/salesreport');
+const getSalesReport = require('../helpers/salesreport');
 const indianTime = new Date();
 const options = { timeZone: 'Asia/Kolkata' };
 
