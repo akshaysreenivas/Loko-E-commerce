@@ -127,18 +127,15 @@ router.post('/changeEmail',verifylogin.verifyLogin,userController.changeEmail)
 router.post('/addAddress', verifylogin.verifyLogin, userController.addAddress)
 router.post('/editaddress', verifylogin.verifyLogin, userController.editAddress)
 router.post('/deleteAddress',verifylogin.verifyLogin,userController.deleteAddress)
-
 router.post('/changeName',verifylogin.verifyLogin,userController.changeName)
 
 // product view ------
 
 router.get("/product/:productID",productController.getSingleproduct)
 
-
 // cart --------
 
 router.get("/cart", verifylogin.verifyLogin,userController.getCart)
-
 
 // post 
 
@@ -180,7 +177,12 @@ router.post("/changeqty", verifylogin.verifyLogin, async (req, res) => {
 });
 
 
-// checkout page -------
+router.get("/wishlist",verifylogin.verifyLogin, userController.getWishlist)
+router.post("/addToWishlist",verifylogin.verifyLogin, userController.addToWishlist)
+
+
+
+// ----- checkout page -------
 router.get('/checkout', verifylogin.verifyLogin, userController.viewCheckout)
 
 // ------add new address------

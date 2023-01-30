@@ -78,11 +78,37 @@ function deleteCategory(Id, image) {
 }
 
 
+// ----ajax for wishlist-----
+
+function addToWishlist(Id) {
+    alert("khg")
+    $.ajax({
+        url: '/addToWishlist',
+        method: 'post',
+        data: {
+            productId: Id
+        },
+        success: (response) => {
+          if ( response.added){
+               swal("Added to Wishlist!", "Item added to Wishlist Successfully!", "success");
+           }else if(response.removed){
+            swal("Item removed from  Wishlist");
+           }else{
+            swal("Error");
+
+           }
+        }
+    })
+
+}
+
+
+
 // -------ajax for cart-------
 // addtocart
 
+
 function addToCart(Id) {
-    $("#add-to-cart-spinner" + Id).addClass("spinner-border");
     $.ajax({
         url: '/addToCart/' + Id,
         method: 'post',
@@ -92,8 +118,7 @@ function addToCart(Id) {
         success: (response) => {
             let count = response.itemCount.totalQty;
             $('#cart-count').html(count)
-            $("#add-to-cart-text" + Id).removeClass("d-none");
-            $(".spinner-border").removeClass("spinner-border");
+          
             swal("Added to cart!", "Item added to cart Successfully!", "success");
         }
     })

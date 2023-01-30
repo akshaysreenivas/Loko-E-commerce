@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const bcrypt = require('bcrypt');
 const coupon = require("../models/couponmodel");
+const wishlist = require('../models/wishlistmodel');
 const indianTime = new Date();
 const options = { timeZone: 'Asia/Kolkata' };
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
@@ -593,6 +594,44 @@ const changeCartProductCount = (userID, data) => {
     });
 };
 
+const addToWishlist = async (req, res) => {
+    try {
+        console.log("hiiiiiiiiiii");
+        const productid = new mongoose.Types.ObjectId(req.body.productID)
+        const userid = new mongoose.Types.ObjectId(req.session.user._id)
+        const WishlistExist = await wishlist.findOne({ userId: userid })
+        if (!WishlistExist) {
+            const newWishlist = new wishlist({
+                userId: userid,
+                products: [{ productId: productid }]
+            });
+            await newWishlist.save().then(() => {
+                res.json({ added: true })
+            })
+        } else {
+            WishlistExist.products.push({ productId: productid })
+        }
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+
+const getWishlist = async (req, res) => {
+    try {
+        const userid = new mongoose.Types.ObjectId(req.session.user._id)
+        const products = await wishlist.find({ userId: userid }).populate("products.productId").lean()
+        console.log("products", products[0]);
+        res.render("users/wishlist", { products, user: req.session.user })
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+
+
+
 const viewCheckout = async (req, res) => {
     try {
         await orders.findOneAndDelete({ _id: req.session.newOrderId, paymentMethod: 'online_payment', paymentStatus: 'Not Paid' })
@@ -724,10 +763,10 @@ const cartPlaceOrder = async (req, res) => {
         const currentDate = new Date();
         let Coupon = await coupon.findOne({ code: req.body.coupon, expirationDate: { $gt: currentDate }, active: true }).lean()
         if (Coupon) {
-            console.log("TotalAmount",TotalAmount);
-            console.log("Coupon.discount",Coupon.discount);
-            let discount =parseInt(TotalAmount * Coupon.discount)/100;
-            console.log("discount",discount);
+            console.log("TotalAmount", TotalAmount);
+            console.log("Coupon.discount", Coupon.discount);
+            let discount = parseInt(TotalAmount * Coupon.discount) / 100;
+            console.log("discount", discount);
             if (TotalAmount > Coupon.min_amount) {
                 if (Coupon.max_discount > discount) {
                     total_discount = discount
@@ -895,6 +934,8 @@ module.exports = {
     addAddress,
     viewCheckout,
     viewCoupons,
+    getWishlist,
+    addToWishlist,
     cartPlaceOrder,
     orderConfirm,
     paymentCancel,

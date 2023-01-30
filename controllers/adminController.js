@@ -52,7 +52,6 @@ const dashBoard = async (req, res) => {
         const totalRevenue = await orders.aggregate([
             {
                 $match: { "currentStatus.status": "Delivered" }
-
             },
             { $project: { totalRevenue: { $sum: "$totalAmount" } } }
 
