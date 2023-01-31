@@ -145,7 +145,7 @@ router.post("/addToCart/:productID", verifylogin.verifyLogin, async (req, res, n
     .addToCart(req.session.user._id, req.params.productID, quantity)
     .then((response) => {
       let itemCount = response.data;
-      res.json({ itemCount });
+      res.json({ status:true, itemCount ,login:true});
     })
     .catch((err) => err);
 });

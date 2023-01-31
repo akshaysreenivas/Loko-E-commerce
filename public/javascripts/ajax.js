@@ -122,24 +122,16 @@ function addToCart(Id) {
         success: (response) => {
 
             if (response) {
-                if (!response.login){
-
-                    location.href = "/login"
-                }else{
+                if (response.status) {
                     let count = response.itemCount.totalQty;
                     $('#cart-count').html(count)
                     swal("Added to cart!", "Item added to cart Successfully!", "success");
                 }
-                
-               
+               else if (!response.login) {
+                    location.href = "/login"
+                }
 
             }
-            else {
-                location.href = "/login"
-
-                swal("error")
-            }
-
         }
     })
 
