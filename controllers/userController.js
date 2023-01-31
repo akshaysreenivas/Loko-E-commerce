@@ -115,11 +115,6 @@ const dologin = (data) => {
     });
 };
 
-
-
-
-
-
 const userdetails = async (user_Id) => {
     try {
         return await users.findOne({ _id: user_Id }).lean();
@@ -140,8 +135,6 @@ const viewProfile = async (req, res) => {
         throw new Error(error)
     }
 };
-
-
 
 const viewCoupons = async (req, res) => {
     const currentDate = new Date()

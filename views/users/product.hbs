@@ -1,37 +1,58 @@
-{{>userNavbar}}
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
+
+{{>userNavbar}}
 <!-------------Product view ------------>
 
 <section class="py-5 contents px-5">
     <div class="container p-4 px-lg-5  border rounded">
         <div class="row gx-4 gx-lg-5 align-items-center">
-            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0 img-fluid" id="product-img"
-                    src="/images/{{image}}" alt="Product image"  /></div>
+
+
+            <div class="col-md-6 col-12">
+                <div class="images p-3">
+                    {{#each productdetails.images}}
+                    {{#if @first}}
+                    <div class="text-center p-4"> <img id="product-img" src="/images/{{filename}}" height="500" />
+                    </div>
+                    {{/if}}
+                    {{/each}}
+                    <div class="d-flex justify-content-center">
+                        {{#each productdetails.images}}
+                        <div class="thumbnail text-center m-1 px-4"> <img onclick="change_image(this)"
+                                src="/images/{{filename}}" width="80"> </div>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+
+
             <div class="col-md-6">
-                <div class="small mb-1">Product Id : {{product._id}}</div>
-                <h1 class="display-5 fw-bolder">{{product.name}}</h1>
+                <div class="small mb-1">Product Id : {{productdetails._id}}</div>
+                <h1 class="display-5 fw-bolder">{{productdetails.name}}</h1>
                 <div class="fs-5 mb-5">
-                    <span><b>₹</b> {{product.price}}</span>
+                    <span><b>₹</b> {{productdetails.price}}</span>
                 </div>
                 <div>
-                    <h5>Category : {{product.category.title}} </h5>
+                    <h5>Category : {{productdetails.category.title}} </h5>
                 </div>
                 <div>
-                    <h5>Size : {{product.size}} </h5>
+                    <h5>Size : {{productdetails.size}} </h5>
                 </div>
 
                 <td class="p-2 "></td>
-                <p class="lead">{{product.product_description}}</p>
+                <p class="lead">{{productdetails.product_description}}</p>
                 <div class="d-flex">
 
                     <button class="btn btn-outline-dark flex-shrink-0 d-flex align-items-center p-2 gap-1 m-2 "
-                        type="button" onclick="addToCart('{{product._id}}')">
+                        type="button" onclick="addToCart('{{productdetails._id}}')">
                         <span class="material-icons-sharp">add_shopping_cart</span>
                         Add to cart
                     </button>
 
-                    <a class="btn btn-outline-dark flex-shrink-0 d-flex align-items-center p-2 gap-1 m-2 "
-                        type="button" href="/checkout">
+                    <a class="btn btn-outline-dark flex-shrink-0 d-flex align-items-center p-2 gap-1 m-2 " type="button"
+                        href="/checkout">
                         <span class="material-icons-sharp">bolt</span>
                         Buy This Now
                     </a>
@@ -55,11 +76,16 @@
 
 </div>
 </section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
 
-      <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
 <script>
+  $("#product-img").elevateZoom({  zoomWindowHeight: 500});
 
-    $("#product-img").elevateZoom();
+  function change_image(image) {
+  document.getElementById("product-img").src = image.src;
+  $("#product-img").elevateZoom({  zoomWindowHeight: 500});
+}
+
+
 
 </script>

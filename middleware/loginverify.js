@@ -5,6 +5,7 @@ module.exports = {
       next();
     } else {
       res.redirect("/login");
+      res.json({login:false})
     }
   }
   ,

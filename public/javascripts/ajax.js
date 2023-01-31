@@ -82,7 +82,7 @@ function deleteCategory(Id, image) {
 
 function addToWishlist(Id) {
     $.ajax({
-        url: '/addToWishlist/'+Id,
+        url: '/addToWishlist/' + Id,
         method: 'post',
         data: {
             productId: Id
@@ -93,6 +93,9 @@ function addToWishlist(Id) {
                     swal("Added to Wishlist!", "Item added to Wishlist Successfully!", "success");
                 } else if (response.removed) {
                     swal("Item removed from  Wishlist");
+                }
+                else if (!response.login) {
+                    location.href = "/login"
                 }
             }
             else {
@@ -117,15 +120,26 @@ function addToCart(Id) {
             productid: Id
         },
         success: (response) => {
-            if(response){
 
-                let count = response.itemCount.totalQty;
-                $('#cart-count').html(count)
-                swal("Added to cart!", "Item added to cart Successfully!", "success");
-            }else{
-                swal("Login to add product to cart");
+            if (response) {
+                if (!response.login){
+
+                    location.href = "/login"
+                }else{
+                    let count = response.itemCount.totalQty;
+                    $('#cart-count').html(count)
+                    swal("Added to cart!", "Item added to cart Successfully!", "success");
+                }
+                
+               
 
             }
+            else {
+                location.href = "/login"
+
+                swal("error")
+            }
+
         }
     })
 

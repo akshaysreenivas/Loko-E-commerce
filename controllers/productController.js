@@ -182,9 +182,6 @@ const editproduct = async (req, res) => {
   }
 }
 
-
-
-
 const viewproductsbycategory = async (req, res) => {
   try {
     const Category = new mongoose.Types.ObjectId(req.params.category)
@@ -219,12 +216,8 @@ const viewproducts = (data) => {
 
 const getSingleproduct = async (req, res) => {
   try {
-    let image;
-    const product = await products.findOne({ _id: req.params.productID }).populate({ path: "category" }).lean()
-    if (product) {
-      image = product.images[0].filename
-    }
-    res.render("users/product", { user: req.session.user, product, image });
+    const productdetails = await products.findOne({ _id: req.params.productID }).populate({ path: "category" }).lean()
+    res.render("users/product", { user: req.session.user, productdetails});
   } catch (error) {
     res.render("error", { error })
   }
