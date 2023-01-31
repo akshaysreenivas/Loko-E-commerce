@@ -8,8 +8,8 @@
 $(document).ready(function () {
     $("#addCategoryForm").submit(function (event) {
         event.preventDefault();
-    alert("kjkbj")
-        
+        alert("kjkbj")
+
     });
 });
 
@@ -81,22 +81,23 @@ function deleteCategory(Id, image) {
 // ----ajax for wishlist-----
 
 function addToWishlist(Id) {
-    alert("khg")
     $.ajax({
-        url: '/addToWishlist',
+        url: '/addToWishlist/'+Id,
         method: 'post',
         data: {
             productId: Id
         },
         success: (response) => {
-          if ( response.added){
-               swal("Added to Wishlist!", "Item added to Wishlist Successfully!", "success");
-           }else if(response.removed){
-            swal("Item removed from  Wishlist");
-           }else{
-            swal("Error");
-
-           }
+            if (response) {
+                if (response.added) {
+                    swal("Added to Wishlist!", "Item added to Wishlist Successfully!", "success");
+                } else if (response.removed) {
+                    swal("Item removed from  Wishlist");
+                }
+            }
+            else {
+                swal("Login to add product to wishlist");
+            }
         }
     })
 
@@ -116,10 +117,15 @@ function addToCart(Id) {
             productid: Id
         },
         success: (response) => {
-            let count = response.itemCount.totalQty;
-            $('#cart-count').html(count)
-          
-            swal("Added to cart!", "Item added to cart Successfully!", "success");
+            if(response){
+
+                let count = response.itemCount.totalQty;
+                $('#cart-count').html(count)
+                swal("Added to cart!", "Item added to cart Successfully!", "success");
+            }else{
+                swal("Login to add product to cart");
+
+            }
         }
     })
 

@@ -5,50 +5,51 @@
     <h2 class=" mb-5"><strong>Whish List</strong></h2>
 
     <div class="row">
+
       {{#each products }}
-        
-      <div class="col-lg-3 col-md-2  mb-4">
+      {{#if @first}}
+      {{#each products}}
+      <div class="col-lg-3 col-sm-6  mb-4">
         <div class="card">
-          <div class="ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/belt.webp" class="w-100 img-fluid" />
-            <a href="#!">
-              <div class="mask">
-                <div class="d-flex justify-content-start align-items-end h-100">
-                  <h5><span class="badge bg-primary ms-2">New</span></h5>
-                </div>
-              </div>
-              <div class="hover-overlay">
-                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-              </div>
-            </a>
-          </div>
+          <a class="text-decoration-none" href="/product/{{productId._id}}">
+            <div class="ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+              {{#each productId.images}}
+              {{#if @first}}
+              <img src="/images/{{filename}}" class="p-2" height="300" />
+              {{/if}}
+
+              {{/each}}
+
+            </div>
+          </a>
           <div class="card-body">
             <a href="" class="text-reset">
               <h5 class="card-title mb-3">{{productId.name}}</h5>
             </a>
             <a href="" class="text-reset">
-              <p>Category</p>
+              <p>{{productId.size}}</p>
             </a>
-            <h6 class="mb-3">$61.99</h6>
+            <h6 class="mb-3">₹ {{productId.selling_price}}</h6>
           </div>
         </div>
       </div>
-
-        {{/each}}
+      {{/each}}
+      {{/if}}
+      {{/each}}
 
     </div>
     {{else}}
     <div class="vh-100 d-flex align-items-center justify-content-center">
-<div>
-  
-      <h6 class="text-secondary text-center mb-4">Wishlist is Empty !</h6>
+      <div>
+
+        <h6 class="text-secondary text-center mb-4">Wishlist is Empty !</h6>
         <a href="/" class="btn btn-dark   text-white m-auto d-flex gap-1" style="max-width: 15rem;">
           <span class="material-icons-sharp">keyboard_backspace</span>
           Continue shopping</a>
-</div>
-      
-  </div>
-  {{/if}}
+      </div>
+
+    </div>
+    {{/if}}
 
 
 </section>

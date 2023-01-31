@@ -596,8 +596,7 @@ const changeCartProductCount = (userID, data) => {
 
 const addToWishlist = async (req, res) => {
     try {
-        console.log("hiiiiiiiiiii");
-        const productid = new mongoose.Types.ObjectId(req.body.productID)
+        const productid = new mongoose.Types.ObjectId(req.params.productID)
         const userid = new mongoose.Types.ObjectId(req.session.user._id)
         const WishlistExist = await wishlist.findOne({ userId: userid })
         if (!WishlistExist) {
@@ -609,7 +608,20 @@ const addToWishlist = async (req, res) => {
                 res.json({ added: true })
             })
         } else {
-            WishlistExist.products.push({ productId: productid })
+            const productIndex = WishlistExist.products.findIndex(item => item.productId.toString() === productid.toString());
+            if (productIndex >= 0) {
+                WishlistExist.products.pull({ productId: productid })
+                await WishlistExist.save().then(() => {
+                    res.json({ removed: true })
+                })
+            } else {
+                WishlistExist.products.push({ productId: productid })
+                await WishlistExist.save().then(() => {
+                    res.json({ added: true })
+                })
+            }
+
+
         }
 
     } catch (error) {
@@ -617,12 +629,54 @@ const addToWishlist = async (req, res) => {
     }
 }
 
+const moveToWishlist = async (req, res) => {
+    try {
+        const productid = new mongoose.Types.ObjectId(req.params.productID)
+        const userid = new mongoose.Types.ObjectId(req.session.user._id)
+        const WishlistExist = await wishlist.findOne({ userId: userid })
+        if (!WishlistExist) {
+            const newWishlist = new wishlist({
+                userId: userid,
+                products: [{ productId: productid }]
+            });
+            await newWishlist.save().then(async () => {
+                await cart.updateOne({ userId: userid }, { $pull: { "products.productId": productid } })
+                res.json({ added: true })
+            })
+        } else {
+            const productIndex = WishlistExist.products.findIndex(item => item.productId.toString() === productid.toString());
+            if (productIndex >= 0) {
+                WishlistExist.products.pull({ productId: productid })
+                await WishlistExist.save().then(() => {
+                    res.json({ removed: true })
+                })
+            } else {
+                WishlistExist.products.push({ productId: productid })
+                await WishlistExist.save().then(async () => {
+                    await cart.findOneAndUpdate(
+                        { userId: userid },
+                        { $pull: { products: { productId: productid } }, $inc: { totalQty: -1 } },
+                        { new: true }
+                    );
+
+                    res.json({ added: true })
+                })
+            }
+
+
+        }
+
+    } catch (error) {
+        throw new Error(error)
+    }
+
+
+}
 
 const getWishlist = async (req, res) => {
     try {
         const userid = new mongoose.Types.ObjectId(req.session.user._id)
         const products = await wishlist.find({ userId: userid }).populate("products.productId").lean()
-        console.log("products", products[0]);
         res.render("users/wishlist", { products, user: req.session.user })
     } catch (error) {
         throw new Error(error)
@@ -664,20 +718,15 @@ const applyCoupon = async (req, res) => {
         let Coupon = await coupon.findOne({ code: req.body.code, expirationDate: { $gt: currentDate }, active: true }).lean()
         if (Coupon) {
             const total = parseInt(req.body.total_amount)
-            console.log("req.body.total_amount ", total);
-            console.log("Coupon.min_amount ", Coupon.min_amount);
             if (total > Coupon.min_amount) {
-                console.log("Coupon.discount", Coupon.discount);
                 let discount = parseInt((total * Coupon.discount) / 100);
                 let total_discount = 0;
-                console.log("Coupon.max_discount", Coupon.max_discount);
-                console.log("discount", discount);
+
                 if (Coupon.max_discount > discount) {
                     total_discount = discount
                 } else {
                     total_discount = Coupon.max_discount
                 }
-                console.log("total_discount", total_discount);
                 res.json({ status: true, Coupon, min_total: true, total_discount })
             } else {
                 res.json({ status: true, min_total: false, Coupon })
@@ -763,10 +812,7 @@ const cartPlaceOrder = async (req, res) => {
         const currentDate = new Date();
         let Coupon = await coupon.findOne({ code: req.body.coupon, expirationDate: { $gt: currentDate }, active: true }).lean()
         if (Coupon) {
-            console.log("TotalAmount", TotalAmount);
-            console.log("Coupon.discount", Coupon.discount);
             let discount = parseInt(TotalAmount * Coupon.discount) / 100;
-            console.log("discount", discount);
             if (TotalAmount > Coupon.min_amount) {
                 if (Coupon.max_discount > discount) {
                     total_discount = discount
@@ -812,7 +858,6 @@ const cartPlaceOrder = async (req, res) => {
                 };
             });
             let coupon = []
-            console.log("total_discount", total_discount * 100);
             if (Coupon) {
                 coupon = await stripe.coupons.create({
                     name: Coupon.code,
@@ -844,8 +889,7 @@ const cartPlaceOrder = async (req, res) => {
 
     }
     catch (error) {
-        console.log(error)
-        // throw new Error(error)
+        throw new Error(error)
     }
 };
 
@@ -936,6 +980,7 @@ module.exports = {
     viewCoupons,
     getWishlist,
     addToWishlist,
+    moveToWishlist,
     cartPlaceOrder,
     orderConfirm,
     paymentCancel,

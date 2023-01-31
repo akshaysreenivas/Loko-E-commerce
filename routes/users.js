@@ -178,7 +178,8 @@ router.post("/changeqty", verifylogin.verifyLogin, async (req, res) => {
 
 
 router.get("/wishlist",verifylogin.verifyLogin, userController.getWishlist)
-router.post("/addToWishlist",verifylogin.verifyLogin, userController.addToWishlist)
+router.post("/addToWishlist/:productID",verifylogin.verifyLogin, userController.addToWishlist)
+router.post("/moveToWishlist/:productID",verifylogin.verifyLogin, userController.moveToWishlist)
 
 
 
