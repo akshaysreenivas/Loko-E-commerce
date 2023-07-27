@@ -14,14 +14,14 @@
                 <div class="images p-3">
                     {{#each productdetails.images}}
                     {{#if @first}}
-                    <div class="text-center p-4"> <img id="product-img" src="/images/{{filename}}" height="500" />
+                    <div class="text-center p-4"> <img id="product-img" src="{{path}}" height="500" />
                     </div>
                     {{/if}}
                     {{/each}}
                     <div class="d-flex justify-content-center">
                         {{#each productdetails.images}}
                         <div class="thumbnail text-center m-1 px-4"> <img onclick="change_image(this)"
-                                src="/images/{{filename}}" width="80"> </div>
+                                src="{{path}}" width="80"> </div>
                         {{/each}}
                     </div>
                 </div>

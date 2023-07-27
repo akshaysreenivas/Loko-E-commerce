@@ -21,6 +21,10 @@ const categorySchema = new Schema({
     default: ""
 
   },
+  cloudinary_id:{
+    type: String,
+    default: ""
+  },
   createdAt: {
     type: Date,
     default: Date.now

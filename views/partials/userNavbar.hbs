@@ -10,9 +10,6 @@
     <div class="collapse navbar-collapse nav-bg py-3" id="navbarNavAltMarkup">
       <div class="navbar-nav d-flex ">
         <a class="nav-link active px-3" aria-current="page" href="/">Home</a>
-       
-       
-
         {{#if user}}
         <div class="d-flex  align-items-center d-sm-px-5 d-sm-mx-5">
           <div class="px-5 ">
@@ -27,16 +24,11 @@
           </div>
           <div class="btn-group">
             <a type="button" class="d-flex justify-content-center btn btn-outline dropdown-toggle p-2 gap-1 nodrop"
-              aria-expanded="false"  href="/profile">
-
+              aria-expanded="false" href="/profile">
               <span class="material-icons-sharp">account_circle</span>
               <span>{{user.name}}</span>
             </a>
-
-            
           </div>
-
-
         </div>
         {{else}}
         <div class="d-flex align-items-center d-sm-px-5 d-sm-mx-5">
@@ -44,9 +36,7 @@
               class="material-icons-sharp">account_circle</span> login</a>
         </div>
         {{/if}}
-      
-</div>
+      </div>
     </div>
   </div>
 </nav>
-

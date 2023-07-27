@@ -173,12 +173,15 @@ function addCount(Id, Count) {
         },
         method: 'post',
         success: (response) => {
-            let count = $('#' + Id).val()
+            console.log(response);
+            let count = $('#count' + Id).val()
+            count=parseInt(count)
             let amount = $('#price' + Id).html()
             let price = (amount / count)
-            count++
+            count=count+1
             let newprice = price * count
-            $('#' + Id).val(count)
+            $('#count' + Id).val(count)
+            console.log(price,newprice,amount,count)
             $('#price' + Id).html(newprice)
             $('.totalcost').html(response.totalCost)
         }
@@ -196,7 +199,8 @@ function decCount(Id, Count) {
         method: 'post',
         success: (response) => {
             if (response) {
-                let count = $('#' + Id).val()
+                let count = $('#count' + Id).val()
+                count=parseInt(count)
                 let totalprice = $('#price' + Id).html()
                 let price = (totalprice / count)
                 count--
@@ -205,7 +209,7 @@ function decCount(Id, Count) {
                 }
                 $('#' + Id).val(count)
                 let newprice = price * count
-                $('#' + Id).val(count)
+                $('#count' + Id).val(count)
                 $('.totalcost').html(response.totalCost)
                 $('#price' + Id).html(newprice)
             }

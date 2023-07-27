@@ -99,7 +99,7 @@ router.get("/", async (req, res) => {
         _id: productsDatas._id,
         name: productsDatas.name,
         price: productsDatas.price,
-        image: productsDatas.images[0].filename,
+        path: productsDatas.images[0].path,
       };
     });  
     res.render("users/home", { productsData,Categorys, totalItems, user: req.session.user });
@@ -166,6 +166,7 @@ router.post("/changeqty", verifylogin.verifyLogin, async (req, res) => {
       userController.getCartTotalamount(req.session.user._id).then((response) => {
         if (response.totalAmount) {
           totalCost = response.totalAmount[0].totalCost
+          console.log(totalCost);
           res.json({ totalCost });
         }
         else {

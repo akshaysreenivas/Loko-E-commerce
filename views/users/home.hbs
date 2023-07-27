@@ -13,8 +13,8 @@
       <div class="col-md-3">
         <a class="card p-1 box-shadow text-decoration-none text-dark" href="/categories/{{_id}}">
           <div class="d-md-flex justify-content-between align-items-center p-2 overflow" >
-            <div class="flex-column lh-1 imagename d-md-block d-none"> <span>{{title}}</span></div>
-            <div> <img src="/images/{{image}}" class="img-fluid" height="100" width="100" /> </div>
+            <div class="flex-column lh-1 imagename d-md-block d-none"><span>{{title}}</span></div>
+            <div> <img src="{{path}}" class="img-fluid" height="100" width="100" /> </div>
           </div>
         </a>
       </div>
@@ -31,7 +31,7 @@
           style=" box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px; background-color: #f7f3f399;">
           <div class="product rounded">
             
-            <img src="/images/{{image}}" class="" height="20" alt="">
+            <img src="{{path}}" class="" height="20" alt="">
            
             <ul class="d-flex align-items-center justify-content-center list-unstyled icons">
               <li class="icon "><span class="material-icons-sharp"  onclick="addToWishlist('{{this._id}}')">favorite_border </span></li>

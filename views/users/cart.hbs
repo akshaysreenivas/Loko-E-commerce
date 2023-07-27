@@ -28,7 +28,7 @@
                                 <a class="bg-image col-lg-3 col-md-12   mb-lg-0 " href="/product/{{productId}}">
                                     {{#each product.images}}
                                     {{#if @first}}
-                                    <img src="/images/{{filename}}" class="  img-fluid rounded"
+                                    <img src="{{path}}" class="  img-fluid rounded"
                                         style="max-width:10rem; max-height:12rem; " />
                                 </a>
                                 {{/if}}
@@ -62,7 +62,7 @@
                                     </button>
 
                                     <div class=" w-50 p-2 ">
-                                        <input id="{{product._id}}" min="1" name="quantity" value="{{quantity}}"
+                                        <input id="count{{product._id}}" min="1" name="quantity" value="{{quantity}}"
                                             type="number" class="form-control" disabled />
                                     </div>
 
@@ -97,7 +97,7 @@
                             <div class="bg-image col-lg-3 col-md-12   mb-lg-0 ">
                                 {{#each product.images}}
                                 {{#if @first}}
-                                <img src="/images/{{filename}}" class="  img-fluid rounded"
+                                <img src="{{path}}" class="  img-fluid rounded"
                                     style="max-width:10rem; max-height:12rem; " />
                             </div>
                             {{/if}}

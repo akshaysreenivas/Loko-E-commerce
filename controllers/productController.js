@@ -2,25 +2,21 @@ const products = require("../models/productmodel");
 const categorys = require('../models/categorymodel');
 const fs = require('fs');
 const { default: mongoose } = require("mongoose");
-
+const cloudinary = require("../utils/cloudinary")
 
 const addCategory = async (req, res) => {
   try {
-    let filePath;
-    let fileName;
-    if (req.file) {
-      fileName = req.file.filename
-      filePath = `${req.file.path}`;
-    }
     const category = await categorys.findOne({ title: req.body.category })
     if (category) {
-      fs.unlinkSync(filePath);
       res.json({ exists: true });
     } else {
+      // Upload image to cloudinary
+      const result = await cloudinary.uploader.upload(req.file.path);
       const newCategory = new categorys({
         title: req.body.category,
         image: req.file.filename,
-        path: req.file.path
+        path: result.secure_url,
+        cloudinary_id: result.public_id
       })
       await newCategory.save().then(() => {
         req.session.categoryAdded = true
@@ -65,21 +61,27 @@ const loadEditCategory = async (req, res) => {
 const editCategory = async (req, res) => {
   try {
     const Category = await categorys.findOne({ _id: req.body.categoryid });
-    const filePath = Category.path
     let img;
     let imgpath;
+    let cloudinaryId;
     if (req.file != null) {
-      fs.unlinkSync(filePath)
+      await cloudinary.uploader.destroy(Category.cloudinary_id);
+      const result = await cloudinary.uploader.upload(req.file.path);
+      cloudinaryId = result.public_id
       img = req.file.filename
-      imgpath = req.file.path
+      imgpath = result.secure_url
+
     } else {
       img = Category.image
-      imgpath = filePath
+      imgpath = Category.path
+      cloudinaryId = Category.cloudinary_id
+
     }
     await categorys.findOneAndUpdate({ _id: req.body.categoryid }, {
       title: req.body.category,
       image: img,
       path: imgpath,
+      cloudinary_id: cloudinaryId,
       updatedAt: Date.now()
     }, { new: true }).then(() => {
       req.session.categoryEdited = true
@@ -92,9 +94,10 @@ const editCategory = async (req, res) => {
 }
 
 const deleteCategory = async (req, res) => {
-  const filePath = `public/images/${req.params.imgpath}`
+
   try {
-    fs.unlinkSync(filePath);
+    const category = await categorys.findOne({ _id: req.params.categoryId })
+    await cloudinary.uploader.destroy(category.cloudinary_id);
     await categorys.deleteOne({ _id: req.params.categoryId }).then(() => {
       res.json({ status: true })
     }).catch((err) => {
@@ -120,26 +123,42 @@ const viewCategory = () => new Promise(async (resolve, reject) => {
 })
 
 const addProduct = async (req, res) => {
-  const data = req.body
   try {
-    const newProduct = new products({
-      name: data.name,
-      price: data.price,
-      size: data.size,
-      images: req.files,
-      selling_price: data.sellingPrice,
-      category: mongoose.Types.ObjectId(data.category),
-      stock: data.quantity,
-      product_description: data.description
-    })
-
-    return await newProduct.save()
-      .then(() => {
-        req.session.productAdded = true
-        res.redirect('/admin/addProduct')
-      }).catch((error) => {
-        throw error;
+    let pictureFiles = req.files;
+    //Check if files exist
+    if (!pictureFiles)
+      return res.status(400).json({ message: "No picture attached!" });
+    //map through images and create a promise array using cloudinary upload function
+    let multiplePicturePromise = pictureFiles.map((picture) =>
+      cloudinary.uploader.upload(picture.path)
+    );
+    // await all the cloudinary upload functions in promise.all
+    let imageResponses = await Promise.all(multiplePicturePromise);
+    const data = req.body
+    imageResponses = imageResponses.map((item) => {
+      return {
+        cloudinary_id: item.public_id,
+        path: item.secure_url
+      };
+    });
+      const newProduct = new products({
+        name: data.name,
+        price: data.price,
+        size: data.size,
+        images: imageResponses,
+        selling_price: data.sellingPrice,
+        category: mongoose.Types.ObjectId(data.category),
+        stock: data.quantity,
+        product_description: data.description
       })
+
+      return await newProduct.save()
+        .then(() => {
+          req.session.productAdded = true
+          res.redirect('/admin/addProduct')
+        }).catch((error) => {
+          throw error;
+        })
   }
   catch (error) {
     throw error;
@@ -147,18 +166,39 @@ const addProduct = async (req, res) => {
 }
 
 const editproduct = async (req, res) => {
+  try {
   const data = req.body
   let images;
   const product = await products.findOne({ _id: req.body.productId })
-
-  product.images.map(item => fs.unlinkSync(item.path))
+ 
   if (req.files != null) {
-    images = req.files
-  } else {
+    let pictureFiles = product.images;
+    let multipledeletePicturePromise = pictureFiles.map((picture) =>
+        cloudinary.uploader.destroy(picture.cloudinary_id)
+      );
+      // await all the cloudinary upload functions in promise.all
+       await Promise.all(multipledeletePicturePromise);
+  
+      //Check if files exist
+      if (!pictureFiles)
+        return res.status(400).json({ message: "No picture attached!" });
+      //map through images and create a promise array using cloudinary upload function
+      let multiplePicturePromise = pictureFiles.map((picture) =>
+        cloudinary.uploader.upload(picture.path)
+      );
+      // await all the cloudinary upload functions in promise.all
+      let imageResponses = await Promise.all(multiplePicturePromise);
+      imageResponses = imageResponses.map((item) => {
+        return {
+          cloudinary_id: item.public_id,
+          path: item.secure_url
+        };
+      });
+    images = imageResponses
+  } else {  
     images = product.images
   }
 
-  try {
     await products.findOneAndUpdate({ _id: data.productId }
       , {
         name: data.name,
@@ -217,7 +257,7 @@ const viewproducts = (data) => {
 const getSingleproduct = async (req, res) => {
   try {
     const productdetails = await products.findOne({ _id: req.params.productID }).populate({ path: "category" }).lean()
-    res.render("users/product", { user: req.session.user, productdetails});
+    res.render("users/product", { user: req.session.user, productdetails });
   } catch (error) {
     res.render("error", { error })
   }
