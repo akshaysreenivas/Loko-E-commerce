@@ -1,36 +1,69 @@
-<section class="vh-100 d-flex align-items-center justify-content-center" style="background-color: #dbdbdb;">
+<link rel="stylesheet" href="/stylesheets/adminLogin.css" />
 
-    <div class="col-md-6 col-lg-7 d-flex align-items-center rounded col-10" style="max-width:600px;">
-        <div class="card-body col-md-6 col-lg-7 p-4 p-lg-5 text-black rounded" style="background-color: #ffffff;">
-            <form action="/admin/adminlogin" method="post" id="adminForm">
 
-                <div class="d-flex justify-content-center" style="width: 100%;">
-                    <h2 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Admin</h2>
+<div class="vh-100 d-flex align-items-center" style="background-color: #ffffff;">
+    <div class="col-xl-10 col-lg-11 login-container">
+        <div class="row">
+            <div class="col-lg-7 img-box">
+                <img src="/images/login-banner.png" alt="">
+            </div>
+            <form action="/admin/adminlogin" method="post" id="adminForm" class="col-lg-5 d-flex no-padding">
+                <div class="login-box">
+                    <h5>Welcome Back!</h5>
+                    <div class="form-outline  p-2">
+                        <h6 class="text-danger">{{message}}</h6>
+                    </div>
+                    <div class="login-row row no-margin">
+                        <label for="ademail"><i class="fas fa-envelope"></i> Email Address</label>
+                        <input class="form-control form-control-sm" type="email" id="ademail"
+                            onblur="javascript:value=value.replace(/\s/g,'');" name="email"
+                            class="form-control form-control-lg px-3">
+                        <small class="text-danger px-2" id="admemailerr"></small>
+                    </div>
+
+                    <div class="login-row row no-margin">
+                        <label for="adpassword"><i class="fas fa-unlock-alt"></i> Password</label>
+                        <div class="d-flex position-relative p-0" style="flex-direction:column;">
+                            <input type="password" id="adpassword" name="password"
+                                class="form-control form-control-sm  d-flex position-relative"
+                                style="widht:100%;flex-direction:column;" onclick="showeye()" />
+
+                            <span class="material-icons-sharp align-self-end  toggle-password" id="eye"
+                                onclick="togglePassword()">
+                            </span>
+                        </div>
+                        <small class="text-danger px-2" id="admpasserr"></small>
+                    </div>
+
+
+
+                    <div class="login-row  row no-margin">
+                        <button class="btn btn-dark btn-lg px-5 " style="width: 75%;border-radius:25px "
+                            type="submit">Login</button>
+                    </div>
+
                 </div>
-
-                <div class="form-outline mb-2 p-2">
-                    <h5 class="text-danger">{{message}}</h5>
-                </div>
-
-                <div class="mb-4 m-3 px-3 p-2">
-                    <input type="email" id="ademail" onblur="javascript:value=value.replace(/\s/g,'');" name="email"
-                        placeholder="Admin id" class="form-control form-control-lg px-3"
-                        style="width: 100%;border-radius:25px" />
-                    <small class="text-danger px-2" id="admemailerr"></small>
-                </div>
-
-                <div class="mb-4 m-3 px-3 p-2">
-                    <input type="password" placeholder="Password " id="adpassword" name="password"
-                        class="form-control form-control-lg px-3" style="width: 100%;border-radius:25px " />
-                    <small class="text-danger px-2" id="admpasserr"></small>
-                </div>
-
-                <div class="mb-4 m-3 px-3 p-2">
-                    <button class="user-login-btn btn-dark p-1" type="submit"
-                        style="width: 100%;border-radius:25px;font-size: 22px;">Login</button>
-                </div>
-
             </form>
         </div>
     </div>
-</section>
+</div>
+
+
+<script>
+    let password = document.getElementById("adpassword");
+    let eye = document.getElementById("eye");
+    function showeye() {
+        eye.innerHTML = "visibility_off"
+    }
+
+    function togglePassword() {
+        if (password.type === "password") {
+            password.type = "text";
+            eye.innerHTML = "visibility"
+
+        } else {
+            eye.innerHTML = "visibility_off"
+            password.type = "password";
+        }
+    }
+</script>

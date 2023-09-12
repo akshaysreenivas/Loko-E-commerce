@@ -1,0 +1,84 @@
+img {
+    max-width: 100%;
+}
+.form-control:focus {
+    box-shadow: none;
+    border: 2px solid #863dd9 !important;
+}
+
+.img-box {
+    margin: auto;
+    padding: 40px;
+    border-right: 1px solid #cccccc5e;
+    text-align: center;
+}
+
+@media screen and (max-width: 991px) {
+    body {
+        overflow: auto;
+    }
+}
+
+.login-container {
+    margin: auto;
+    box-shadow: 1.5px 3.99px 27px 0px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+    background-color: rgba(255, 255, 255, 0.72);
+    margin: auto;
+}
+
+@media screen and (max-width: 991px) {
+    .login-container {
+        margin-bottom: 5%;
+    }
+
+    .img-box {
+        border-right: 0px;
+    }
+}
+
+.login-box {
+    padding: 40px;
+    margin: auto;
+}
+
+.login-box .login-row {
+    margin-top: 25px;
+}
+
+.login-box .login-row input {
+    margin-bottom: 0px;
+}
+
+.login-box label {
+    font-size: .93rem;
+    margin-bottom: 0px;
+    color: #928f8f;
+}
+
+.login-box label i {
+    margin-right: 3px;
+}
+
+.login-box input {
+    border: 0px;
+    border-radius: 0px;
+    border-bottom: 1px solid #CCC;
+    background-color: #fcfbfc1f;
+}
+
+.login-box input:focus {
+    border: 0px !important;
+    border-bottom: 2px solid #5288f4 !important;
+    background-color: #fcfbfc1f !important;
+    margin-top: 0px;
+    transition: 0.1s ease;
+}
+
+/* Style the password toggle button */
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
