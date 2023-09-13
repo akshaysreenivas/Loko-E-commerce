@@ -89,7 +89,7 @@ function validatesignup(e) {
   }
 
   if (password !== confirmPassword) {
-    confirmPasswordErr.innerHTML = 'Passwords doesnt match';
+    confirmPasswordErr.innerHTML = 'Passwords does not match';
     return;
   }
 

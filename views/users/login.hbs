@@ -1,72 +1,97 @@
+
 <link rel="stylesheet" href="/stylesheets/userLogin.css" />
 
 
+<section class="container-fluid form-section  d-flex align-items-center justify-content-center">
+  <div class="container ">
+    <div class="row ">
+      <div class="col-lg-10 col-md-12 login-box">
+        <div class="row">
+          <div class="col-lg-6 col-md-6 log-det">
+            <div class="d-flex align-items-center gap-md-4">
 
-<div class="card-body  text-black rounded p-5" style="background-color: #ffffff;">
-    <form action="/login" method="post" class="" id="loginForm">
-        <h2 class="fw-normal mb-3  p-3" style="letter-spacing: 1px;">Sign in </h2>
-
-        <div class="form-outline mb-2">
-            <h5 class="text-danger">{{message}}</h5>
-        </div>
-        <div class=" m-1 p-2">
-            <label class="p-2" for="email"> Enter Email ID</label>
-            <div class="position-relative"> <input type="email" onblur="javascript:value=value.replace(/\s/g,'');"
-                    id="userEmail" name="email" class="form-control ps-5 py-2 input"
-                    style="width: 100%;border-radius:25px" />
-                <span class="material-icons-sharp icon p-3">
-                    email
-                </span>
+              <img height="30px" src="/images/favicon.jpg" alt="">
+              <h3 class="text-center">User Login</h3>
             </div>
-            <small id="emailerr" class="text-danger px-3"></small>
-        </div>
-        <div class="m-1 p-2">
-            <label class="p-2" for="password">Password</label>
-            <div class="d-flex position-relative" style="flex-direction:column;">
-                <input type="password" id="userPassword" class="form-control ps-5 py-2 input" name="password"
-                    style="width: 100%;border-radius:25px " onclick="showeye()" />
-                <span class="material-icons-sharp icon p-3" id="key">
-                    key
-                </span>
-                <span class="material-icons-sharp align-self-end  toggle-password p-3" id="eye"
-                    onclick="togglePassword()">
 
+            <p class="my-3">Log in to access exclusive discounts, order tracking, and a convenient wishlist feature.</p>
+            <form class="text-box-cont" action="/login" method="post" id="loginForm">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <label for="userEmail">
+                    <span class="input-group-text" id="basic-addon1"><span class="material-icons-sharp">
+                        email
+                      </span></span>
+                  </label>
+                </div>
+                <input type="email" onblur="javascript:value=value.replace(/\s/g,'');" id="userEmail" name="email"
+                  class="form-control" placeholder="Email Address" aria-label="email address">
+              </div>
+              <small id="emailerr" class="text-danger"></small>
+
+
+              <div class="input-group mt-4 position-relative">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon1"><span class="material-icons-sharp">
+                      key
+                    </span></span>
+                </div>
+                <span class="material-icons-sharp align-self-end  toggle-password" id="eye"
+                  onclick="togglePassword()">
                 </span>
+                <input type="password" id="userPassword" class="form-control" name="password" placeholder="Password"
+                  aria-label="Password" onclick="showeye()">
+                
+              </div>
+              <small id="passwordErr" class="text-danger"></small>
+
+              <div class="input-group center mt-4">
+                <button class="btn btn-dark btn-round" type="submit">CLICK TO LOGIN</button>
+              </div>
+            </form>
+            <div class="form-outline mb-2">
+              <h6 class="text-danger text-center">{{message}}</h6>
             </div>
-            <small id="passwordErr" class="text-danger px-3"></small>
+          </div>
+
+          <div class="col-lg-6 col-md-6 box-de">
+            <div class="inn-cover">
+              <div class="ditk-inf">
+                <h2 class="w-100">Don't Have an Account </h2>
+                <p>Join our fashion community by signing up today! Enjoy exclusive perks like member-only discounts,
+                  faster checkout for seamless shopping Elevate your fashion journey – sign up now and step
+                  into a world of possibilities!</p>
+                <a href="/signup">
+                  <button type="button" class="btn button">SIGN UP</button>
+                </a>
+
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <div class=" mb-4  mx-auto p-2 d-flex justify-content-center" style="width: 100%;">
-            <button class="btn btn-dark btn-lg px-5 " style="width: 75%;border-radius:25px " type="submit"
-                >Login</button>
-        </div>
 
-        <p class="text-center text-muted mt-3 mb-0">Don't have an account? <a href="/signup"
-                class="fw-bold text-body"><u class="text-primary"> Create&nbspaccount</u></a></p>
-
-    </form>
-
-</div>
 <script>
+  let password = document.getElementById("userPassword");
+  let eye = document.getElementById("eye");
+  function showeye() {
+    eye.innerHTML = "visibility_off"
+  }
 
+  function togglePassword() {
+    if (password.type === "password") {
+      password.type = "text";
+      eye.innerHTML = "visibility"
 
-
-    let password = document.getElementById("userPassword");
-    let eye = document.getElementById("eye");
-    function showeye() {
-        eye.innerHTML = "visibility_off"
+    } else {
+      eye.innerHTML = "visibility_off"
+      password.type = "password";
     }
-
-    function togglePassword() {
-        if (password.type === "password") {
-            password.type = "text";
-            eye.innerHTML = "visibility"
-
-        } else {
-            eye.innerHTML = "visibility_off"
-            password.type = "password";
-        }
-    }
+  }
 </script>
 </body>
 

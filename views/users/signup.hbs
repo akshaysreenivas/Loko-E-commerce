@@ -1,107 +1,199 @@
-
 <link rel="stylesheet" href="/stylesheets/userSignup.css" />
 
- 
-          <div class="card form-div rounded " >
-            <div class="card-body">
-              {{#if message}}
-              <div>
-                <h5>{{message}} <a href="/login" class="fw-bold text-body"><u class="text-primary">Login here</u></a>
-                </h5>
+
+{{!-- <div class="card form-div rounded ">
+  <div class="card-body">
+    {{#if message}}
+    <div>
+      <h5>{{message}} <a href="/login" class="fw-bold text-body"><u class="text-primary">Login here</u></a>
+      </h5>
+    </div>
+    {{else}}
+    <div>
+      <h2 class="text-center mb-3">Create an account</h2>
+      <form action="/signup" method="post" id="signupForm">
+
+        <div class="form-outline mb-2">
+          <label class="form-label" for="signupname">First Name</label>
+          <div class="position-relative">
+            <input type="text" id="signupname" name="name" class="form-control b-radius "
+              onblur="javascript:value=value.replace(/\s/g,'');" />
+            <span class="material-icons-sharp icon ps-2">
+              person
+            </span>
+          </div>
+          <small class="text-danger px-2" id="signameErr"></small>
+        </div>
+
+        <div class="form-outline mb-2">
+          <label class="form-label" for="signupemail">Your Email</label>
+          <div class="position-relative">
+            <input type="email" id="signupemail" onblur="javascript:value=value.replace(/\s/g,'');" name="email"
+              class="form-control b-radius" />
+            <span class="material-icons-sharp icon ps-2">
+              mail
+            </span>
+          </div>
+          <small class="text-danger px-2" id="signemailErr"></small>
+        </div>
+
+        <div class="form-outline mb-2">
+          <label class="form-label" for="signuppassword">Password</label>
+          <div class="d-flex position-relative" style="flex-direction:column;">
+            <input type="password" id="signuppassword" name="password" class="form-control b-radius " />
+            <span class="material-icons-sharp icon ps-2">
+              lock
+            </span>
+            <span class="material-icons-sharp key pe-3 align-self-end" id="eye1"
+              onclick="togglePassword(signuppassword,eye1)">
+              visibility_off
+            </span>
+          </div>
+          <small class="text-danger px-2" id="sigpasswordErr"></small>
+        </div>
+
+        <div class="form-outline mb-3">
+          <label class="form-label" for="signupconfirmPassword">Confirm password</label>
+          <div class="d-flex position-relative " style="flex-direction:column;">
+            <input type="password" id="signupconfirmPassword" name="confirmPassword" class="form-control b-radius" />
+            <span class="material-icons-sharp icon ps-2">
+              lock
+            </span>
+            <span class="material-icons-sharp key pe-3 align-self-end " id="eye2"
+              onclick="togglePassword(signupconfirmPassword,eye2)">
+              visibility_off
+            </span>
+          </div>
+          <small class="text-danger" id="confpasswordErr"></small>
+        </div>
+
+        <div class=" mt-4 mx-auto p-2 d-flex justify-content-center" style="width: 100%;">
+          <button class="b-radius btn btn-dark btn-lg px-5" type="submit">Register</button>
+        </div>
+
+        <p class="text-center text-muted ">Have already an account? <a href="/login" class="fw-bold text-body"><u
+              class="text-primary">Login Here</u></a></p>
+      </form>
+    </div>
+    {{/if}}
+  </div>
+</div> --}}
+<section class="container-fluid form-section  d-flex align-items-center justify-content-center">
+  <div class="container ">
+    <div class="row ">
+      <div class="col-lg-10 col-md-12 login-box">
+        <div class="row">
+
+
+          <div class="col-lg-6 col-md-6 box-de">
+            <div class="inn-cover">
+              <div class="ditk-inf">
+                <h2 class="w-100"> Already Have an Account ? </h2>
+                <p>Log in to access exclusive discounts, order tracking, and a convenient wishlist feature. sign up now and step
+                  into a world of possibilities!</p>
+                <a href="/login">
+                  <button type="button" class="btn button">LOGIN NOW</button>
+                </a>
+
               </div>
-              {{else}}
-              <div>
-                <h2 class="text-center mb-3">Create an account</h2>
-                <form action="/signup" method="post" id="signupForm">
-                  <div class="form-outline mb-2">
-                    <label class="form-label" for="signupname">First Name</label>
-                    <div class="position-relative">
-                      <input type="text" id="signupname" name="name" class="form-control b-radius " onblur="javascript:value=value.replace(/\s/g,'');" />
-                      <span class="material-icons-sharp icon ps-2">
-                        person
-                      </span>
-                    </div>
-                    <small class="text-danger px-2" id="signameErr"></small>
-
-                  </div>
-                  <div class="form-outline mb-2">
-                    <label class="form-label" for="signupemail">Your Email</label>
-                    <div class="position-relative">
-                      <input type="email" id="signupemail" onblur="javascript:value=value.replace(/\s/g,'');"
-                        name="email" class="form-control b-radius" />
-                      <span class="material-icons-sharp icon ps-2">
-                        mail
-                      </span>
-                    </div>
-                    <small class="text-danger px-2" id="signemailErr"></small>
-                  </div>
-
-                  <div class="form-outline mb-2">
-                    <label class="form-label" for="signuppassword">Password</label>
-                    <div class="d-flex position-relative" style="flex-direction:column;">
-                      <input type="password" id="signuppassword" name="password" class="form-control b-radius " />
-                      <span class="material-icons-sharp icon ps-2">
-                        lock
-                      </span>
-                      <span class="material-icons-sharp key pe-3 align-self-end" id="eye1" onclick="togglePassword()">
-                        visibility_off
-                      </span>
-                    </div>
-                    <small class="text-danger px-2" id="sigpasswordErr"></small>
-                  </div>
-                  <div class="form-outline mb-3">
-                    <label class="form-label" for="signupconfirmPassword">Confirm password</label>
-                    <div class="d-flex position-relative " style="flex-direction:column;">
-                      <input type="password" id="signupconfirmPassword" name="confirmPassword"
-                        class="form-control b-radius" />
-                      <span class="material-icons-sharp icon ps-2">
-                        lock
-                      </span>
-                      <span class="material-icons-sharp key pe-3 align-self-end " id="eye2" onclick="toggleConfirmPassword()">
-                        visibility_off
-                      </span>
-                    </div>
-                    <small class="text-danger " id="confpasswordErr"></small>
-                  </div>
-
-                  <div class=" mt-4 mx-auto p-2 d-flex justify-content-center" style="width: 100%;">
-                    <button class="b-radius btn btn-dark btn-lg px-5" type="submit"
-                    >Register</button>
-                  </div>
-                  <p class="text-center text-muted ">Have already an account? <a href="/login"
-                      class="fw-bold text-body"><u class="text-primary">Login Here</u></a></p>
-                </form>
-              </div>
-              {{/if}}
             </div>
           </div>
-        
+
+          <div class="col-lg-6 col-md-6 log-det">
+            <div class="d-flex align-items-center gap-md-4">
+              <img height="30px" src="/images/favicon.jpg" alt="">
+              <h3 class="text-center">User Signup</h3>
+            </div>
+            <form class="text-box-cont" action="/signup" method="post" id="signupForm">
+
+              <div class="input-group mt-4">
+                <div class="input-group-prepend">
+                  <label for="signupname">
+                    <span class="input-group-text" id="basic-addon1"><span class="material-icons-sharp">
+                        person
+                      </span></span>
+                  </label>
+                </div>
+                <input type="text" id="signupname" name="name" onblur="javascript:value=value.replace(/\s/g,'');"
+                  class="form-control" placeholder="Name" aria-label="email address">
+              </div>
+              <small class="text-danger" id="signameErr"></small>
+
+              <div class="input-group mt-4">
+                <div class="input-group-prepend">
+                  <label for="userEmail">
+                    <span class="input-group-text" id="basic-addon1"><span class="material-icons-sharp">
+                        email
+                      </span></span>
+                  </label>
+                </div>
+                <input type="email" onblur="javascript:value=value.replace(/\s/g,'');" id="signupemail" name="email"
+                  class="form-control" placeholder="Email Address" aria-label="email address">
+              </div>
+              <small id="signemailErr" class="text-danger"></small>
+
+
+              <div class="input-group mt-4 position-relative">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon1"><span class="material-icons-sharp">
+                      key
+                    </span></span>
+                </div>
+                <span class="material-icons-sharp align-self-end  toggle-password" id="eye1"
+                  onclick="togglePassword(signuppassword,eye1)">
+                </span>
+                <input type="password" id="signuppassword" class="form-control" name="password" placeholder="Password"
+                  aria-label="Password" onclick="showeye(eye1)">
+              </div>
+              <small id="sigpasswordErr" class="text-danger"></small>
+
+
+              <div class="input-group mt-4 position-relative">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon1"><span class="material-icons-sharp">
+                      key
+                    </span></span>
+                </div>
+                <span class="material-icons-sharp align-self-end  toggle-password" id="eye2"
+                  onclick="togglePassword(signupconfirmPassword,signupconfirmPassword)">
+                </span>
+                <input type="password" id="signupconfirmPassword" class="form-control" name="password"
+                  placeholder="Password" aria-label="Password" onclick="showeye(eye2)">
+
+              </div>
+              <small id="confpasswordErr" class="text-danger"></small>
+
+              <div class="input-group center mt-4">
+                <button class="btn btn-dark btn-round" type="submit">CREATE ACCOUNT</button>
+              </div>
+            </form>
+            {{#if message}}
+            <div class="form-outline m-1">
+              <h6 class="text-danger" >{{message}}<a href="/login"
+                  class="fw-bold text-body"><u class="text-primary">Login here</u></a>
+            </div>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 
 <script>
-
-  let password = document.getElementById("signuppassword")
-  let confpass = document.getElementById("signupconfirmPassword")
-  let eye1=document.getElementById("eye1")
-  let eye2=document.getElementById("eye2")
-  function togglePassword() {
-    if (password.type === "password") {
-      password.type = "text";
-      eye1.innerHTML = "visibility"
-
+  function togglePassword(inputId, iconId) {
+    let password = document.getElementById(inputId)
+    if (inputId.type === "password") {
+      inputId.type = "text";
+      iconId.innerHTML = "visibility"
     } else {
-      eye1.innerHTML = "visibility_off"
-      password.type = "password";
+      iconId.innerHTML = "visibility_off"
+      inputId.type = "password";
     }
   }
-  function toggleConfirmPassword() {
-    if (confpass.type === "password") {
-      confpass.type = "text";
-      eye2.innerHTML = "visibility"
-
-    } else {
-      eye2.innerHTML = "visibility_off"
-      confpass.type = "password";
-    }
+  function showeye(icon) {
+    icon.innerHTML = "visibility_off"
   }
 </script>

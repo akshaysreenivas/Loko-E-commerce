@@ -1,6 +1,5 @@
 <link rel="stylesheet" href="/stylesheets/adminLogin.css" />
 
-
 <div class="vh-100 d-flex align-items-center" style="background-color: #ffffff;">
     <div class="col-xl-10 col-lg-11 login-container">
         <div class="row">
@@ -8,13 +7,17 @@
                 <img src="/images/login-banner.png" alt="">
             </div>
             <form action="/admin/adminlogin" method="post" id="adminForm" class="col-lg-5 d-flex no-padding">
+            
                 <div class="login-box">
-                    <h5>Welcome Back!</h5>
-                    <div class="form-outline  p-2">
-                        <h6 class="text-danger">{{message}}</h6>
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                 <h3>Admin Login</h3>   <img height="30px" src="/images/favicon.jpg" alt="">
                     </div>
+                    <h6 class="pt-2">Welcome Back!</h6>
+                   
                     <div class="login-row row no-margin">
-                        <label for="ademail"><i class="fas fa-envelope"></i> Email Address</label>
+
+                        <label for="ademail" class="d-flex align-items-center"><i
+                                class="material-icons-sharp ">email</i> Email Address</label>
                         <input class="form-control form-control-sm" type="email" id="ademail"
                             onblur="javascript:value=value.replace(/\s/g,'');" name="email"
                             class="form-control form-control-lg px-3">
@@ -22,7 +25,8 @@
                     </div>
 
                     <div class="login-row row no-margin">
-                        <label for="adpassword"><i class="fas fa-unlock-alt"></i> Password</label>
+                        <label for="adpassword" class="d-flex align-items-center"><i
+                                class="material-icons-sharp">key</i> Password</label>
                         <div class="d-flex position-relative p-0" style="flex-direction:column;">
                             <input type="password" id="adpassword" name="password"
                                 class="form-control form-control-sm  d-flex position-relative"
@@ -34,8 +38,6 @@
                         </div>
                         <small class="text-danger px-2" id="admpasserr"></small>
                     </div>
-
-
 
                     <div class="login-row  row no-margin">
                         <button class="btn btn-dark btn-lg px-5 " style="width: 75%;border-radius:25px "

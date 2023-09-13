@@ -51,24 +51,6 @@ function validateadminLogin(e) {
         return
     }
 
-    if (/\s/.test(password)) {
-        if (passworderr) {
-            passworderr.innerHTML = "No spaces"
-        }
-        return
-    }
-
-    if (password.trim().length < 6) {
-        if (passworderr) {
-            passworderr.innerHTML = "Enter a minimum 6 to maximum 18 characters"
-        }
-        return
-    }
-    if (password.length < 6) {
-        if (passworderr) {
-            passworderr.innerHTML = "Enter a minimum 6 to maximum 18 characters"
-        } return
-    }
 
 
     adminloginForm.submit()

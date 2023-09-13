@@ -1,0 +1,142 @@
+<style>
+    /*--------------------- Footer -----------------------*/
+    .footer {
+        background: black;
+        padding-top: 60px;
+    }
+
+    /* Small Device = 320px */
+    @media only screen and (max-width: 479px) {
+        .footer {
+            padding-top: 0px;
+        }
+    }
+
+    .footer__about {
+        margin-bottom: 30px;
+    }
+
+
+    .footer__about p {
+        color: #b7b7b7;
+        margin-bottom: 30px;
+    }
+
+    .footer__widget {
+        margin-bottom: 30px;
+    }
+
+    .footer__widget h6 {
+        color: white;
+        font-size: 15px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+    }
+
+    .footer__widget ul li {
+        line-height: 36px;
+        list-style: none;
+    }
+
+    .footer__widget ul li a {
+        color: #b7b7b7;
+        font-size: 15px;
+    }
+
+    .footer__widget .footer__newslatter p {
+        color: #b7b7b7;
+    }
+
+    .footer__widget .footer__newslatter form {
+        position: relative;
+    }
+
+    .footer__widget .footer__newslatter form input {
+        width: 100%;
+        font-size: 15px;
+        color: #3d3d3d;
+        background: transparent;
+        border: none;
+        padding: 15px 0;
+        border-bottom: 2px solid white-color;
+    }
+
+    .footer__widget .footer__newslatter form input::placeholder {
+        color: #3d3d3d;
+    }
+
+    .footer__copyright__text {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 20px 0;
+        margin-top: 40px;
+    }
+
+    .footer__copyright__text p {
+        color: #b7b7b7;
+        margin-bottom: 0;
+    }
+
+    .footer__copyright__text p i {
+        color: primary-color;
+    }
+
+    .footer__copyright__text p a {
+        color: primary-color;
+    }
+</style>
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="footer__about">
+                    <p>The customer is at the heart of our unique business model, which includes design.</p>
+                    <img src="/images/payment.png" alt="">
+                </div>
+            </div>
+            <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
+                <div class="footer__widget">
+                    <h6>Shopping</h6>
+                    <ul>
+                        <li><a href="/shop">Clothing Store</a></li>
+                        <li><a href="/shop">Sale</a></li>
+                        <li><a href="/profile/coupons">Coupons</a></li>
+                        <li><a href="#">Delivery</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-6">
+                <div class="footer__widget">
+                    <h6>Useful Links</h6>
+                    <ul>
+                        <li><a href="/contact">Contact Us</a></li>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="#">Payment Methods</a></li>
+                        <li><a href="#">Return & Exchanges</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
+                <div class="footer__widget">
+                    <h6>NewsLetter</h6>
+                    <div class="footer__newslatter">
+                        <p>Be the first to know about new arrivals, look books, sales & promos!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="footer__copyright__text">
+                    <p>Copyright ©
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                        All rights reserved
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

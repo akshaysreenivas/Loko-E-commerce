@@ -1,41 +1,87 @@
+<style>
+  .menu {
+    padding: 3px;
+    list-style: none;
+    margin: auto;
+    width: 800px;
+    width: -moz-fit-content;
+    width: -webkit-fit-content;
+    width: fit-content;
+  }
+
+  .menu>li {
+    background: #000;
+    float: left;
+    position: relative;
+    transform: skewX(25deg);
+    border: 0.1px solid;
+  }
+
+  .menu a {
+    display: block;
+    color: #fff;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .menu li:hover {
+    background: #3b3636;
+  }
+
+  .menu>li>a {
+    transform: skewX(-25deg);
+    padding: 1em 2em;
+  }
+
+  @media screen and (min-width: 1126px) {
+    .logo {
+      margin-left: 60px;
+    }
+  }
+</style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<nav class="navbar nav-bg  nav-bar navbar-expand-lg p-0 ">
-  <div class="container-fluid nav-bg">
+<nav class="navbar nav-bg d-flex justify-content-around  nav-bar navbar-expand-lg p-0 ">
+  <div class="container-fluid nav-bg ">
     <button class="navbar-toggler p-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
       aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <a class="logo px-3" href="/"><img class="img-fluid logo " src="/images/loko logo.png" alt=""></a>
-    <div class="collapse navbar-collapse nav-bg py-3" id="navbarNavAltMarkup">
-      <div class="navbar-nav d-flex ">
-        <a class="nav-link active px-3" aria-current="page" href="/">Home</a>
-        {{#if user}}
-        <div class="d-flex  align-items-center d-sm-px-5 d-sm-mx-5">
-          <div class="px-5 ">
-            <a href="/cart/" class="position-relative">
-              <span class="material-icons-sharp text-dark ">shopping_cart
-              </span>
-              <span class="position-absolute  start-100 translate-middle badge rounded-pill bg-danger p-1"
-                id="cart-count">
-                <small> {{totalItems}}</small>
-              </span>
-            </a>
-          </div>
-          <div class="btn-group">
-            <a type="button" class="d-flex justify-content-center btn btn-outline dropdown-toggle p-2 gap-1 nodrop"
-              aria-expanded="false" href="/profile">
-              <span class="material-icons-sharp">account_circle</span>
-              <span>{{user.name}}</span>
-            </a>
-          </div>
+    <div class="collapse navbar-collapse nav-bg py-2" id="navbarNavAltMarkup">
+      <div class="navbar-nav gap-5 m-auto">
+        <ul class="menu">
+          <li><a class="active" href="/">Home</a></li>
+          <li><a class="active" href="/">Shop</a></li>
+          <li><a class="active" href="/">Blog</a></li>
+          <li><a class="active" href="/">About</a></li>
+          <li><a class="active" href="/">Contact</a></li>
+        </ul>
+        <div class="d-flex  align-items-start justify-content-around d-sm-px-5 d-sm-mx-5 gap-5 mt-3">
+          <a href="/wishlist" class="p-1">
+            <span class="material-icons-sharp text-dark" onclick="addToWishlist('{{this._id}}')">favorite_border </span>
+          </a>
+          <a href="/cart" class="p-1 position-relative">
+            <span class="material-icons-sharp text-dark ">shopping_cart
+            </span>
+            {{#if totalItems}}
+            <span class="position-absolute  start-100 translate-middle badge rounded-pill bg-danger p-1"
+              id="cart-count">
+              <small> {{totalItems}} </small>
+            </span>
+            {{/if}}
+          </a>
+          <a type="button" class="d-flex justify-content-center btn btn-outline dropdown-toggle p-1 gap-1 nodrop"
+            aria-expanded="false" href="/profile">
+            <span class="material-icons-sharp">account_circle</span>
+            {{#if user}}
+            <span>{{user.name}}</span>
+            {{else}}
+            <span>Login</span>
+            {{/if}}
+          </a>
         </div>
-        {{else}}
-        <div class="d-flex align-items-center d-sm-px-5 d-sm-mx-5">
-          <a class="dropdown-item d-flex px-5  align-items-center py-2 gap-1" href="/login" method="get"><span
-              class="material-icons-sharp">account_circle</span> login</a>
-        </div>
-        {{/if}}
       </div>
     </div>
   </div>

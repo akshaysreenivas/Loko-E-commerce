@@ -47,19 +47,6 @@ function validateuserLogin(e) {
     return
   }
 
-  if (/\s/.test(password)) {
-    passwordErr.innerHTML = " no spaces"
-    return
-  }
-
-  if (password.trim().length < 6) {
-    passwordErr.innerHTML = "Enter a minimum 6 to maximum 18 characters"
-    return
-  }
-  if (password.length < 6) {
-    passwordErr.innerHTML = "Enter a minimum 6 to maximum 18 characters"
-    return
-  }
 
 
   loginForm.submit()
