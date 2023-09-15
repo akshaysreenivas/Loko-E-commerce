@@ -19,11 +19,11 @@
           <li><a class="active" href="/contact">Contact</a></li>
         </ul>
         <div class="d-flex  align-items-start justify-content-around d-sm-px-5 d-sm-mx-5 gap-5 mt-3">
-          <a href="/wishlist" class="p-1">
-            <span class="material-icons-sharp text-dark" onclick="addToWishlist('{{this._id}}')">favorite_border </span>
+          <a href="/wishlist" class="p-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wishlist">
+            <span class="material-icons-sharp text-dark" onclick="addToWishlist('{{this._id}}')" >favorite_border </span>
           </a>
-          <a href="/cart" class="p-1 position-relative">
-            <span class="material-icons-sharp text-dark ">shopping_cart
+          <a href="/cart" class="p-1 position-relative" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Shopping Bag">
+            <span class="material-icons-sharp text-dark" >shopping_bag
             </span>
             {{#if totalItems}}
             <span class="position-absolute  start-100 translate-middle badge rounded-pill bg-danger p-1"

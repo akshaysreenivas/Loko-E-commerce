@@ -3,7 +3,7 @@ const cart = require('../models/cartmodel');
 const nodemailer = require('../config/nodemailer');
 const orders = require('../models/ordersmodel');
 const mongoose = require('mongoose');
-const productController = require("../controllers/productController");
+const productController = require("./productController");
 mongoose.Promise = global.Promise;
 const bcrypt = require('bcrypt');
 const coupon = require("../models/couponmodel");
@@ -22,12 +22,12 @@ const signupPage = (req, res) => {
 };
 const loginPage = (req, res) => {
     if (req.session.loggedIn)
-    res.redirect("/");
-  else {
-    const message = req.session.message;
-    res.render("users/login", { message });
-    req.session.message = " ";
-  }
+        res.redirect("/");
+    else {
+        const message = req.session.message;
+        res.render("users/login", { message });
+        req.session.message = " ";
+    }
 };
 
 const blogPage = async (req, res) => {
@@ -59,83 +59,84 @@ const aboutPage = async (req, res) => {
 const shopPage = async (req, res) => {
     let totalItems = null;
     let Categorys = null;
-    let categorys=  await   productController.viewCategory()
-    if(categorys){
-       Categorys= await categorys.Categorys
+    let categorys = productController.viewCategory()
+    if (categorys) {
+        Categorys = await categorys.Categorys
     }
     if (req.session.user) {
-      totalItems = await getCartCount(req.session.user._id);
+        totalItems = await getCartCount(req.session.user._id);
     }
     await productController.viewproducts().then((response) => {
-      const productsDatas = response.data;
-      const productsData = productsDatas.map((productsDatas) => {
-        return {
-          _id: productsDatas._id,
-          name: productsDatas.name,
-          price: productsDatas.price,
-          path: productsDatas.images[0].path,
-        };
-      });  
-      res.render("users/shop", { productsData,Categorys, totalItems, user: req.session.user });
+        const productsDatas = response.data;
+        const productsData = productsDatas.map((productsDatas) => {
+            return {
+                _id: productsDatas._id,
+                name: productsDatas.name,
+                price: productsDatas.price,
+                selling_price: productsDatas.selling_price,
+                path: productsDatas.images[0].path,
+            };
+        });
+        res.render("users/shop", { productsData, Categorys, totalItems, user: req.session.user });
     });
 };
 const homePage = async (req, res) => {
     let totalItems = null;
     let Categorys = null;
-    let categorys=  await   productController.viewCategory()
-    if(categorys){
-       Categorys= await categorys.Categorys
+    let categorys = await productController.viewCategory()
+    if (categorys) {
+        Categorys = await categorys.Categorys
     }
     if (req.session.user) {
-      totalItems = await getCartCount(req.session.user._id);
+        totalItems = await getCartCount(req.session.user._id);
     }
     await productController.viewproducts().then((response) => {
-      const productsDatas = response.data;
-      const productsData = productsDatas.map((productsDatas) => {
-        return {
-          _id: productsDatas._id,
-          name: productsDatas.name,
-          price: productsDatas.price,
-          path: productsDatas.images[0].path,
-        };
-      });  
-      res.render("users/home", { productsData,Categorys, totalItems, user: req.session.user });
+        const productsDatas = response.data;
+        const productsData = productsDatas.map((productsDatas) => {
+            return {
+                _id: productsDatas._id,
+                name: productsDatas.name,
+                price: productsDatas.price,
+                path: productsDatas.images[0].path,
+            };
+        });
+        res.render("users/home", { productsData, Categorys, totalItems, user: req.session.user });
     });
 };
 const login = async (req, res) => {
     dologin(req.body).then((response) => {
         if (!response.user) {
-          req.session.message = "No User Found with this email id";
-          res.redirect("/login");
-        } else {
-          if (response.blocked) {
-            req.session.message =
-              " OOPS !, Your account has been temporarly blocked";
+            req.session.message = "No User Found with this email id";
             res.redirect("/login");
-          } else {
-            if (response.result) {
-              let user={
-                name:response.userdoc.name,
-                email:response.userdoc.email,
-                _id:response.userdoc._id
-              }
-              req.session.user = user;
-              req.session.loggedIn = true;
-              res.redirect("/");
+        } else {
+            if (response.blocked) {
+                req.session.message =
+                    " OOPS !, Your account has been temporarly blocked";
+                res.redirect("/login");
             } else {
-              req.session.message = "Invalid Password";
-              res.redirect("/login");
+                if (response.result) {
+                    let user = {
+                        name: response.userdoc.name,
+                        email: response.userdoc.email,
+                        _id: response.userdoc._id
+                    }
+                    req.session.user = user;
+                    req.session.loggedIn = true;
+                    res.redirect("/");
+                } else {
+                    req.session.message = "Invalid Password";
+                    res.redirect("/login");
+                }
             }
-          }
         }
-      });
+    });
 };
 const loginOtpPage = async (req, res) => {
     if (req.session.loggedIn) res.redirect("/");
-  else {
-    res.render('users/otp', { invalidOtp: req.session.invalidOtp })
-    req.session.invalidOtp = ""
-  }
+    else {
+        res.render('users/otp', { invalidOtp: req.session.invalidOtp })
+        req.session.invalidOtp = ""
+    }
 };
 const userSignup = async (req, res) => {
     const userdata = req.body;
@@ -588,14 +589,14 @@ const getCart = async (req, res) => {
     }
 };
 const addToCartlist = async (req, res) => {
-        const quantity = 1;
-        await addToCart(req.session.user._id, req.params.productID, quantity)
-          .then((response) => {
+    const quantity = 1;
+    await addToCart(req.session.user._id, req.params.productID, quantity)
+        .then((response) => {
             let itemCount = response.data;
-            res.json({ status:true, itemCount ,login:true});
-          })
-          .catch((err) => err);
-      
+            res.json({ status: true, itemCount, login: true });
+        })
+        .catch((err) => err);
+
 };
 
 const getCartCount = (ID) => {
@@ -692,16 +693,14 @@ const deleteCartProduct = async (req, res) => {
     } catch (error) {
         throw error;
     }
-
 };
 const changeqty = async (req, res) => {
     let totalCost = 0;
     await changeCartProductCount(req.session.user._id, req.body)
         .then((response) => {
-          getCartTotalamount(req.session.user._id).then((response) => {
+            getCartTotalamount(req.session.user._id).then((response) => {
                 if (response.totalAmount) {
                     totalCost = response.totalAmount[0].totalCost
-                    console.log(totalCost);
                     res.json({ totalCost });
                 }
                 else {
@@ -826,9 +825,7 @@ const moveToWishlist = async (req, res) => {
 
 const getWishlist = async (req, res) => {
     try {
-
         let totalItems = await getCartCount(req.session.user._id);
-
         const userid = new mongoose.Types.ObjectId(req.session.user._id)
         const products = await wishlist.find({ userId: userid }).populate("products.productId").lean()
         res.render("users/wishlist", { totalItems, products, user: req.session.user })
@@ -1050,7 +1047,6 @@ const cartPlaceOrder = async (req, res) => {
 const orderConfirm = async (req, res) => {
     const order = await orders.findOne({ _id: req.session.newOrderId });
     let totalItems = await getCartCount(req.session.user._id);
-
     if (order) {
         if (order.paymentMethod === 'online_payment') {
             order.paymentStatus = 'Paid';

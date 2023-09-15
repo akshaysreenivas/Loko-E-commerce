@@ -398,18 +398,9 @@ $("#changePassword").submit(function (e) {
 
 })
 
-// --------placeOrder Form---------
-
-
-
-
-
 
 
 // profile management ------
-
-
-
 
 function deleteaddress(id) {
     swal({
@@ -460,7 +451,5 @@ function cancelOrder(Id) {
             }
         });
 }
-
-// --------- change order status -------
 
 

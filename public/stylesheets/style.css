@@ -22,6 +22,7 @@ body {
   font-family: "Poppins", sans-serif;
   user-select: none;
   overflow-x: hidden;
+  background-color: #b9b3af;
 }
 .body_dashboard{
   background-color: #dee7fdbd;

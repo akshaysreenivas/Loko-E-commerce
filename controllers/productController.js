@@ -1,8 +1,8 @@
 const products = require("../models/productmodel");
 const categorys = require('../models/categorymodel');
-const fs = require('fs');
 const { default: mongoose } = require("mongoose");
 const cloudinary = require("../utils/cloudinary")
+const userController = require("./userController")
 
 const addCategory = async (req, res) => {
   try {
@@ -32,7 +32,7 @@ const addCategory = async (req, res) => {
 const loadcategory = async (req, res) => {
   try {
     let categorys;
-    await viewCategory().then((response) => {
+    viewCategory().then((response) => {
       if (response.status) {
         categorys = response.Categorys
       }
@@ -141,24 +141,24 @@ const addProduct = async (req, res) => {
         path: item.secure_url
       };
     });
-      const newProduct = new products({
-        name: data.name,
-        price: data.price,
-        size: data.size,
-        images: imageResponses,
-        selling_price: data.sellingPrice,
-        category: mongoose.Types.ObjectId(data.category),
-        stock: data.quantity,
-        product_description: data.description
-      })
+    const newProduct = new products({
+      name: data.name,
+      price: data.price,
+      size: data.size,
+      images: imageResponses,
+      selling_price: data.sellingPrice,
+      category: mongoose.Types.ObjectId(data.category),
+      stock: data.quantity,
+      product_description: data.description
+    })
 
-      return await newProduct.save()
-        .then(() => {
-          req.session.productAdded = true
-          res.redirect('/admin/addProduct')
-        }).catch((error) => {
-          throw error;
-        })
+    return await newProduct.save()
+      .then(() => {
+        req.session.productAdded = true
+        res.redirect('/admin/addProduct')
+      }).catch((error) => {
+        throw error;
+      })
   }
   catch (error) {
     throw error;
@@ -167,18 +167,18 @@ const addProduct = async (req, res) => {
 
 const editproduct = async (req, res) => {
   try {
-  const data = req.body
-  let images;
-  const product = await products.findOne({ _id: req.body.productId })
- 
-  if (req.files != null) {
-    let pictureFiles = product.images;
-    let multipledeletePicturePromise = pictureFiles.map((picture) =>
+    const data = req.body
+    let images;
+    const product = await products.findOne({ _id: req.body.productId })
+
+    if (req.files != null) {
+      let pictureFiles = product.images;
+      let multipledeletePicturePromise = pictureFiles.map((picture) =>
         cloudinary.uploader.destroy(picture.cloudinary_id)
       );
       // await all the cloudinary upload functions in promise.all
-       await Promise.all(multipledeletePicturePromise);
-  
+      await Promise.all(multipledeletePicturePromise);
+
       //Check if files exist
       if (!pictureFiles)
         return res.status(400).json({ message: "No picture attached!" });
@@ -194,10 +194,10 @@ const editproduct = async (req, res) => {
           path: item.secure_url
         };
       });
-    images = imageResponses
-  } else {  
-    images = product.images
-  }
+      images = imageResponses
+    } else {
+      images = product.images
+    }
 
     await products.findOneAndUpdate({ _id: data.productId }
       , {
@@ -258,10 +258,10 @@ const getSingleproduct = async (req, res) => {
   try {
     let totalItems = null;
     if (req.session.user) {
-      totalItems = await getCartCount(req.session.user._id);
+      totalItems = await userController.getCartCount(req.session.user._id);
     }
     const productdetails = await products.findOne({ _id: req.params.productID }).populate({ path: "category" }).lean()
-    res.render("users/product", { totalItems,user: req.session.user, productdetails });
+    res.render("users/product", { totalItems, user: req.session.user, productdetails });
   } catch (error) {
     res.render("error", { error })
   }
