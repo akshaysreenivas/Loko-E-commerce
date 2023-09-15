@@ -3,6 +3,7 @@ const cart = require('../models/cartmodel');
 const nodemailer = require('../config/nodemailer');
 const orders = require('../models/ordersmodel');
 const mongoose = require('mongoose');
+const productController = require("../controllers/productController");
 mongoose.Promise = global.Promise;
 const bcrypt = require('bcrypt');
 const coupon = require("../models/couponmodel");
@@ -19,7 +20,123 @@ const signupPage = (req, res) => {
     else { res.render("users/signup", { message }); }
     req.session.signuperror = '';
 };
+const loginPage = (req, res) => {
+    if (req.session.loggedIn)
+    res.redirect("/");
+  else {
+    const message = req.session.message;
+    res.render("users/login", { message });
+    req.session.message = " ";
+  }
+};
 
+const blogPage = async (req, res) => {
+    let totalItems = null
+    if (req.session.user) {
+        totalItems = await getCartCount(req.session.user._id);
+    }
+    res.render('users/blog', { totalItems, user: req.session.user })
+
+};
+
+const contactPage = async (req, res) => {
+    let totalItems = null
+    if (req.session.user) {
+        totalItems = await getCartCount(req.session.user._id);
+    }
+    res.render('users/contact', { totalItems, user: req.session.user })
+
+};
+
+const aboutPage = async (req, res) => {
+    let totalItems = null
+    if (req.session.user) {
+        totalItems = await getCartCount(req.session.user._id);
+    }
+    res.render('users/about', { totalItems, user: req.session.user })
+
+};
+const shopPage = async (req, res) => {
+    let totalItems = null;
+    let Categorys = null;
+    let categorys=  await   productController.viewCategory()
+    if(categorys){
+       Categorys= await categorys.Categorys
+    }
+    if (req.session.user) {
+      totalItems = await getCartCount(req.session.user._id);
+    }
+    await productController.viewproducts().then((response) => {
+      const productsDatas = response.data;
+      const productsData = productsDatas.map((productsDatas) => {
+        return {
+          _id: productsDatas._id,
+          name: productsDatas.name,
+          price: productsDatas.price,
+          path: productsDatas.images[0].path,
+        };
+      });  
+      res.render("users/shop", { productsData,Categorys, totalItems, user: req.session.user });
+    });
+};
+const homePage = async (req, res) => {
+    let totalItems = null;
+    let Categorys = null;
+    let categorys=  await   productController.viewCategory()
+    if(categorys){
+       Categorys= await categorys.Categorys
+    }
+    if (req.session.user) {
+      totalItems = await getCartCount(req.session.user._id);
+    }
+    await productController.viewproducts().then((response) => {
+      const productsDatas = response.data;
+      const productsData = productsDatas.map((productsDatas) => {
+        return {
+          _id: productsDatas._id,
+          name: productsDatas.name,
+          price: productsDatas.price,
+          path: productsDatas.images[0].path,
+        };
+      });  
+      res.render("users/home", { productsData,Categorys, totalItems, user: req.session.user });
+    });
+};
+const login = async (req, res) => {
+    dologin(req.body).then((response) => {
+        if (!response.user) {
+          req.session.message = "No User Found with this email id";
+          res.redirect("/login");
+        } else {
+          if (response.blocked) {
+            req.session.message =
+              " OOPS !, Your account has been temporarly blocked";
+            res.redirect("/login");
+          } else {
+            if (response.result) {
+              let user={
+                name:response.userdoc.name,
+                email:response.userdoc.email,
+                _id:response.userdoc._id
+              }
+              req.session.user = user;
+              req.session.loggedIn = true;
+              res.redirect("/");
+            } else {
+              req.session.message = "Invalid Password";
+              res.redirect("/login");
+            }
+          }
+        }
+      });
+};
+const loginOtpPage = async (req, res) => {
+    if (req.session.loggedIn) res.redirect("/");
+  else {
+    res.render('users/otp', { invalidOtp: req.session.invalidOtp })
+    req.session.invalidOtp = ""
+  }
+};
 const userSignup = async (req, res) => {
     const userdata = req.body;
     try {
@@ -125,12 +242,14 @@ const userdetails = async (user_Id) => {
 
 const viewProfile = async (req, res) => {
     try {
+        let totalItems = await getCartCount(req.session.user._id);
+
         const User = await userdetails(req.session.user._id);
         let user = {
             name: User.name,
             email: User.email
         }
-        res.render('users/profile', { user: user });
+        res.render('users/profile', { totalItems, user: user });
     } catch (error) {
         throw new Error(error)
     }
@@ -139,12 +258,20 @@ const viewProfile = async (req, res) => {
 const viewCoupons = async (req, res) => {
     const currentDate = new Date()
     try {
+        let totalItems = await getCartCount(req.session.user._id);
+
         const coupons = await coupon.find({ active: true, expirationDate: { $gt: currentDate }, active: true }).lean()
-        res.render("users/coupons", { coupons, user: req.session.user })
+        res.render("users/coupons", { totalItems, coupons, user: req.session.user })
     } catch (error) {
         throw new Error(error)
     }
 }
+
+const addAddressPage = async (req, res) => {
+    let totalItems = await getCartCount(req.session.user._id);
+    res.render('users/addAddress', { totalItems, user: req.session.user })
+
+};
 
 const addAddress = async (req, res) => {
     try {
@@ -169,16 +296,20 @@ const manageAddress = async (req, res) => {
     const userid = req.session.user._id;
     let userAddress;
     const address = await users.findOne({ _id: userid }, 'addressDetails').lean();
+    let totalItems = await getCartCount(req.session.user._id);
     if (address) {
         userAddress = address.addressDetails;
     }
-    res.render('users/addressBook', { userAddress, user: req.session.user });
+    res.render('users/addressBook', { totalItems, userAddress, user: req.session.user });
 };
+
 
 const orderManage = async (req, res) => {
     try {
+        let totalItems = await getCartCount(req.session.user._id);
+
         const allOrders = await orders.find({ user: req.session.user._id }).sort({ orderOn: -1 }).populate({ path: 'orderItems.product' }).lean();
-        res.render('users/orders', { allOrders, user: req.session.user });
+        res.render('users/orders', { totalItems, allOrders, user: req.session.user });
     } catch (error) {
         res.render('error', { error });
     }
@@ -187,11 +318,13 @@ const orderManage = async (req, res) => {
 const addressTobeEdited = async (req, res) => {
     try {
         let useraddress;
+        let totalItems = await getCartCount(req.session.user._id);
+
         const address = await users.findOne({ _id: req.session.user._id, 'addressDetails._id': req.params.addressid }, { 'addressDetails.$': 1 }).lean();
         if (address) {
             useraddress = address.addressDetails[0];
         }
-        res.render('users/editaddress', { user: req.session.user, useraddress });
+        res.render('users/editaddress', { totalItems, user: req.session.user, useraddress });
     } catch (error) {
         res.render('error', { error });
     }
@@ -362,7 +495,6 @@ const addToCart = (userID, productID, quantity) => {
                             resolve({ status: true, data });
                         });
                 }
-
             }
 
         } catch (error) {
@@ -454,6 +586,16 @@ const getCart = async (req, res) => {
     } catch (error) {
         throw new Error(error);
     }
+};
+const addToCartlist = async (req, res) => {
+        const quantity = 1;
+        await addToCart(req.session.user._id, req.params.productID, quantity)
+          .then((response) => {
+            let itemCount = response.data;
+            res.json({ status:true, itemCount ,login:true});
+          })
+          .catch((err) => err);
+      
 };
 
 const getCartCount = (ID) => {
@@ -551,6 +693,22 @@ const deleteCartProduct = async (req, res) => {
         throw error;
     }
 
+};
+const changeqty = async (req, res) => {
+    let totalCost = 0;
+    await changeCartProductCount(req.session.user._id, req.body)
+        .then((response) => {
+          getCartTotalamount(req.session.user._id).then((response) => {
+                if (response.totalAmount) {
+                    totalCost = response.totalAmount[0].totalCost
+                    console.log(totalCost);
+                    res.json({ totalCost });
+                }
+                else {
+                    res.json({ removed: true });
+                }
+            })
+        });
 };
 
 const changeCartProductCount = (userID, data) => {
@@ -668,9 +826,12 @@ const moveToWishlist = async (req, res) => {
 
 const getWishlist = async (req, res) => {
     try {
+
+        let totalItems = await getCartCount(req.session.user._id);
+
         const userid = new mongoose.Types.ObjectId(req.session.user._id)
         const products = await wishlist.find({ userId: userid }).populate("products.productId").lean()
-        res.render("users/wishlist", { products, user: req.session.user })
+        res.render("users/wishlist", { totalItems, products, user: req.session.user })
     } catch (error) {
         throw new Error(error)
     }
@@ -888,6 +1049,8 @@ const cartPlaceOrder = async (req, res) => {
 
 const orderConfirm = async (req, res) => {
     const order = await orders.findOne({ _id: req.session.newOrderId });
+    let totalItems = await getCartCount(req.session.user._id);
+
     if (order) {
         if (order.paymentMethod === 'online_payment') {
             order.paymentStatus = 'Paid';
@@ -898,7 +1061,7 @@ const orderConfirm = async (req, res) => {
         order.timeline.push({ status: 'Confirmed', timestamp: indianTime.toLocaleString('IND', options) });
         await order.save().then(async () => {
             await cart.findOneAndDelete({ userId: req.session.user._id }).then(() => {
-                res.render('users/orderConfirm', { user: req.session.user });
+                res.render('users/orderConfirm', { totalItems, user: req.session.user });
             });
         });
     } else {
@@ -944,6 +1107,8 @@ const logout = (req, res) => {
 
 module.exports = {
     signupPage,
+    loginPage,
+    login,
     userSignup,
     otpValidator,
     dologin,
@@ -977,5 +1142,14 @@ module.exports = {
     cartPlaceOrder,
     orderConfirm,
     paymentCancel,
-    logout
+    logout,
+    changeqty,
+    blogPage,
+    contactPage,
+    aboutPage,
+    shopPage,
+    homePage,
+    addAddressPage,
+    addToCartlist,
+    loginOtpPage
 };

@@ -256,8 +256,12 @@ const viewproducts = (data) => {
 
 const getSingleproduct = async (req, res) => {
   try {
+    let totalItems = null;
+    if (req.session.user) {
+      totalItems = await getCartCount(req.session.user._id);
+    }
     const productdetails = await products.findOne({ _id: req.params.productID }).populate({ path: "category" }).lean()
-    res.render("users/product", { user: req.session.user, productdetails });
+    res.render("users/product", { totalItems,user: req.session.user, productdetails });
   } catch (error) {
     res.render("error", { error })
   }

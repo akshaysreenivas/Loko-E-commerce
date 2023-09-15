@@ -5,102 +5,40 @@ const productController = require("../controllers/productController");
 const verifylogin = require('../middleware/loginverify');
 
 
-// --------------- user signup ----------------
+// ------- user login ------
+//  login page
+router.get("/login",userController.loginPage)
 
-// ------get method------
+// post login
+router.post("/login", userController.login)
 
+// user signup page ----------------
 router.get("/signup",userController.signupPage)
 
 // ------post method------
-
 router.post("/signup", userController.userSignup)
 
+// otp page   
+router.get('/otp-validation',userController.loginOtpPage) 
+
 //--- user validation with otp  -----
-
-router.get('/otp-validation', (req, res) => {
-  if (req.session.loggedIn) res.redirect("/");
-  else {
-    res.render('users/otp', { invalidOtp: req.session.invalidOtp })
-    req.session.invalidOtp = ""
-  }
-})
-
 router.post("/otp-validation", userController.otpValidator)
 
-// --------------- user login ----------------
+// user home page
+router.get("/", userController.homePage) 
 
-// get login
+// Shop page  
+router.get('/shop',userController.shopPage)
 
-router.get("/login", (req, res) => {
-  if (req.session.loggedIn)
-    res.redirect("/");
-  else {
-    const message = req.session.message;
-    res.render("users/login", { message });
-    req.session.message = " ";
-  }
-});
+// blog page  
+router.get('/blog',userController.blogPage) 
 
-// post login
+// contacts page  
+router.get('/contact',userController.contactPage) 
 
-router.post("/login", (req, res) => {
-  userController.dologin(req.body).then((response) => {
-    if (!response.user) {
-      req.session.message = "No User Found with this email id";
-      res.redirect("/login");
-    } else {
-      if (response.blocked) {
-        req.session.message =
-          " OOPS !, Your account has been temporarly blocked";
-        res.redirect("/login");
-      } else {
-        if (response.result) {
-          let user={
-            name:response.userdoc.name,
-            email:response.userdoc.email,
-            _id:response.userdoc._id
-          }
-          req.session.user = user;
-          req.session.loggedIn = true;
-          res.redirect("/");
-        } else {
-          req.session.message = "Invalid Password";
-          res.redirect("/login");
-        }
-      }
-    }
-  });
-});
+// about page  
+router.get('/about', userController.aboutPage)
 
-/* user home page. */
-
-router.get("/", async (req, res) => {
-  let totalItems = null;
-  let Categorys = null;
-  let categorys=  await productController.viewCategory()
-  if(categorys){
-     Categorys= await categorys.Categorys
-  }
-  if (req.session.user) {
-    totalItems = await userController.getCartCount(req.session.user._id);
-  }
-  await productController.viewproducts().then((response) => {
-    const productsDatas = response.data;
-    const productsData = productsDatas.map((productsDatas) => {
-      return {
-        _id: productsDatas._id,
-        name: productsDatas.name,
-        price: productsDatas.price,
-        path: productsDatas.images[0].path,
-      };
-    });  
-    res.render("users/home", { productsData,Categorys, totalItems, user: req.session.user });
-  });
-});
-
-// -------    viewproductsbycategory    ------
-
-router.get('/categories/:category', productController.viewproductsbycategory)
 
 // -----profile UI--------
 
@@ -122,87 +60,57 @@ router.post('/deleteAddress',verifylogin.verifyLogin,userController.deleteAddres
 router.post('/changeName',verifylogin.verifyLogin,userController.changeName)
 
 // product view ------
-
 router.get("/product/:productID",productController.getSingleproduct)
 
-// cart --------
+// -------    viewproductsbycategory    ------
+router.get('/categories/:category', productController.viewproductsbycategory)
 
+// cart --------
 router.get("/cart", verifylogin.verifyLogin,userController.getCart)
 
-// post 
-
-router.post("/addToCart/:productID", verifylogin.verifyLogin, async (req, res, next) => {
-  const quantity = 1;
-  await userController
-    .addToCart(req.session.user._id, req.params.productID, quantity)
-    .then((response) => {
-      let itemCount = response.data;
-      res.json({ status:true, itemCount ,login:true});
-    })
-    .catch((err) => err);
-});
-
+// add to cart  
+router.post("/addToCart/:productID", verifylogin.verifyLogin,userController.addToCartlist)
 
 // delete product from cart 
-
 router.post("/delete-cart-item/:productID", verifylogin.verifyLogin, userController.deleteCartProduct);
 
-
 // change quantity of a single item in cart  
+router.post("/changeqty", verifylogin.verifyLogin,userController.changeqty);
 
-router.post("/changeqty", verifylogin.verifyLogin, async (req, res) => {
-  let totalCost = 0;
-  await userController
-    .changeCartProductCount(req.session.user._id, req.body)
-    .then((response) => {
-      userController.getCartTotalamount(req.session.user._id).then((response) => {
-        if (response.totalAmount) {
-          totalCost = response.totalAmount[0].totalCost
-          console.log(totalCost);
-          res.json({ totalCost });
-        }
-        else {
-          res.json({ removed: true });
-
-        }
-      })
-    });
-});
-
-
+// wishlist page  
 router.get("/wishlist",verifylogin.verifyLogin, userController.getWishlist)
+
+// add to wishlist  
 router.post("/addToWishlist/:productID",verifylogin.verifyLogin, userController.addToWishlist)
+
+// move to wishlist   
 router.post("/moveToWishlist/:productID",verifylogin.verifyLogin, userController.moveToWishlist)
-
-
 
 // ----- checkout page -------
 router.get('/checkout', verifylogin.verifyLogin, userController.viewCheckout)
 
+// add address page    
+router.get('/addAddress', verifylogin.verifyLogin,userController.addAddressPage)
+
 // ------add new address------
-
-router.get('/addAddress', verifylogin.verifyLogin, (req, res) => {
-  res.render('users/addAddress', { user: req.session.user})
-})
-
 router.post('/addAddress', verifylogin.verifyLogin, userController.addAddress)
 
-
 // ------ place order -------
-
 router.post('/create-checkout-session', verifylogin.verifyLogin, userController.cartPlaceOrder)
 
+// coupon apply 
 router.post('/applyCoupon', verifylogin.verifyLogin, userController.applyCoupon)
-// confirm order  
 
+// confirm order  
 router.get('/confirmOrder', verifylogin.verifyLogin,userController.orderConfirm)
 
+// payment failed page  
 router.get("/paymentfailed",verifylogin.verifyLogin,userController.paymentCancel)
 
+// cancel order  
 router.post("/cancelOrder/:orderID",verifylogin.verifyLogin,userController.cancelOrder)
 
 // ======logout====
-
 router.get("/logout", userController.logout);
 
 module.exports = router;
