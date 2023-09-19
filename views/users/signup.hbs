@@ -89,7 +89,8 @@
             <div class="inn-cover">
               <div class="ditk-inf">
                 <h2 class="w-100"> Already Have an Account ? </h2>
-                <p>Log in to access exclusive discounts, order tracking, and a convenient wishlist feature. sign up now and step
+                <p>Log in to access exclusive discounts, order tracking, and a convenient wishlist feature. sign up now
+                  and step
                   into a world of possibilities!</p>
                 <a href="/login">
                   <button type="button" class="btn button">LOGIN NOW</button>
@@ -164,13 +165,17 @@
               <small id="confpasswordErr" class="text-danger"></small>
 
               <div class="input-group center mt-4">
-                <button class="btn btn-dark btn-round" type="submit">CREATE ACCOUNT</button>
+                <button class="btn btn-dark btn-round" type="submit" id="signup_btn"><span class="login_submit"
+                    id="signup_submit">CREATE ACCOUNT</span>
+                  <span class="spinner-border m-auto text-white p-2 spinner-border-sm" id="spinner_signup"
+                    style="display:none;" role="status"> </span>
+                </button>
               </div>
             </form>
             {{#if message}}
             <div class="form-outline m-1">
-              <h6 class="text-danger" >{{message}}<a href="/login"
-                  class="fw-bold text-body"><u class="text-primary">Login here</u></a>
+              <h6 class="text-danger">{{message}}<a href="/login" class="fw-bold text-body"><u
+                    class="text-primary">Login here</u></a>
             </div>
             {{/if}}
           </div>

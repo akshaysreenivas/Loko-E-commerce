@@ -1,0 +1,23 @@
+.about__pic {
+    background: url("/images/about-us.avif") center center/cover no-repeat;
+    height: 400px;
+    margin-bottom: 35px;
+}
+
+.about__pic img {
+    min-width: 100%;
+}
+
+.about__item {
+    margin-bottom: 30px;
+}
+
+.about__item h4 {
+    color: heading-color;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.about__item p {
+    margin-bottom: 0;
+}

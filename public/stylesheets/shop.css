@@ -1,0 +1,138 @@
+/*--------------------- Shop -----------------------*/
+.shop {
+  margin-top: 100px;
+}
+
+.shop__sidebar {
+  padding: 0 8px;
+}
+
+.shop__sidebar__search {
+  background-color: white;
+  margin-bottom: 25px;
+  transition: width 0.3s ease;
+}
+#searchDiv {
+  transition: width 0.3s ease; /* Adjust the duration and timing function as needed */
+}
+
+
+.shop__sidebar__search input {
+  transition: width 0.3s ease; /* Adjust the duration and timing function as needed */
+  width: 100%;
+  font-size: 15px;
+  color: #b7b7b7;
+  padding-left: 10px;
+  border: none;
+  height: 42px;
+}
+
+
+
+.shop__sidebar__search input::placeholder {
+  color: #b7b7b7;
+}
+
+.shop__sidebar__search button {
+  color: #b7b7b7;
+  font-size: 15px;
+  border: none;
+  background: transparent;
+  height: 100%;
+  padding: 15px;
+}
+.shop__sidebar__search button:hover {
+  color: rgb(19, 19, 19);
+}
+
+.shop__sidebar__accordion .card {
+  border: none;
+  border-radius: 0;
+  margin-bottom: 25px;
+}
+
+.card-heading {
+  color: #b7b7b7;
+  font-size: 15px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.shop__sidebar__categories ul li {
+  list-style: none;
+}
+
+.shop__sidebar__categories ul li a {
+  color: #727272;
+  font-size: 18px;
+  line-height: 40px;
+}
+
+.shop__sidebar__categories ul li:hover {
+  background-color: #f2f2f2e0;
+}
+
+.shop__product__option {
+  margin-bottom: 45px;
+}
+
+.shop__product__option p {
+  margin-bottom: 0;
+}
+
+.shop__product__option__right {
+  text-align: right;
+}
+
+.shop__product__option__right p {
+  display: inline-block;
+  margin-bottom: 0;
+}
+
+.shop__product__option__right {
+  text-align: right;
+}
+
+.shop__product__option__right p {
+  display: inline-block;
+  margin-bottom: 0;
+}
+
+.shop__product__option__right select {
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.shop__product__option__right:after {
+  border-bottom: 15px solid #111;
+  border-right: 1.5px solid #111;
+  height: 8px;
+  right: 12px;
+  width: 8px;
+}
+
+.shop__product__option__right select .list {
+  border-radius: 0;
+}
+
+.accordion-button:focus {
+  z-index: 3;
+  border: none;
+  outline: 0;
+  box-shadow: none;
+}
+
+.accordion-button:not(.collapsed) {
+  color: #b7b7b7;
+  background-color: #ffffff;
+}
+
+.accordion-button:not(.collapsed)::after {
+  color: #b7b7b7;
+
+  background-image: var(--bs-accordion-btn-icon);
+  transform: var(--bs-accordion-btn-icon-transform);
+}

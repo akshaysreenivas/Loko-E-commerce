@@ -1,45 +1,5 @@
-<style>
-  .menu {
-    padding: 3px;
-    list-style: none;
-    margin: auto;
-    width: 800px;
-    width: -moz-fit-content;
-    width: -webkit-fit-content;
-    width: fit-content;
-  }
+<link rel="stylesheet" href="/stylesheets/navbar.css" />
 
-  .menu>li {
-    background: #000;
-    float: left;
-    position: relative;
-    transform: skewX(25deg);
-    border: 0.1px solid;
-  }
-
-  .menu a {
-    display: block;
-    color: #fff;
-    text-transform: uppercase;
-    text-decoration: none;
-    font-size: 14px;
-  }
-
-  .menu li:hover {
-    background: #3b3636;
-  }
-
-  .menu>li>a {
-    transform: skewX(-25deg);
-    padding: 1em 2em;
-  }
-
-  @media screen and (min-width: 1126px) {
-    .logo {
-      margin-left: 60px;
-    }
-  }
-</style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <nav class="navbar nav-bg d-flex justify-content-around  nav-bar navbar-expand-lg p-0 ">
@@ -53,17 +13,17 @@
       <div class="navbar-nav gap-5 m-auto">
         <ul class="menu">
           <li><a class="active" href="/">Home</a></li>
-          <li><a class="active" href="/">Shop</a></li>
-          <li><a class="active" href="/">Blog</a></li>
-          <li><a class="active" href="/">About</a></li>
-          <li><a class="active" href="/">Contact</a></li>
+          <li><a class="active" href="/shop">Shop</a></li>
+          <li><a class="active" href="/blog">Blog</a></li>
+          <li><a class="active" href="/about">About</a></li>
+          <li><a class="active" href="/contact">Contact</a></li>
         </ul>
         <div class="d-flex  align-items-start justify-content-around d-sm-px-5 d-sm-mx-5 gap-5 mt-3">
-          <a href="/wishlist" class="p-1">
-            <span class="material-icons-sharp text-dark" onclick="addToWishlist('{{this._id}}')">favorite_border </span>
+          <a href="/wishlist" class="p-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wishlist">
+            <span class="material-icons-sharp text-dark" onclick="addToWishlist('{{this._id}}')" >favorite_border </span>
           </a>
-          <a href="/cart" class="p-1 position-relative">
-            <span class="material-icons-sharp text-dark ">shopping_cart
+          <a href="/cart" class="p-1 position-relative" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Shopping Bag">
+            <span class="material-icons-sharp text-dark" >shopping_bag
             </span>
             {{#if totalItems}}
             <span class="position-absolute  start-100 translate-middle badge rounded-pill bg-danger p-1"

@@ -1,0 +1,40 @@
+.menu {
+    padding: 3px;
+    list-style: none;
+    margin: auto;
+    width: 800px;
+    width: -moz-fit-content;
+    width: -webkit-fit-content;
+    width: fit-content;
+  }
+
+  .menu>li {
+    background: #000;
+    float: left;
+    position: relative;
+    transform: skewX(25deg);
+    border: 0.1px solid;
+  }
+
+  .menu a {
+    display: block;
+    color: #fff;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .menu li:hover {
+    background: #3b3636;
+  }
+
+  .menu>li>a {
+    transform: skewX(-25deg);
+    padding: 1em 2em;
+  }
+
+  @media screen and (min-width: 1126px) {
+    .logo {
+      margin-left: 60px;
+    }
+  }
