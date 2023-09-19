@@ -1,4 +1,3 @@
-
 <link rel="stylesheet" href="/stylesheets/userLogin.css" />
 
 
@@ -36,18 +35,23 @@
                       key
                     </span></span>
                 </div>
-                <span class="material-icons-sharp align-self-end  toggle-password" id="eye"
-                  onclick="togglePassword()">
+                <span class="material-icons-sharp align-self-end  toggle-password" id="eye" onclick="togglePassword()">
                 </span>
                 <input type="password" id="userPassword" class="form-control" name="password" placeholder="Password"
                   aria-label="Password" onclick="showeye()">
-                
+
               </div>
               <small id="passwordErr" class="text-danger"></small>
 
               <div class="input-group center mt-4">
-                <button class="btn btn-dark btn-round" type="submit">CLICK TO LOGIN</button>
+                <button class="btn  btn-dark align btn-round" id="login_btn" type="submit">
+                  <span class="login_submit" id="login_submit">CLICK TO LOGIN</span>
+                  <span class="spinner-border m-auto text-white p-2 spinner-border-sm" id="spinner_login"
+                    style="display:none;" role="status">
+                  </span>
+                </button>
               </div>
+
             </form>
             <div class="form-outline mb-2">
               <h6 class="text-danger text-center">{{message}}</h6>
@@ -61,6 +65,7 @@
                 <p>Join our fashion community by signing up today! Enjoy exclusive perks like member-only discounts,
                   faster checkout for seamless shopping Elevate your fashion journey – sign up now and step
                   into a world of possibilities!</p>
+
                 <a href="/signup">
                   <button type="button" class="btn button">SIGN UP</button>
                 </a>

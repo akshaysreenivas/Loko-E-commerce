@@ -94,4 +94,7 @@ function validatesignup(e) {
   }
 
   signupForm.submit();
+  document.getElementById("signup_btn").disabled = true;
+  document.getElementById("spinner_signup").style.display = "block";
+  document.getElementById("signup_submit").style.display = "none";
 }

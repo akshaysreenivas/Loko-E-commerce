@@ -11,7 +11,7 @@ const wishlist = require('../models/wishlistmodel');
 const indianTime = new Date();
 const options = { timeZone: 'Asia/Kolkata' };
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-
+const cartcount = require("../middleware/cartcount")
 
 
 const signupPage = (req, res) => {
@@ -33,7 +33,7 @@ const loginPage = (req, res) => {
 const blogPage = async (req, res) => {
     let totalItems = null
     if (req.session.user) {
-        totalItems = await getCartCount(req.session.user._id);
+        totalItems = await cartcount.getCartCount(req.session.user._id);
     }
     res.render('users/blog', { totalItems, user: req.session.user })
 
@@ -42,7 +42,7 @@ const blogPage = async (req, res) => {
 const contactPage = async (req, res) => {
     let totalItems = null
     if (req.session.user) {
-        totalItems = await getCartCount(req.session.user._id);
+        totalItems = await cartcount.getCartCount(req.session.user._id);
     }
     res.render('users/contact', { totalItems, user: req.session.user })
 
@@ -51,22 +51,22 @@ const contactPage = async (req, res) => {
 const aboutPage = async (req, res) => {
     let totalItems = null
     if (req.session.user) {
-        totalItems = await getCartCount(req.session.user._id);
+        totalItems = await cartcount.getCartCount(req.session.user._id);
     }
     res.render('users/about', { totalItems, user: req.session.user })
 
 };
 const shopPage = async (req, res) => {
     let totalItems = null;
-    let Categorys = null;
-    let categorys = productController.viewCategory()
+    let Categorys;
+    let categorys = await productController.viewCategory()
     if (categorys) {
         Categorys = await categorys.Categorys
     }
     if (req.session.user) {
-        totalItems = await getCartCount(req.session.user._id);
+        totalItems = await cartcount.getCartCount(req.session.user._id);
     }
-    await productController.viewproducts().then((response) => {
+    await productController.viewproducts(req.query.category,req.query.sort).then((response) => {
         const productsDatas = response.data;
         const productsData = productsDatas.map((productsDatas) => {
             return {
@@ -88,7 +88,7 @@ const homePage = async (req, res) => {
         Categorys = await categorys.Categorys
     }
     if (req.session.user) {
-        totalItems = await getCartCount(req.session.user._id);
+        totalItems = await cartcount.getCartCount(req.session.user._id);
     }
     await productController.viewproducts().then((response) => {
         const productsDatas = response.data;
@@ -243,7 +243,7 @@ const userdetails = async (user_Id) => {
 
 const viewProfile = async (req, res) => {
     try {
-        let totalItems = await getCartCount(req.session.user._id);
+        let totalItems = await cartcount.getCartCount(req.session.user._id);
 
         const User = await userdetails(req.session.user._id);
         let user = {
@@ -259,7 +259,7 @@ const viewProfile = async (req, res) => {
 const viewCoupons = async (req, res) => {
     const currentDate = new Date()
     try {
-        let totalItems = await getCartCount(req.session.user._id);
+        let totalItems = await cartcount.getCartCount(req.session.user._id);
 
         const coupons = await coupon.find({ active: true, expirationDate: { $gt: currentDate }, active: true }).lean()
         res.render("users/coupons", { totalItems, coupons, user: req.session.user })
@@ -269,7 +269,7 @@ const viewCoupons = async (req, res) => {
 }
 
 const addAddressPage = async (req, res) => {
-    let totalItems = await getCartCount(req.session.user._id);
+    let totalItems = await cartcount.getCartCount(req.session.user._id);
     res.render('users/addAddress', { totalItems, user: req.session.user })
 
 };
@@ -297,7 +297,7 @@ const manageAddress = async (req, res) => {
     const userid = req.session.user._id;
     let userAddress;
     const address = await users.findOne({ _id: userid }, 'addressDetails').lean();
-    let totalItems = await getCartCount(req.session.user._id);
+    let totalItems = await cartcount.getCartCount(req.session.user._id);
     if (address) {
         userAddress = address.addressDetails;
     }
@@ -307,7 +307,7 @@ const manageAddress = async (req, res) => {
 
 const orderManage = async (req, res) => {
     try {
-        let totalItems = await getCartCount(req.session.user._id);
+        let totalItems = await cartcount.getCartCount(req.session.user._id);
 
         const allOrders = await orders.find({ user: req.session.user._id }).sort({ orderOn: -1 }).populate({ path: 'orderItems.product' }).lean();
         res.render('users/orders', { totalItems, allOrders, user: req.session.user });
@@ -319,7 +319,7 @@ const orderManage = async (req, res) => {
 const addressTobeEdited = async (req, res) => {
     try {
         let useraddress;
-        let totalItems = await getCartCount(req.session.user._id);
+        let totalItems = await cartcount.getCartCount(req.session.user._id);
 
         const address = await users.findOne({ _id: req.session.user._id, 'addressDetails._id': req.params.addressid }, { 'addressDetails.$': 1 }).lean();
         if (address) {
@@ -570,7 +570,7 @@ const getCart = async (req, res) => {
     try {
         const ID = new mongoose.Types.ObjectId(req.session.user._id);
         const total_cost = await getCartTotalamount(ID)
-        const totalItems = await getCartCount(ID)
+        const totalItems = await cartcount.getCartCount(ID)
         const cartProducts = await getCartItems(ID)
         let validItems;
         if (cartProducts) {
@@ -597,25 +597,6 @@ const addToCartlist = async (req, res) => {
         })
         .catch((err) => err);
 
-};
-
-const getCartCount = (ID) => {
-
-    return new Promise(async (resolve, reject) => {
-
-        try {
-            await cart.findOne({ userId: ID, active: true }, { totalQty: 1 }).then((data) => {
-                if (data) {
-                    resolve(data.totalQty);
-                } else {
-                    resolve(0);
-                }
-            });
-        } catch (error) {
-            throw new Error(error)
-        }
-
-    });
 };
 
 const getCartTotalamount = (userID) => {
@@ -825,7 +806,7 @@ const moveToWishlist = async (req, res) => {
 
 const getWishlist = async (req, res) => {
     try {
-        let totalItems = await getCartCount(req.session.user._id);
+        let totalItems = await cartcount.getCartCount(req.session.user._id);
         const userid = new mongoose.Types.ObjectId(req.session.user._id)
         const products = await wishlist.find({ userId: userid }).populate("products.productId").lean()
         res.render("users/wishlist", { totalItems, products, user: req.session.user })
@@ -1046,7 +1027,7 @@ const cartPlaceOrder = async (req, res) => {
 
 const orderConfirm = async (req, res) => {
     const order = await orders.findOne({ _id: req.session.newOrderId });
-    let totalItems = await getCartCount(req.session.user._id);
+    let totalItems = await cartcount.getCartCount(req.session.user._id);
     if (order) {
         if (order.paymentMethod === 'online_payment') {
             order.paymentStatus = 'Paid';
@@ -1125,7 +1106,6 @@ module.exports = {
     addToCart,
     getCartItems,
     getCart,
-    getCartCount,
     getCartTotalamount,
     deleteCartProduct,
     changeCartProductCount,

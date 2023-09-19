@@ -50,4 +50,7 @@ function validateuserLogin(e) {
 
 
   loginForm.submit()
+  document.getElementById("login_btn").disabled = true;
+  document.getElementById("spinner_login").style.display = "block";
+  document.getElementById("login_submit").style.display = "none";
 }

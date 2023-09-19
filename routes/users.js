@@ -28,7 +28,7 @@ router.post("/otp-validation", userController.otpValidator)
 router.get("/", userController.homePage)
 
 // Shop page  
-router.get('/shop', userController.shopPage)
+router.get('/shop/:category?', userController.shopPage)
 
 // blog page  
 router.get('/blog', userController.blogPage)
@@ -63,7 +63,7 @@ router.post('/changeName', verifylogin.verifyLogin, userController.changeName)
 router.get("/product/:productID", productController.getSingleproduct)
 
 // -------    viewproductsbycategory    ------
-router.get('/categories/:category', productController.viewproductsbycategory)
+router.get('/shop/categories/:category', productController.viewproductsbycategory)
 
 // cart --------
 router.get("/cart", verifylogin.verifyLogin, userController.getCart)

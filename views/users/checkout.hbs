@@ -30,10 +30,9 @@
           {{/each}}
         </div>
         {{/if}}
-        <div class="container mx-0 my-4  p-2 border border-secondary box-shadow rounded ">
+        <div class="container bg-white mx-0 my-4  p-2 border border-secondary box-shadow rounded ">
           <a class="btn btn-outline-dark d-flex p-3" href="/addAddress" role="button"><span
               class="material-icons-sharp">add</span> Add New address</a>
-
         </div>
     </div>
 
@@ -53,7 +52,6 @@
                   <span id="coupon_submit">Redeem</span>
                   <span class="spinner-border text-dark p-2 spinner-border-sm" id="spinner_redeem" style="display:none;"
                     role="status">
-
                 </button>
               </div>
             </div>
@@ -135,17 +133,7 @@
     <h2>NO orders</h2>
   </div>
   {{/if}}
-  <footer class="my-5 pt-5 text-muted text-center text-small">
-    <p class="mb-1">&copy; 2023-2024 loko</p>
-    <ul class="list-inline">
-      <li class="list-inline-item"><a href="#">Privacy</a></li>
-      <li class="list-inline-item"><a href="#">Terms</a></li>
-      <li class="list-inline-item"><a href="#">Support</a></li>
-    </ul>
-  </footer>
 </section>
-
-
 <script>
   function applyCoupon() {
     let Code = document.getElementById("promo_code")

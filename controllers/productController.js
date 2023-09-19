@@ -2,7 +2,7 @@ const products = require("../models/productmodel");
 const categorys = require('../models/categorymodel');
 const { default: mongoose } = require("mongoose");
 const cloudinary = require("../utils/cloudinary")
-const userController = require("./userController")
+const cartcount = require("../middleware/cartcount")
 
 const addCategory = async (req, res) => {
   try {
@@ -239,10 +239,25 @@ const viewproductsbycategory = async (req, res) => {
 
 }
 
-const viewproducts = (data) => {
+const viewproducts = (category, sort) => {
   return new Promise(async (resolve, reject) => {
+
     try {
-      await products.find({ active: true }).populate({ path: "category" }).lean().then((data) => {
+      let filter = { active: true }
+      let sortObject = {}
+      if (category) {
+        filter["category"] = category
+      }
+      if (sort) {
+        if (sort === "price_asc") {
+          sortObject["price"] = 1
+        }
+        if (sort === "price_desc") {
+          sortObject["price"] = -1
+        }
+      }
+
+      await products.find(filter).sort(sortObject).populate({ path: "category" }).lean().then((data) => {
         resolve({ status: true, data })
       }).catch((error) => {
         throw error;
@@ -258,7 +273,7 @@ const getSingleproduct = async (req, res) => {
   try {
     let totalItems = null;
     if (req.session.user) {
-      totalItems = await userController.getCartCount(req.session.user._id);
+      totalItems = await cartcount.getCartCount(req.session.user._id);
     }
     const productdetails = await products.findOne({ _id: req.params.productID }).populate({ path: "category" }).lean()
     res.render("users/product", { totalItems, user: req.session.user, productdetails });
