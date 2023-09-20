@@ -236,7 +236,6 @@ const viewproductsbycategory = async (req, res) => {
   } catch (error) {
     throw new Error(error)
   }
-
 }
 
 const viewproducts = (category, sort) => {
@@ -298,11 +297,15 @@ const deleteProduct = (data) => {
   })
 }
 
+const search = async (req, res) => {
+  let payload = req.body.payload.trim();
+  if (!req.body.payload) return
+  const [Categorys, Products] = await Promise.all([
+    categorys.find({ title: { $regex: new RegExp('^' + payload + '.*', 'i') } },{title:1,path:1}).lean(),
+    products.find({ name: { $regex: new RegExp('^' + payload + '.*', 'i') } },{name:1,images: { $slice: 1 }}).limit(7).lean()])
 
-
-
-
-
+  res.send({ Categorys, Products })
+};
 
 module.exports = {
   addCategory,
@@ -316,5 +319,6 @@ module.exports = {
   viewproductsbycategory,
   viewproducts,
   getSingleproduct,
-  deleteProduct
+  deleteProduct,
+  search
 }

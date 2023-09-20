@@ -18,7 +18,10 @@
           <li><a class="active" href="/about">About</a></li>
           <li><a class="active" href="/contact">Contact</a></li>
         </ul>
-        <div class="d-flex  align-items-start justify-content-around d-sm-px-5 d-sm-mx-5 gap-5 mt-3">
+        <div class="d-flex  align-items-start justify-content-around  d-sm-px-5 d-sm-mx-5 gap-4 mt-3">
+          <a href="/wishlist" class="p-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wishlist">
+            <span class="material-icons-sharp text-dark" onclick="search('{{this._id}}')" >search </span>
+          </a>
           <a href="/wishlist" class="p-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wishlist">
             <span class="material-icons-sharp text-dark" onclick="addToWishlist('{{this._id}}')" >favorite_border </span>
           </a>

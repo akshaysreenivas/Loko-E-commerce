@@ -7,13 +7,19 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="shop__sidebar">
-                    <div class="shop__sidebar__search d-flex align-items-center ps-2" id="searchDiv">
-                        <input onfocus="searchinputfocus(true)" onblur="searchinputfocus(false)" type="text"
-                            placeholder="Search...">
-                        <button class="d-flex align-items-center" type="submit"><span
+                    <div class="shop__sidebar__search d-flex align-items-center ps-2 bg-white"
+                        id="searchDiv">
+                        <input onfocus="searchinputfocus(true)" onblur="searchinputfocus(false)" id="searchinput"
+                            type="text" placeholder="Search..." onkeyup="Search(this)">
+                        <button class="d-flex align-items-center bg-white" type="submit"><span
                                 class="material-icons-sharp">search</span></button>
                     </div>
-
+                    <div class="search-container bg-white" id="search-container">
+                        <section class="d-flex justify-content-start flex-column bg-white" id="searchResults">
+                        </section>
+                    </div>
+                    <div>
+                    </div>
                     <div class="accordion shop__sidebar__accordion" id="accordionPanelsStayOpenExample">
                         <div class="accordion-item card">
                             <h2 class="accordion-header" id="panelsStayOpen-headingOne">
@@ -44,7 +50,7 @@
                 <div class="shop__product__option">
                     <div class=" ms-auto col-lg-6 col-md-6 col-sm-6">
                         <div class="shop__product__option__right">
-                            <p>Sort by:</p>
+                            <p>Sort by : </p>
                             <select class="select" id="sort" onchange="sortbyprice(this.value)">
                                 <option value="newest_first">Newest first</option>
                                 <option value="price_asc">Price - Low To High</option>
@@ -85,24 +91,20 @@
 </section>
 {{>footer}}
 
+  <script src="/javascripts/shop.js"></script>
 
 <script>
+    // Add an event listener to handle clicks outside the search container
+    document.addEventListener("click", function (e) {
+        const searchContainer = document.getElementById("search-container");
+        const searchResults = document.getElementById("searchResults");
 
-    function searchinputfocus(data) {
-        const searchDiv = document.getElementById("searchDiv")
-        if (data) {
-            if (window.innerWidth >= 768) {
-                searchDiv.style.width = "680px";
-                searchDiv.style.position = "relative";
-            }
-        } else {
-            searchDiv.style.width = "auto"
+        if (!searchContainer.contains(e.target)) {
+            // Clicked outside the search container, so hide the results
+            searchResults.style.display = "none";
         }
-    }
+    });
 
-    function sortbyprice(data) {
-        window.location.href = `/shop/?sort=${data}`;
-    }
     // Get the current sorting parameter from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const sortingParameter = urlParams.get('sort');

@@ -56,6 +56,9 @@ const aboutPage = async (req, res) => {
     res.render('users/about', { totalItems, user: req.session.user })
 
 };
+
+
+
 const shopPage = async (req, res) => {
     let totalItems = null;
     let Categorys;
@@ -80,6 +83,7 @@ const shopPage = async (req, res) => {
         res.render("users/shop", { productsData, Categorys, totalItems, user: req.session.user });
     });
 };
+
 const homePage = async (req, res) => {
     let totalItems = null;
     let Categorys = null;
