@@ -27,11 +27,6 @@ function validatesignup(e) {
   passwordErr.innerHTML = '';
   confirmPasswordErr.innerHTML = '';
 
-
-
-
-
-
   // ------name validation----
 
   if (!name) {

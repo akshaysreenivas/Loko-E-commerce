@@ -2,7 +2,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<nav class="navbar nav-bg d-flex justify-content-around  nav-bar navbar-expand-lg p-0 ">
+<nav class="navbar nav-bg  justify-content-around flex-colum  nav-bar navbar-expand-lg p-0 ">
   <div class="container-fluid nav-bg ">
     <button class="navbar-toggler p-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
       aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,12 +18,21 @@
           <li><a class="active" href="/about">About</a></li>
           <li><a class="active" href="/contact">Contact</a></li>
         </ul>
-        <div class="d-flex  align-items-start justify-content-around d-sm-px-5 d-sm-mx-5 gap-5 mt-3">
+        <div class="d-flex  align-items-start justify-content-around  d-sm-px-5 d-sm-mx-5 gap-4 mt-3">
+          {{#if shop}}
+          {{else}}
+          <div class="" data-bs-placement="bottom" title="Search" id="searchModalBtn">
+            <button type="button" class="btn p-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+              <span class="material-icons-sharp text-dark">search</span>
+            </button>
+          </div>
+          {{/if}}
           <a href="/wishlist" class="p-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wishlist">
-            <span class="material-icons-sharp text-dark" onclick="addToWishlist('{{this._id}}')" >favorite_border </span>
+            <span class="material-icons-sharp text-dark" onclick="addToWishlist('{{this._id}}')">favorite_border </span>
           </a>
-          <a href="/cart" class="p-1 position-relative" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Shopping Bag">
-            <span class="material-icons-sharp text-dark" >shopping_bag
+          <a href="/cart" class="p-1 position-relative" data-bs-toggle="tooltip" data-bs-placement="bottom"
+            title="Shopping Bag">
+            <span class="material-icons-sharp text-dark">shopping_bag
             </span>
             {{#if totalItems}}
             <span class="position-absolute  start-100 translate-middle badge rounded-pill bg-danger p-1"
@@ -46,3 +55,35 @@
     </div>
   </div>
 </nav>
+
+
+
+{{#if shop}}
+
+{{else}}
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">What are you looking for ?</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/searchResultPage" id="searchForm" method="post"  class="searchDiv d-flex align-items-center bg-white">
+          <input onfocus="searchinputfocus(true)" onblur="searchinputfocus(false)" id="searchinput" type="text"
+            placeholder="Search..." onkeyup="Search(this)" name="search">
+          <button class="d-flex align-items-center bg-white" type="submit"><span
+              class="material-icons-sharp">search</span></button>
+        </form>
+        <div class="search-container bg-white">
+          <section class="d-flex justify-content-start flex-column bg-white" id="searchResults">
+          </section>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{{/if}}

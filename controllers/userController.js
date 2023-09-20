@@ -11,7 +11,8 @@ const wishlist = require('../models/wishlistmodel');
 const indianTime = new Date();
 const options = { timeZone: 'Asia/Kolkata' };
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const cartcount = require("../middleware/cartcount")
+const cartcount = require("../middleware/cartcount");
+const productmodel = require('../models/productmodel');
 
 
 const signupPage = (req, res) => {
@@ -56,6 +57,9 @@ const aboutPage = async (req, res) => {
     res.render('users/about', { totalItems, user: req.session.user })
 
 };
+
+
+
 const shopPage = async (req, res) => {
     let totalItems = null;
     let Categorys;
@@ -66,7 +70,7 @@ const shopPage = async (req, res) => {
     if (req.session.user) {
         totalItems = await cartcount.getCartCount(req.session.user._id);
     }
-    await productController.viewproducts(req.query.category,req.query.sort).then((response) => {
+    await productController.viewproducts(req.query.category, req.query.sort).then((response) => {
         const productsDatas = response.data;
         const productsData = productsDatas.map((productsDatas) => {
             return {
@@ -77,9 +81,10 @@ const shopPage = async (req, res) => {
                 path: productsDatas.images[0].path,
             };
         });
-        res.render("users/shop", { productsData, Categorys, totalItems, user: req.session.user });
+        res.render("users/shop", { shop: true, productsData, Categorys, totalItems, user: req.session.user });
     });
 };
+
 const homePage = async (req, res) => {
     let totalItems = null;
     let Categorys = null;
@@ -90,9 +95,8 @@ const homePage = async (req, res) => {
     if (req.session.user) {
         totalItems = await cartcount.getCartCount(req.session.user._id);
     }
-    await productController.viewproducts().then((response) => {
-        const productsDatas = response.data;
-        const productsData = productsDatas.map((productsDatas) => {
+    let productsData = await productmodel.find().limit(8).lean()
+        productsData = productsData.map((productsDatas) => {
             return {
                 _id: productsDatas._id,
                 name: productsDatas.name,
@@ -101,7 +105,6 @@ const homePage = async (req, res) => {
             };
         });
         res.render("users/home", { productsData, Categorys, totalItems, user: req.session.user });
-    });
 };
 const login = async (req, res) => {
     dologin(req.body).then((response) => {

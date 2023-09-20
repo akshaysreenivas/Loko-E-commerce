@@ -9,13 +9,11 @@
 
 .shop__sidebar__search {
   background-color: white;
-  margin-bottom: 25px;
   transition: width 0.3s ease;
 }
 #searchDiv {
   transition: width 0.3s ease; /* Adjust the duration and timing function as needed */
 }
-
 
 .shop__sidebar__search input {
   transition: width 0.3s ease; /* Adjust the duration and timing function as needed */
@@ -26,8 +24,6 @@
   border: none;
   height: 42px;
 }
-
-
 
 .shop__sidebar__search input::placeholder {
   color: #b7b7b7;
@@ -41,14 +37,33 @@
   height: 100%;
   padding: 15px;
 }
+
 .shop__sidebar__search button:hover {
   color: rgb(19, 19, 19);
 }
 
+@media (max-width: 768px) {
+  .shop__sidebar__search button{
+    margin-left: auto;
+  }
+}
+.searchResultDiv a:hover{
+  background-color: #e6e6e6;
+}
+#searchDiv {
+  transition: width 0.3s ease-in-out; /* Add a transition for smooth width changes */
+}
+
+#searchResults {
+  position: relative; /* Add position property */
+  width: 100%;
+  max-width: 100%;
+  z-index: 1;
+}
 .shop__sidebar__accordion .card {
   border: none;
   border-radius: 0;
-  margin-bottom: 25px;
+  margin: 25px 0;
 }
 
 .card-heading {

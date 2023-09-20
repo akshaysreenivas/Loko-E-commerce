@@ -2,16 +2,16 @@
 {{>userNavbar}}
 
 
-<section class="contents py-5 px-5">
+<section class="contents pt-5 ">
 
     <div class="container mt-4">
-
         <div class="row">
             {{#if productsdata}}
+            <h4 class=" mb-5"><strong>Showing results for query "{{query}}"</strong></h4>
             {{#each productsdata}}
             <div class="col-lg-3 col-sm-6 mb-4 p-3">
-                <div class=" d-flex flex-column align-items-center justify-content-center rounded product-item p-3  border"
-                    style=" box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px; background-color: #f7f3f399;">
+                <div class=" d-flex flex-column align-items-center justify-content-center rounded product-item p-3 bg-white  border"
+                   >
                     <div class="product rounded">
                         {{#each images }}
                         {{#if @first}}
@@ -39,11 +39,12 @@
             {{/each}}
             {{else}}
             <div class="col-12">
-                <h4 class="text-secondary text-center">No Result for your Search</h4>
+              <div class="m-auto">
+                  <img src="/images/nosearchresults.png" width="200" class="img-fluid d-block m-auto">
+                <h4 class="text-secondary text-center">could'nt find any results for your query "{{query}}"</h4>
+              </div>
             </div>
             {{/if}}
-
-
         </div>
     </div>
 

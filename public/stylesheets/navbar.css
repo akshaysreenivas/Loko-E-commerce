@@ -1,40 +1,72 @@
 .menu {
-    padding: 3px;
-    list-style: none;
-    margin: auto;
-    width: 800px;
-    width: -moz-fit-content;
-    width: -webkit-fit-content;
-    width: fit-content;
-  }
+  padding: 3px;
+  list-style: none;
+  margin: auto;
+  width: 800px;
+  width: -moz-fit-content;
+  width: -webkit-fit-content;
+  width: fit-content;
+}
 
-  .menu>li {
-    background: #000;
-    float: left;
-    position: relative;
-    transform: skewX(25deg);
-    border: 0.1px solid;
-  }
+.menu > li {
+  background: #000;
+  float: left;
+  position: relative;
+  transform: skewX(25deg);
+  border: 0.1px solid;
+}
 
-  .menu a {
-    display: block;
-    color: #fff;
-    text-transform: uppercase;
-    text-decoration: none;
-    font-size: 14px;
-  }
+.menu a {
+  display: block;
+  color: #fff;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-size: 14px;
+}
 
-  .menu li:hover {
-    background: #3b3636;
-  }
+.menu li:hover {
+  background: #3b3636;
+}
 
-  .menu>li>a {
-    transform: skewX(-25deg);
-    padding: 1em 2em;
-  }
+.menu > li > a {
+  transform: skewX(-25deg);
+  padding: 1em 2em;
+}
 
-  @media screen and (min-width: 1126px) {
-    .logo {
-      margin-left: 60px;
-    }
+@media screen and (min-width: 1126px) {
+  .logo {
+    margin-left: 60px;
   }
+}
+.searchDiv {
+  border: 1px #1c1a1a solid;
+}
+.searchDiv input {
+  transition: width 0.3s ease; /* Adjust the duration and timing function as needed */
+  width: 100%;
+  font-size: 15px;
+  color: #b7b7b7;
+  padding-left: 10px;
+  border: none;
+  height: 42px;
+}
+.searchDiv input::placeholder {
+  color: #b7b7b7;
+}
+
+.searchDiv button {
+  color: #b7b7b7;
+  font-size: 15px;
+  border: none;
+  background: transparent;
+  height: 100%;
+  padding: 15px;
+  margin-left: auto;
+}
+
+.searchDiv button:hover {
+  color: rgb(19, 19, 19);
+}
+.btn:focus {
+  outline: none !important;
+}

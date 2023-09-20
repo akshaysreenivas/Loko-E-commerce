@@ -70,7 +70,7 @@ function newImgView(event) {
 const input = document.getElementById("images");
 const preview = document.getElementById("preview");
 
-if(input){
+if (input) {
   input.addEventListener("change", updatePreview);
 }
 
@@ -91,6 +91,33 @@ function updatePreview() {
     preview.appendChild(img);
   });
 }
+
+
+
+
+const SearchProductsForm = document.getElementById("searchForm");
+if (SearchProductsForm) {
+  SearchProductsForm.addEventListener("submit", SearchProducts);
+}
+function SearchProducts(e) {
+  e.preventDefault()
+
+  const searchinput = document.getElementById("searchinput");
+  let match = searchinput.value.match(/^[a-zA-z ]*/);
+  let match2 = searchinput.value.match(/\s*/);
+  if (!searchinput.value) {
+    return;
+  }
+  if (match2[0] === searchinput.value) {
+    return;
+  }
+  if (match[0] === searchinput.value) {
+    SearchProductsForm.submit()
+  }
+  return
+}
+
+
 
 
 
