@@ -17,7 +17,6 @@ function searchinputfocus(data) {
         } else {
             searchDiv.style.maxWidth = "none"; // Remove max-width on smaller screens
         }
-
         searchResults.style.height = "auto"; // Set a default height
 
     }
@@ -67,7 +66,7 @@ function Search(e) {
                             if (index > 0) htmlContent += '';
                             htmlContent += `<div class="bg-white p-1 searchResultDiv"><a href="/shop?category=${item._id}"
                             class="d-flex align-items-center bg-white gap-3 text-decoration-none p-2"><img
-                                src="${item.path}" class="" height="35" width="35" />${item.title}</a></div>`;
+                                src="${item.path}" class="" width="40" />${item.title}</a></div>`;
 
                         });
                     }
@@ -76,7 +75,7 @@ function Search(e) {
                             if (index > 0) htmlContent += '';
                             htmlContent += `<div class="bg-white p-1  searchResultDiv"><a href="/product/${item._id}"
                             class="d-flex align-items-center gap-3 text-decoration-none p-2"><img
-                                src="${item.images[0].path}" class="img-fluid searchResult" width="40" />${item.name}</a></div>`;
+                                src="${item.images[0].path}" height="35" width="35" />${item.name}</a></div>`;
 
                         });
                     }

@@ -33,6 +33,9 @@ router.get('/shop/:category?', userController.shopPage)
 // search  
 router.post('/search',productController.search)
 
+// search  
+router.post('/searchResultPage',productController.searchResultPage)
+
 // blog page  
 router.get('/blog', userController.blogPage)
 
