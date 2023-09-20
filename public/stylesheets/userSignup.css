@@ -194,8 +194,8 @@ textarea {
 
 @media screen and (max-width: 767px) {
   .box-de .inn-cover {
-    border-top-right-radius: 0px;
-    border-bottom-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 0px;
     position: relative;
   }
 }
