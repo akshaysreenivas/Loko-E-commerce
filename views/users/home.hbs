@@ -90,64 +90,6 @@
   }
 
 
-
-
-  /*--------------------- Banner -----------------------*/
-  .blog {
-    padding-bottom: 55px;
-  }
-
-  .banner__item {
-    position: relative;
-    overflow: hidden;
-  }
-
-
-
-  .banner__item.banner__item--middle {
-    margin-top: -75px;
-  }
-
-  .banner__item.banner__item--middle .banner__item__pic {
-    float: none;
-  }
-
-  .banner__item.banner__item--middle .banner__item__text {
-    position: relative;
-    top: 0;
-    left: 0;
-    max-width: 100%;
-    padding-top: 22px;
-  }
-
-  .banner__item.banner__item--last {
-    margin-top: 100px;
-  }
-
-  .banner__item__pic {
-    float: right;
-  }
-
-  .banner__item__text {
-    max-width: 300px;
-    position: absolute;
-    left: 0;
-    top: 140px;
-  }
-
-  .banner__item__text h2 {
-    color: #111;
-    font-weight: 700;
-    line-height: 46px;
-    margin-bottom: 10px;
-  }
-
-  .banner__item__text a {
-    color: #000000;
-    text-decoration: none;
-
-  }
-
   /* ------------text effects ------------*/
   .link {
     cursor: pointer;
@@ -422,62 +364,6 @@
     </div>
   </section>
   <!-- Carousal Section End -->
-
-  <!-- Banner Section Begin -->
-  <section class="banner spad">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-7 offset-lg-4">
-          <div class="banner__item">
-            <div class="banner__item__pic">
-              <img src="/images/product/banner-1.jpg" alt="">
-            </div>
-            <div class="banner__item__text shape">
-              <div class="link link--helike ">
-                <h2>Clothing Collections 2030</h2>
-              </div>
-              <a href="/shop" class="link link--thebe">
-                Shop now
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-5">
-          <div class="banner__item banner__item--middle">
-            <div class="banner__item__pic">
-              <img src="/images/product/banner-2.avif" alt="">
-            </div>
-            <div class="banner__item__text">
-              <div class="link link--helike">
-                <h2>Clothing Collections 2030</h2>
-              </div>
-              <a href="/shop" class="link link--thebe">
-                Shop now
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-7">
-          <div class="banner__item banner__item--last">
-            <div class="banner__item__pic">
-              <img src="/images/product/banner-3.jpg" alt="">
-            </div>
-            <div class="banner__item__text">
-              <div class="link link--helike">
-                <h2>Clothing Collections 2030</h2>
-              </div>
-              <a href="/shop" class="link link--thebe">
-                Shop now
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- Banner Section End -->
-
-
   <!-- Products Section End -->
   <div class="container my-4">
     <h1 class="text-center mb-2">New Arrivals</h1>
@@ -508,9 +394,12 @@
   </div>
   <!-- Products Section End -->
 
+<div>
+  <img class="img-fluid" src="/images/footerdesktop-strip.jpg" alt="">
+</div>
+{{>footer}}
 </section>
 
-{{>footer}}
 
 
 <script src="https://cdn.jsdelivr.net/npm/swiffy-slider@1.6.0/dist/js/swiffy-slider.min.js" crossorigin="anonymous"
