@@ -3,10 +3,6 @@
   margin-top: 100px;
 }
 
-.shop__sidebar {
-  padding: 0 8px;
-}
-
 .shop__sidebar__search {
   background-color: white;
   transition: width 0.3s ease;

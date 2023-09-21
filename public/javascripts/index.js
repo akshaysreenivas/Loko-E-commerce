@@ -1,8 +1,10 @@
+window.addEventListener("load",()=>{
+  const preloader=document.querySelector(".preloader")
+  preloader.classList.add("preloader-hidden")
 
+})
 
 // modal opening querys
-
-
 $(document).on("click", ".opendatamodal", function () {
   const selectionId = $(this).data('email');
   $(".modal-body .selection").val(selectionId);

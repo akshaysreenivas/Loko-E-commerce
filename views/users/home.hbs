@@ -40,7 +40,7 @@
   }
 
   .set-bg1 {
-    background: url("/images/portrait-basketball-player-leaning-wall.jpg") center center/cover no-repeat;
+    background: url("/images/portrait-basketball-player-leaning-wall.webp") center center/cover no-repeat;
   }
 
   .set-bg2 {
@@ -52,7 +52,7 @@
   }
 
   .set-bg4 {
-    background: url("/images/romantic-portrait-woman-long-blue-dress-beach-by-sea-windy-day.jpg") center center/cover no-repeat;
+    background: url("/images/romantic-portrait-woman-long-blue-dress-beach-by-sea-windy-day.webp") center center/cover no-repeat;
   }
 
 
@@ -331,14 +331,81 @@
     width: 600px;
     background-color: #fff;
   }
-</style>
 
+  .bigBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    background: url("https://img.freepik.com/free-vector/hand-painted-watercolor-abstract-watercolor-background_23-2149005675.jpg?w=996&t=st=1695287014~exp=1695287614~hmac=a9e16b3798d0859cb9a5ea4ede4979decb8ccc50014ea8a9f5091d466df55cc0");
+    background-size: cover;
+    overflow: hidden;
+  }
+
+  .box {
+    position: relative;
+    width: 200px;
+    height: 300px;
+    transform-style: preserve-3d;
+    animation: animate 20s linear infinite;
+  }
+
+  @keyframes animate {
+    0% {
+      transform: perspective(1000px) rotateY(0deg);
+    }
+
+    100% {
+      transform: perspective(1000px) rotateY(360deg);
+
+    }
+  }
+
+  .box span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform-origin: center;
+    transform-style: preserve-3d;
+    transform: rotateY(calc(var(--i)*45deg)) translateZ(400px);
+    -webkit-box-reflect: below 0px linear-gradient(transparent, transparent, #004);
+  }
+
+  .box span img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+
+  .product-card {
+    perspective: 1000px; /* Set the perspective for 3D effect */
+}
+
+.product-image {
+    position: relative;
+    transform-style: preserve-3d; /* Enable 3D transformations */
+    transition: transform 0.5s ease; /* Add a smooth transition */
+}
+
+.product-card:hover .product-image {
+    transform: rotateY(45deg); /* Apply a 3D rotation on hover */
+}
+
+
+</style>
 
 
 <!------ navigation bar  ------>
 {{>userNavbar}}
 
 <section class="contents">
+ 
   <!-- Carousal Section Begin -->
   <section class="hero">
     <div
@@ -474,6 +541,34 @@
     </div>
   </section>
   <!-- Banner Section End -->
+  <div class="bigBox">
+    <div class="box">
+      <span style="--i:1"><img
+          src="https://img.freepik.com/free-vector/choice-worker_52683-44663.jpg?size=626&ext=jpg&uid=R59665659&ga=GA1.2.1865649110.1694514221&semt=ais"
+          alt=""></span>
+      <span style="--i:2"><img
+          src="https://img.freepik.com/free-vector/worker-doing-research-work_1012-221.jpg?size=626&ext=jpg&uid=R59665659&ga=GA1.2.1865649110.1694514221&semt=ais"
+          alt=""></span>
+      <span style="--i:3"><img
+          src="https://img.freepik.com/free-vector/hand-drawn-flat-design-overwhelmed-people-illustration_23-2149352794.jpg?size=626&ext=jpg&uid=R59665659&ga=GA1.2.1865649110.1694514221&semt=ais"
+          alt=""></span>
+      <span style="--i:4"><img
+          src="https://img.freepik.com/free-vector/environmental-audit-concept-illustration_114360-8634.jpg?size=626&ext=jpg&uid=R59665659&ga=GA1.2.1865649110.1694514221&semt=ais"
+          alt=""></span>
+      <span style="--i:5"><img
+          src="https://img.freepik.com/free-vector/instruction-manual-guide-document-with-cogwheel-isolated-design-element-male-character-analyzing-file-business-analysis-data-processing-updating-concept-illustration_335657-1666.jpg?size=626&ext=jpg&uid=R59665659&ga=GA1.2.1865649110.1694514221&semt=ais"
+          alt=""></span>
+      <span style="--i:6"><img
+          src="https://img.freepik.com/free-vector/modern-email-marketing-concept_23-2147997239.jpg?size=626&ext=jpg&uid=R59665659&ga=GA1.2.1865649110.1694514221&semt=ais"
+          alt=""></span>
+      <span style="--i:7"><img
+          src="https://img.freepik.com/free-vector/code-review-concept-illustration_114360-3973.jpg?size=626&ext=jpg&uid=R59665659&ga=GA1.2.1865649110.1694514221&semt=ais"
+          alt=""></span>
+      <span style="--i:8"><img
+          src="https://img.freepik.com/free-vector/environmental-audit-concept-illustration_114360-8634.jpg?size=626&ext=jpg&uid=R59665659&ga=GA1.2.1865649110.1694514221&semt=ais"
+          alt=""></span>
+    </div>
+  </div>
 
   <!-- Products Section End -->
   <div class="container my-4">
@@ -481,7 +576,8 @@
     <div class="row">
       {{#each productsData}}
       <div class="col-lg-3 col-sm-6 mb-3">
-        <div class=" d-flex flex-column align-items-center justify-content-center rounded product-item p-3 bg-white border">
+        <div
+          class=" d-flex flex-column align-items-center justify-content-center rounded product-item p-3 bg-white border">
           <div class="product rounded">
             <img src="{{path}}" class="" height="20" alt="">
             <ul class="d-flex align-items-center justify-content-center list-unstyled icons">
@@ -517,4 +613,5 @@
     transitionTime: 1,
     delay: 3.5
   });
+
 </script>

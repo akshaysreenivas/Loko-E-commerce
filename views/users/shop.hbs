@@ -6,10 +6,9 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-3">
-                <div class="shop__sidebar">
-                    <div class="shop__sidebar__search d-flex align-items-center ps-2 bg-white"
-                        id="searchDiv">
-                        <input onfocus="searchinputfocus(true)" onblur="searchinputfocus(false)" id="searchinput"
+                <form class="shop__sidebar" action="/searchResultPage" id="searchForm" method="post">
+                    <div class="shop__sidebar__search d-flex align-items-center ps-2 bg-white" id="searchDiv">
+                        <input onfocus="searchinputfocus(true)" name="search" onblur="searchinputfocus(false)" id="searchinput"
                             type="text" placeholder="Search..." onkeyup="Search(this)">
                         <button class="d-flex align-items-center bg-white" type="submit"><span
                                 class="material-icons-sharp">search</span></button>
@@ -18,33 +17,32 @@
                         <section class="d-flex justify-content-start flex-column bg-white" id="searchResults">
                         </section>
                     </div>
-                    <div>
-                    </div>
-                    <div class="accordion shop__sidebar__accordion" id="accordionPanelsStayOpenExample">
-                        <div class="accordion-item card">
-                            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                                <button class="accordion-button card-heading" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
-                                    aria-controls="panelsStayOpen-collapseOne">
-                                    CATEGORIES
-                                </button>
-                            </h2>
-                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
-                                aria-labelledby="panelsStayOpen-headingOne">
-                                <div class="accordion-body shop__sidebar__categories px-2 py-0 pt-1">
-                                    <ul class="p-0">
-                                        {{#each Categorys}}
-                                        <li class="py-2 px-3 "><a href="/shop?category={{_id}}"
-                                                class="d-flex align-items-center gap-3 text-decoration-none"><img
-                                                    src="{{path}}" class="img-fluid" width="35" />{{title}}</a>
-                                        </li>
-                                        {{/each}}
-                                    </ul>
-                                </div>
+                </form>
+                <div class="accordion shop__sidebar__accordion" id="accordionPanelsStayOpenExample">
+                    <div class="accordion-item card">
+                        <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                            <button class="accordion-button card-heading" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
+                                aria-controls="panelsStayOpen-collapseOne">
+                                CATEGORIES
+                            </button>
+                        </h2>
+                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
+                            aria-labelledby="panelsStayOpen-headingOne">
+                            <div class="accordion-body shop__sidebar__categories px-2 py-0 pt-1">
+                                <ul class="p-0">
+                                    {{#each Categorys}}
+                                    <li class="py-2 px-3 "><a href="/shop?category={{_id}}"
+                                            class="d-flex align-items-center gap-3 text-decoration-none"><img
+                                                src="{{path}}" class="img-fluid" width="35" />{{title}}</a>
+                                    </li>
+                                    {{/each}}
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
+                </form>
             </div>
             <div class="col-lg-9">
                 <div class="shop__product__option">
