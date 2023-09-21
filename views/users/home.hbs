@@ -274,7 +274,23 @@
     background-color: #fff;
   }
 
+  .features {
+    background-color: whitesmoke;
+  }
 
+  .features img {
+    max-width: 120px;
+  }
+  .viewmore{
+    background-color: rgb(255, 255, 255);
+    border: 2px black solid;
+  }
+  .viewmore:hover{
+    background-color: rgb(0, 0, 0);
+    border: 2px black solid;
+    color: #fff;
+  }
+  
 </style>
 
 
@@ -282,7 +298,7 @@
 {{>userNavbar}}
 
 <section class="contents">
- 
+
   <!-- Carousal Section Begin -->
   <section class="hero">
     <div
@@ -364,6 +380,7 @@
     </div>
   </section>
   <!-- Carousal Section End -->
+
   <!-- Products Section End -->
   <div class="container my-4">
     <h1 class="text-center mb-2">New Arrivals</h1>
@@ -390,14 +407,29 @@
         </div>
       </div>
       {{/each}}
+       <a href="/shop" class="text-decoration-none text-center my-2">
+      <button class="btn viewmore px-3"> View More</button>
+    </a>
     </div>
+   
   </div>
   <!-- Products Section End -->
 
-<div>
-  <img class="img-fluid" src="/images/footerdesktop-strip.jpg" alt="">
-</div>
-{{>footer}}
+  <div class="features row p-3 mb-sm-2">
+    <div class="col-lg-4 col-sm-4 col-12 d-flex align-items-center justify-content-around p-2 gap-2">
+      <img class="img-fluid" src="/images/small-truck_57490.png" alt="">
+      <h2>Express Delivery</h2>
+    </div>
+    <div class="col-lg-4 col-sm-4 col-12 d-flex align-items-center justify-content-around p-2 gap-2">
+      <img class="img-fluid" src="/images/loop-arrow_3179052.png" alt="">
+      <h2>Easy Returns</h2>
+    </div>
+    <div class="col-lg-4 col-sm-4 col-12 d-flex align-items-center justify-content-around p-2 gap-2">
+      <img class="img-fluid" src="/images/cash-delivery_5163751.png" alt="">
+      <h2>Cash On Delivery</h2>
+    </div>
+  </div>
+  {{>footer}}
 </section>
 
 
