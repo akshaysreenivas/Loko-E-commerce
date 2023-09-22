@@ -18,7 +18,7 @@
           <li><a class="active" href="/about">About</a></li>
           <li><a class="active" href="/contact">Contact</a></li>
         </ul>
-        <div class="d-flex  align-items-start justify-content-around  d-sm-px-5 d-sm-mx-5 gap-4 mt-3">
+        <div class="d-flex  align-items-start justify-content-around  d-sm-px-5 d-sm-mx-5 gap-lg-3 mt-3">
           {{#if shop}}
           {{else}}
           <div class="" data-bs-placement="bottom" title="Search" id="searchModalBtn">
@@ -45,7 +45,7 @@
             aria-expanded="false" href="/profile">
             <span class="material-icons-sharp">account_circle</span>
             {{#if user}}
-            <span>{{user.name}}</span>
+            <span>Account</span>
             {{else}}
             <span>Login</span>
             {{/if}}
