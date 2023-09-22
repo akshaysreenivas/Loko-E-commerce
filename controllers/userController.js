@@ -143,6 +143,7 @@ const loginOtpPage = async (req, res) => {
 };
 const userSignup = async (req, res) => {
     const userdata = req.body;
+    console.log(req.body)
     try {
         const user = await users.findOne({ email: userdata.email });
         if (user) {
