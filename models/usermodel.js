@@ -74,7 +74,7 @@ userSchema.pre("save", function (next) {
                 }
             })
         } catch (err) {
-            console.log(err);
+            // console.log(err);
         }
     }
 });
